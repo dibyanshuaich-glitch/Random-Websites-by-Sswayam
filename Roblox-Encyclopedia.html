@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROBLOX — The Complete Encyclopedia</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:#E8192C; --blue:#00A2FF; --green:#02B757;
+  --yellow:#FFD700; --orange:#FF6B00; --purple:#9B5DE5;
+  --cyan:#00F5FF; --pink:#FF3CAC;
+  --dark:#0a0a0f; --darker:#04040a;
+  --panel:#0e0e1a; --panel2:#141428;
+  --text:#e8e8ff; --dim:#6060a0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--darker);color:var(--text);font-family:'Rajdhani',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* ── LOADING ─────────────────── */
+#ls{position:fixed;inset:0;z-index:999999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s;}
+#ls.gone{opacity:0;visibility:hidden;}
+.ll{font-family:'Press Start 2P';font-size:clamp(18px,5vw,44px);color:var(--red);text-shadow:0 0 40px var(--red);animation:lp .6s ease-in-out infinite alternate;margin-bottom:30px;}
+@keyframes lp{from{text-shadow:0 0 20px var(--red);}to{text-shadow:0 0 60px var(--red),0 0 120px var(--red);}}
+.lbw{width:320px;height:8px;background:rgba(255,255,255,.08);overflow:hidden;}
+.lb{height:100%;background:linear-gradient(90deg,var(--red),var(--blue),var(--green));width:0%;transition:width .05s;box-shadow:0 0 12px var(--red);}
+.lt{font-family:'Press Start 2P';font-size:7px;color:var(--dim);margin-top:12px;letter-spacing:2px;}
+#lp2{font-family:'Press Start 2P';font-size:10px;color:var(--red);margin-top:4px;}
+
+/* ── PROGRESS BAR ─────────────── */
+#spb{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,var(--red),var(--blue),var(--green));z-index:10001;box-shadow:0 0 8px var(--red);}
+
+/* ── CURSOR ──────────────────── */
+.co{width:30px;height:30px;border:2px solid rgba(232,25,44,.5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:border-color .2s;}
+.ci{width:8px;height:8px;background:var(--red);position:fixed;top:0;left:0;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);box-shadow:0 0 8px var(--red);}
+
+/* ── MATRIX CANVAS ───────────── */
+#mc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.035;}
+
+/* ── NAV ─────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:12px 40px;background:rgba(4,4,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(232,25,44,.2);}
+nav::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),var(--blue),var(--green),transparent);animation:ns 4s linear infinite;background-size:300%;}
+@keyframes ns{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.nl{font-family:'Press Start 2P';font-size:12px;color:var(--red);text-shadow:0 0 14px var(--red);letter-spacing:2px;}
+.nlinks{display:flex;gap:18px;flex-wrap:wrap;}
+.nlinks a{font-family:'Orbitron';font-size:9px;color:var(--dim);text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:color .3s;position:relative;padding-bottom:3px;}
+.nlinks a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--blue);transform:scaleX(0);transition:transform .3s;}
+.nlinks a:hover{color:var(--blue);}
+.nlinks a:hover::after{transform:scaleX(1);}
+
+/* ── SHARED SECTION ──────────── */
+.sw{max-width:1340px;margin:0 auto;padding:100px 60px;}
+.stag{font-family:'Press Start 2P';font-size:8px;color:var(--red);letter-spacing:4px;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px;}
+.stag::before{content:'';display:inline-block;width:18px;height:2px;background:var(--red);box-shadow:0 0 8px var(--red);}
+h2.st{font-family:'Orbitron';font-size:clamp(24px,4.5vw,54px);font-weight:900;line-height:1.1;margin-bottom:16px;color:#fff;}
+h2.st .r{color:var(--red);}h2.st .b{color:var(--blue);}h2.st .g{color:var(--green);}h2.st .y{color:var(--yellow);}h2.st .p{color:var(--purple);}h2.st .c{color:var(--cyan);}
+.sd{font-size:18px;color:var(--dim);max-width:680px;line-height:1.75;margin-bottom:54px;}
+
+/* ── DIVIDER ─────────────────── */
+.div{position:relative;height:60px;display:flex;align-items:center;overflow:hidden;}
+.div::before{content:'';position:absolute;inset:0;height:1px;top:50%;background:linear-gradient(90deg,transparent,rgba(232,25,44,.6),rgba(0,162,255,.5),transparent);animation:ds 3s linear infinite;background-size:200%;}
+@keyframes ds{0%{background-position:-200%}100%{background-position:200%}}
+.dicon{position:relative;z-index:1;margin:0 auto;background:var(--darker);padding:0 20px;font-family:'Press Start 2P';font-size:9px;color:var(--red);}
+
+/* ── HERO ────────────────────── */
+#hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#1a0008 0%,#04040a 65%);}
+.bbg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.blk{position:absolute;animation:bfl linear infinite;}
+.bface{position:absolute;width:100%;height:100%;}
+.bshadow{position:absolute;bottom:-10px;left:5px;width:100%;height:100%;filter:blur(4px);transform:scaleY(0.25);}
+@keyframes bfl{0%{transform:translateY(110vh) rotate(0deg);opacity:0;}8%{opacity:1;}92%{opacity:.8;}100%{transform:translateY(-15vh) rotate(720deg);opacity:0;}}
+#pc{position:absolute;inset:0;pointer-events:none;z-index:1;}
+.hcont{position:relative;z-index:2;text-align:center;animation:he 1.2s cubic-bezier(.23,1,.32,1) both;}
+@keyframes he{from{opacity:0;transform:scale(.85) translateY(40px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.hey{font-family:'Orbitron';font-size:11px;letter-spacing:8px;color:var(--dim);text-transform:uppercase;margin-bottom:18px;}
+.hlw{position:relative;display:inline-block;margin-bottom:8px;}
+.hl{font-family:'Press Start 2P';font-size:clamp(28px,8vw,88px);color:#fff;letter-spacing:6px;position:relative;z-index:2;}
+.hl .lr{color:var(--red);animation:lp2 .6s ease both .8s;}
+.hl .lo{color:#fff;animation:lp2 .6s ease both .9s;}
+.hl .lb2{color:var(--blue);animation:lp2 .6s ease both 1s;}
+.hl .ll2{color:#fff;animation:lp2 .6s ease both 1.1s;}
+.hl .lo2{color:var(--green);animation:lp2 .6s ease both 1.2s;}
+.hl .lx{color:var(--yellow);animation:lp2 .6s ease both 1.3s;}
+@keyframes lp2{0%{opacity:0;transform:translateY(-40px) rotate(-10deg) scale(.5);}60%{transform:translateY(6px) rotate(3deg) scale(1.1);}100%{opacity:1;transform:translateY(0) rotate(0) scale(1);}}
+.hlg1{position:absolute;top:0;left:0;right:0;font-family:'Press Start 2P';font-size:clamp(28px,8vw,88px);color:var(--red);letter-spacing:6px;opacity:0;z-index:3;animation:gl1 6s ease-in-out infinite 2s;pointer-events:none;user-select:none;}
+.hlg2{position:absolute;top:0;left:0;right:0;font-family:'Press Start 2P';font-size:clamp(28px,8vw,88px);color:var(--blue);letter-spacing:6px;opacity:0;z-index:3;animation:gl2 6s ease-in-out infinite 2s;pointer-events:none;user-select:none;}
+@keyframes gl1{0%,85%,100%{opacity:0;transform:translateX(0);}86%{opacity:.7;transform:translateX(-4px);clip-path:inset(20% 0 60% 0);}88%{opacity:.7;transform:translateX(4px);clip-path:inset(60% 0 10% 0);}90%{opacity:0;}}
+@keyframes gl2{0%,87%,100%{opacity:0;transform:translateX(0);}88%{opacity:.7;transform:translateX(6px);clip-path:inset(40% 0 40% 0);}90%{opacity:.7;transform:translateX(-6px);clip-path:inset(10% 0 80% 0);}92%{opacity:0;}}
+.hsub{font-family:'Orbitron';font-size:clamp(9px,1.5vw,13px);color:var(--dim);letter-spacing:5px;margin:16px 0 36px;text-transform:uppercase;animation:fiu 1.2s ease both 1.5s;}
+@keyframes fiu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hstats{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;animation:fiu 1.2s ease both 1.8s;}
+.sbox{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);padding:16px 26px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;min-width:110px;}
+.sbox:hover{transform:translateY(-4px);border-color:rgba(232,25,44,.4);}
+.sbox::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent 0deg,rgba(232,25,44,.1) 90deg,transparent 180deg);animation:sc 3s linear infinite;}
+.sbox::after{content:'';position:absolute;inset:1px;background:var(--darker);}
+@keyframes sc{to{transform:rotate(360deg);}}
+.si{position:relative;z-index:1;}
+.sn{font-family:'Orbitron';font-size:24px;font-weight:900;color:var(--red);}
+.sl{font-size:10px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.sca{position:absolute;bottom:28px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:'Press Start 2P';font-size:6px;color:var(--dim);letter-spacing:3px;animation:bo 2s ease-in-out infinite;}
+@keyframes bo{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.sarr{width:18px;height:18px;border-right:2px solid var(--dim);border-bottom:2px solid var(--dim);transform:rotate(45deg);}
+
+/* ── TIMELINE ────────────────── */
+.tl{position:relative;padding-left:68px;}
+.tl::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--red),var(--blue),var(--green),var(--yellow),var(--red));background-size:100% 200%;animation:tlg 4s linear infinite;}
+@keyframes tlg{0%{background-position:0 0;filter:drop-shadow(0 0 4px var(--red));}50%{background-position:0 100%;filter:drop-shadow(0 0 4px var(--blue));}100%{background-position:0 0;filter:drop-shadow(0 0 4px var(--green));}}
+.ti{position:relative;margin-bottom:64px;opacity:0;transform:translateX(-50px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1);}
+.ti.v{opacity:1;transform:translateX(0);}
+.td{position:absolute;left:-52px;top:10px;width:20px;height:20px;background:var(--ic,var(--red));transform:rotate(45deg);box-shadow:0 0 18px var(--ic,var(--red));animation:dp 2s ease-in-out infinite;}
+@keyframes dp{0%,100%{box-shadow:0 0 8px var(--ic,var(--red));}50%{box-shadow:0 0 24px var(--ic,var(--red)),0 0 40px var(--ic,var(--red));}}
+.td::before{content:'';position:absolute;inset:-8px;border:2px solid var(--ic,var(--red));opacity:.3;animation:dr 2s linear infinite;}
+@keyframes dr{to{transform:rotate(90deg);opacity:0;}}
+.tiy{font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--ic,var(--red));letter-spacing:4px;margin-bottom:5px;}
+.tit{font-family:'Rajdhani';font-size:25px;font-weight:700;color:#fff;margin-bottom:9px;}
+.tib{font-size:15px;color:var(--dim);line-height:1.75;max-width:720px;}
+.badge{display:inline-block;margin-top:10px;padding:3px 12px;font-family:'Orbitron';font-size:8px;letter-spacing:2px;text-transform:uppercase;border:1px solid;}
+.br{color:var(--red);border-color:var(--red);}
+.bb{color:var(--blue);border-color:var(--blue);}
+.bg2{color:var(--green);border-color:var(--green);}
+.by{color:var(--yellow);border-color:var(--yellow);}
+.bo2{color:var(--orange);border-color:var(--orange);}
+.bp{color:var(--purple);border-color:var(--purple);}
+
+/* ── EVENTS SCROLL ───────────── */
+.escroll{overflow-x:auto;overflow-y:visible;padding-bottom:30px;scrollbar-width:thin;scrollbar-color:var(--red) rgba(255,255,255,.05);}
+.escroll::-webkit-scrollbar{height:4px;}
+.escroll::-webkit-scrollbar-thumb{background:var(--red);}
+.etrack{display:flex;min-width:max-content;position:relative;padding:70px 0 20px;}
+.etrack::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(255,255,255,.07);transform:translateY(-50%);}
+.ecard{width:210px;flex-shrink:0;position:relative;padding:0 14px;}
+.ebox{position:relative;background:var(--panel);border:1px solid rgba(255,255,255,.07);padding:15px;transition:all .3s;}
+.ebox:hover{border-color:var(--ec,var(--red));transform:scale(1.04);z-index:10;}
+.ebox::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--ec,var(--red)),transparent 60%);opacity:.04;transition:opacity .3s;}
+.ebox:hover::before{opacity:.1;}
+.edot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:var(--ec,var(--red));border-radius:50%;box-shadow:0 0 12px var(--ec,var(--red));z-index:5;}
+.edot::before{content:'';position:absolute;inset:-4px;border:1px solid var(--ec,var(--red));border-radius:50%;opacity:.4;animation:ep 2s linear infinite;}
+@keyframes ep{100%{transform:scale(2);opacity:0;}}
+.eyr{font-family:'Press Start 2P';font-size:6px;color:var(--ec,var(--red));margin-bottom:5px;}
+.etit{font-family:'Rajdhani';font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.3;}
+.edesc{font-size:11px;color:var(--dim);line-height:1.5;}
+.etype{font-family:'Orbitron';font-size:7px;color:var(--ec,var(--red));margin-top:5px;letter-spacing:1px;}
+.etype::before{content:'● ';}
+
+/* ── PERSON CARDS ────────────── */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:22px;}
+.pc2{background:var(--panel);border:1px solid rgba(255,255,255,.06);padding:30px;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.23,1,.32,1),border-color .3s;opacity:0;transform:translateY(28px);}
+.pc2.v{opacity:1;transform:translateY(0);}
+.pc2:hover{transform:translateY(-8px) rotate(-.4deg)!important;border-color:var(--pc,var(--red));}
+.pc2::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--pc,var(--red));box-shadow:0 0 12px var(--pc,var(--red));}
+.pc2::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--pc,var(--red)),transparent 40%);opacity:0;transition:opacity .3s;}
+.pc2:hover::after{opacity:.04;}
+.pav{width:62px;height:62px;background:var(--pc,var(--red));display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px;position:relative;z-index:1;}
+.pav::after{content:'';position:absolute;bottom:-5px;left:5px;width:100%;height:100%;background:var(--pc,var(--red));opacity:.18;z-index:-1;}
+.pro{font-family:'Orbitron';font-size:8px;color:var(--pc,var(--red));letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;z-index:1;position:relative;}
+.pnm{font-family:'Rajdhani';font-size:21px;font-weight:700;color:#fff;margin-bottom:8px;z-index:1;position:relative;}
+.pde{font-size:13px;color:var(--dim);line-height:1.65;z-index:1;position:relative;}
+
+/* ── YOUTUBER CARDS ──────────── */
+.ygrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:18px;}
+.ytc{background:var(--panel);border:1px solid rgba(255,255,255,.06);padding:22px;text-align:center;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.23,1,.32,1);opacity:0;transform:scale(.9);}
+.ytc.v{opacity:1;transform:scale(1);}
+.ytc:hover{transform:translateY(-9px) scale(1.02)!important;border-color:var(--yc,var(--red));}
+.ytc::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,var(--yc,var(--red)),transparent);opacity:0;transition:opacity .3s;}
+.ytc:hover::before{opacity:.06;}
+.ytico{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-size:20px;font-weight:900;color:#fff;position:relative;transition:transform .3s;}
+.ytc:hover .ytico{transform:scale(1.15) rotate(5deg);}
+.ytico::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--yc,var(--red));opacity:.4;animation:ir 3s linear infinite;}
+@keyframes ir{to{transform:rotate(360deg);}}
+.ytnm{font-family:'Rajdhani';font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;}
+.ytsub{font-family:'Orbitron';font-size:8px;color:var(--yc,var(--red));letter-spacing:2px;margin-bottom:7px;}
+.ytde{font-size:12px;color:var(--dim);line-height:1.5;}
+
+/* ── HACKER CARDS ────────────── */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:20px;}
+.hc{background:rgba(232,25,44,.03);border:1px solid rgba(232,25,44,.14);padding:26px;position:relative;overflow:hidden;transition:all .3s;opacity:0;transform:scale(.94);}
+.hc.v{opacity:1;transform:scale(1);}
+.hc:hover{border-color:var(--red);background:rgba(232,25,44,.07);}
+.hc::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(232,25,44,.02) 3px,rgba(232,25,44,.02) 4px);opacity:0;transition:opacity .3s;}
+.hc:hover::before{opacity:1;}
+.hc::after{content:'> _';position:absolute;top:12px;right:12px;font-family:'Press Start 2P';font-size:6px;color:var(--red);opacity:.4;animation:bl 1s step-end infinite;}
+@keyframes bl{50%{opacity:0;}}
+.hnm{font-family:'Press Start 2P';font-size:9px;color:var(--red);margin-bottom:9px;text-shadow:0 0 10px var(--red);}
+.hst{font-family:'Orbitron';font-size:8px;letter-spacing:2px;padding:2px 9px;display:inline-block;border:1px solid;margin-bottom:12px;text-transform:uppercase;}
+.sm{color:var(--yellow);border-color:var(--yellow);}
+.sr{color:var(--green);border-color:var(--green);}
+.sl2{color:var(--blue);border-color:var(--blue);}
+.sb{color:var(--red);border-color:var(--red);}
+.hde{font-size:13px;color:var(--dim);line-height:1.65;}
+
+/* ════════════════════════════════
+   ENCYCLOPEDIA
+   ════════════════════════════════ */
+#encyclopedia{background:linear-gradient(180deg,var(--darker),#070714,var(--darker));}
+.enc-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;align-items:center;}
+.enc-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--text);font-family:'Rajdhani';font-size:16px;padding:12px 18px;outline:none;transition:border-color .3s;}
+.enc-search:focus{border-color:var(--blue);}
+.enc-search::placeholder{color:var(--dim);}
+.enc-filter-btn{font-family:'Orbitron';font-size:9px;padding:10px 16px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--dim);cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .2s;}
+.enc-filter-btn:hover,.enc-filter-btn.active{border-color:var(--blue);color:var(--blue);background:rgba(0,162,255,.08);}
+.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.enc-card{background:var(--panel);border:1px solid rgba(255,255,255,.06);padding:20px 24px;position:relative;overflow:hidden;transition:all .3s;cursor:default;opacity:0;transform:translateY(16px);}
+.enc-card.v{opacity:1;transform:translateY(0);}
+.enc-card:hover{border-color:var(--ec2,var(--blue));background:rgba(0,162,255,.04);}
+.enc-cat{font-family:'Orbitron';font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--ec2,var(--blue));margin-bottom:6px;}
+.enc-term{font-family:'Rajdhani';font-size:19px;font-weight:700;color:#fff;margin-bottom:6px;}
+.enc-def{font-size:13px;color:var(--dim);line-height:1.6;}
+.enc-tag{display:inline-block;margin-top:8px;padding:2px 8px;background:rgba(255,255,255,.05);font-family:'Orbitron';font-size:7px;letter-spacing:1px;color:var(--dim);}
+.enc-empty{font-family:'Press Start 2P';font-size:11px;color:var(--dim);text-align:center;padding:60px;display:none;grid-column:1/-1;}
+.enc-count{font-family:'Orbitron';font-size:10px;color:var(--dim);letter-spacing:2px;margin-bottom:20px;}
+
+/* ════════════════════════════════
+   MINIGAMES
+   ════════════════════════════════ */
+#minigames{background:radial-gradient(ellipse at 50% 0%,#0a0014 0%,var(--darker) 70%);}
+.gtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+.gtab{font-family:'Press Start 2P';font-size:8px;padding:10px 16px;border:2px solid rgba(255,255,255,.1);background:transparent;color:var(--dim);cursor:pointer;transition:all .25s;letter-spacing:1px;text-transform:uppercase;}
+.gtab:hover{border-color:var(--blue);color:var(--blue);}
+.gtab.active{border-color:var(--yellow);color:var(--yellow);background:rgba(255,215,0,.07);}
+.gpanel{display:none;}
+.gpanel.active{display:block;}
+.gbox{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);padding:24px;position:relative;overflow:hidden;}
+.gbox::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gc,var(--blue));box-shadow:0 0 10px var(--gc,var(--blue));}
+.ghdr{font-family:'Press Start 2P';font-size:9px;color:var(--gc,var(--blue));margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.gctrls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+.ginfo{font-family:'Press Start 2P';font-size:6px;color:var(--dim);align-self:center;}
+.btn{font-family:'Press Start 2P';font-size:8px;padding:11px 18px;border:2px solid;background:transparent;cursor:pointer;transition:all .2s;letter-spacing:1px;position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:rgba(255,255,255,.09);transition:left .3s;}
+.btn:hover::after{left:100%;}
+.btn-b{color:var(--blue);border-color:var(--blue);}
+.btn-b:hover{background:var(--blue);color:#000;}
+.btn-r{color:var(--red);border-color:var(--red);}
+.btn-r:hover{background:var(--red);color:#fff;}
+.btn-g{color:var(--green);border-color:var(--green);}
+.btn-g:hover{background:var(--green);color:#000;}
+.btn-y{color:var(--yellow);border-color:var(--yellow);}
+.btn-y:hover{background:var(--yellow);color:#000;}
+.btn-p{color:var(--purple);border-color:var(--purple);}
+.btn-p:hover{background:var(--purple);color:#fff;}
+
+/* OBBY CANVAS */
+#obby-canvas{width:100%;height:300px;background:#07080d;display:block;border:1px solid rgba(0,162,255,.15);}
+
+/* BLOCK BLASTER */
+#clicker-area{width:100%;height:300px;background:#060d08;position:relative;overflow:hidden;cursor:crosshair;border:1px solid rgba(2,183,87,.15);}
+.cblk{position:absolute;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none;animation:bpop .25s cubic-bezier(.23,1,.32,1);transition:transform .1s;}
+.cblk:hover{transform:scale(1.2);}
+@keyframes bpop{from{transform:scale(0) rotate(-20deg);opacity:0;}to{transform:scale(1);opacity:1;}}
+.cscore{font-family:'Press Start 2P';font-size:30px;text-align:center;color:var(--green);text-shadow:0 0 20px var(--green);margin:10px 0 4px;}
+.cinfo{font-family:'Orbitron';font-size:10px;color:var(--dim);text-align:center;letter-spacing:2px;}
+.fplus{position:absolute;font-family:'Press Start 2P';font-size:12px;font-weight:900;pointer-events:none;animation:fu .8s ease forwards;z-index:10;}
+@keyframes fu{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-65px) scale(1.4);}}
+
+/* MEMORY MATCH */
+#mem-game{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px;}
+.mcard{aspect-ratio:1;background:var(--panel2);border:2px solid rgba(255,255,255,.1);cursor:pointer;position:relative;transition:transform .3s;transform-style:preserve-3d;}
+.mcard.flip{transform:rotateY(180deg);}
+.mcard.matched{border-color:var(--green);box-shadow:0 0 12px var(--green);}
+.mfront,.mback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;font-size:clamp(18px,3vw,28px);}
+.mfront{background:var(--panel2);font-family:'Press Start 2P';font-size:14px;color:var(--dim);}
+.mback{background:var(--panel);transform:rotateY(180deg);}
+.mem-info{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;}
+.mem-stat{font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:2px;}
+.mem-stat span{color:var(--yellow);}
+
+/* WORD SCRAMBLE */
+.ws-word{font-family:'Press Start 2P';font-size:clamp(18px,3vw,32px);color:var(--blue);letter-spacing:6px;text-align:center;margin:20px 0;text-shadow:0 0 20px var(--blue);min-height:50px;}
+.ws-hint{font-family:'Rajdhani';font-size:16px;color:var(--dim);text-align:center;margin-bottom:16px;font-style:italic;}
+.ws-input-row{display:flex;gap:10px;margin-bottom:14px;}
+.ws-input{flex:1;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);color:var(--text);font-family:'Orbitron';font-size:16px;padding:12px 16px;outline:none;transition:border-color .3s;text-transform:uppercase;letter-spacing:2px;}
+.ws-input:focus{border-color:var(--blue);}
+.ws-feedback{font-family:'Press Start 2P';font-size:10px;text-align:center;min-height:24px;margin-bottom:10px;}
+.ws-score-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;}
+.ws-stat{font-family:'Orbitron';font-size:12px;color:var(--dim);letter-spacing:2px;}
+.ws-stat span{color:var(--yellow);}
+.ws-timer-bar{height:6px;background:rgba(255,255,255,.1);margin-top:12px;margin-bottom:4px;}
+.ws-timer-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));transition:width .1s linear;box-shadow:0 0 6px var(--green);}
+
+/* SIMON SAYS */
+.simon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:320px;margin:0 auto;}
+.sbtn{height:120px;border:none;cursor:pointer;position:relative;overflow:hidden;transition:filter .1s;border-radius:4px;opacity:.5;}
+.sbtn.lit{filter:brightness(2)!important;opacity:1;}
+.sbtn:hover{opacity:.7;}
+#simon-msg{font-family:'Press Start 2P';font-size:10px;text-align:center;margin:14px 0 6px;color:var(--text);min-height:24px;}
+.simon-stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;}
+.simon-stat{font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:2px;}
+.simon-stat span{color:var(--cyan);}
+
+/* SPEED CLICKER */
+#speed-area{width:100%;height:260px;background:#0a0010;border:1px solid rgba(155,93,229,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;}
+.sc-big{font-family:'Press Start 2P';font-size:clamp(32px,5vw,64px);color:var(--purple);text-shadow:0 0 30px var(--purple);user-select:none;pointer-events:none;transition:transform .05s;}
+.sc-big.bump{transform:scale(.92);}
+.sc-ripple{position:absolute;border-radius:50%;border:2px solid var(--purple);animation:rip .6s ease-out forwards;pointer-events:none;}
+@keyframes rip{from{width:0;height:0;opacity:.8;}to{width:200px;height:200px;opacity:0;margin:-100px;}}
+.sc-stats{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap;justify-content:center;}
+.sc-stat{font-family:'Orbitron';font-size:12px;color:var(--dim);letter-spacing:2px;}
+.sc-stat span{color:var(--purple);}
+.sc-bar-wrap{height:6px;background:rgba(155,93,229,.1);margin-top:12px;}
+.sc-bar{height:100%;background:var(--purple);box-shadow:0 0 8px var(--purple);transition:width .1s;}
+
+/* TRIVIA */
+.trivia-meta{display:flex;gap:18px;align-items:center;margin-bottom:18px;}
+.trivia-sc{font-family:'Orbitron';font-size:20px;font-weight:700;color:var(--yellow);min-width:85px;}
+.trivia-track{flex:1;height:5px;background:rgba(255,255,255,.08);}
+.trivia-fill{height:100%;background:linear-gradient(90deg,var(--yellow),var(--orange));box-shadow:0 0 6px var(--yellow);transition:width .5s;width:0%;}
+.trivia-qn{font-family:'Orbitron';font-size:9px;color:var(--dim);white-space:nowrap;}
+.trivia-q{font-family:'Rajdhani';font-size:20px;font-weight:700;color:#fff;margin-bottom:18px;min-height:50px;line-height:1.4;}
+.trivia-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.topt{font-family:'Rajdhani';font-size:15px;font-weight:600;padding:13px 16px;border:1px solid rgba(255,215,0,.2);background:rgba(255,215,0,.03);color:var(--text);cursor:pointer;text-align:left;transition:all .2s;}
+.topt:hover{border-color:var(--yellow);background:rgba(255,215,0,.08);}
+.topt.correct{border-color:var(--green);background:rgba(2,183,87,.18);color:var(--green);}
+.topt.wrong{border-color:var(--red);background:rgba(232,25,44,.18);color:var(--red);}
+.topt:disabled{cursor:default;}
+
+/* ── FACTS ───────────────────── */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px;}
+.fcd{background:var(--panel);border-left:3px solid var(--fc,var(--red));padding:22px;position:relative;overflow:hidden;opacity:0;transform:translateX(-18px);transition:opacity .6s,transform .6s,box-shadow .3s;}
+.fcd.v{opacity:1;transform:translateX(0);}
+.fcd:hover{box-shadow:-4px 0 20px var(--fc,var(--red));}
+.fnum{font-family:'Press Start 2P';font-size:20px;color:var(--fc,var(--red));opacity:.22;margin-bottom:8px;}
+.ftxt{font-size:14px;color:var(--dim);line-height:1.65;}
+.ftxt strong{color:var(--text);}
+
+/* ── CREDITS ─────────────────── */
+#credits{position:relative;background:#000;overflow:hidden;min-height:700px;}
+#crc{position:absolute;inset:0;width:100%;height:100%;}
+.cinner{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:90px 60px;text-align:center;}
+.cbuilt{font-family:'Press Start 2P';font-size:8px;color:var(--dim);letter-spacing:4px;margin-bottom:18px;}
+.cname{font-family:'Press Start 2P';font-size:clamp(18px,4vw,40px);color:#fff;letter-spacing:4px;margin-bottom:8px;display:inline-block;animation:cg 2s ease-in-out infinite alternate;}
+@keyframes cg{from{text-shadow:0 0 20px var(--red),0 0 40px rgba(232,25,44,.4);}to{text-shadow:0 0 30px var(--blue),0 0 60px rgba(0,162,255,.4);}}
+.cname::before{content:'< ';color:var(--red);font-size:.55em;animation:cf 3s ease-in-out infinite;}
+.cname::after{content:' />';color:var(--red);font-size:.55em;animation:cf 3s ease-in-out infinite .5s;}
+@keyframes cf{0%,90%,100%{opacity:1;}95%{opacity:.2;}}
+.csub{font-family:'Orbitron';font-size:11px;color:var(--dim);letter-spacing:3px;margin-top:6px;margin-bottom:36px;}
+.crbox{margin:0 auto 28px;max-width:480px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);padding:28px;position:relative;overflow:hidden;}
+.crbox::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(232,25,44,.1),transparent 30%);animation:sc 4s linear infinite;}
+.crbox::after{content:'';position:absolute;inset:1px;background:#000;}
+.crbi{position:relative;z-index:1;}
+.crbl{font-family:'Orbitron';font-size:9px;color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.crbu{font-family:'Press Start 2P';font-size:clamp(12px,3vw,22px);color:var(--yellow);text-shadow:0 0 20px var(--yellow);margin-bottom:12px;letter-spacing:2px;animation:ug 2s ease-in-out infinite alternate;}
+@keyframes ug{from{text-shadow:0 0 10px var(--yellow);}to{text-shadow:0 0 30px var(--yellow),0 0 60px rgba(255,215,0,.3);}}
+.crmsg{font-family:'Rajdhani';font-size:15px;color:var(--dim);line-height:1.65;}
+.crmsg strong{color:var(--text);}
+.cricon{font-size:44px;margin-bottom:14px;animation:iff 3s ease-in-out infinite;}
+@keyframes iff{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+/* FAVORITE GAMES */
+.fav-games{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:28px 0;}
+.fav-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);padding:22px 28px;text-align:center;position:relative;overflow:hidden;min-width:160px;transition:all .3s;}
+.fav-card:hover{transform:translateY(-6px);}
+.fav-rank{font-family:'Press Start 2P';font-size:24px;margin-bottom:8px;filter:drop-shadow(0 0 8px currentColor);}
+.fav-name{font-family:'Rajdhani';font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;}
+.fav-tag{font-family:'Orbitron';font-size:8px;letter-spacing:2px;color:var(--dim);}
+.fav-card.rank1{border-color:var(--yellow);background:rgba(255,215,0,.05);}
+.fav-card.rank1::before{content:'★ FAVOURITE ★';position:absolute;top:0;left:0;right:0;font-family:'Press Start 2P';font-size:6px;color:var(--yellow);background:var(--yellow);color:#000;padding:3px;letter-spacing:2px;}
+.fav-card.rank1{padding-top:28px;}
+.fav-card.rank2{border-color:rgba(192,192,192,.5);}
+.fav-card.rank3{border-color:rgba(205,127,50,.5);}
+
+.chearts{display:flex;gap:8px;justify-content:center;margin:18px 0;font-size:18px;animation:hw 2s ease-in-out infinite;}
+@keyframes hw{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.ccopy{font-family:'Press Start 2P';font-size:6px;color:var(--dim);margin-top:32px;line-height:2.2;}
+.ccopy .cr{color:var(--red);}
+
+/* ── FOOTER ──────────────────── */
+footer{background:#000;border-top:1px solid rgba(232,25,44,.2);padding:28px 50px;text-align:center;}
+.fbar{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+.fbar a{font-family:'Orbitron';font-size:8px;color:var(--dim);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .3s;}
+.fbar a:hover{color:var(--red);}
+footer p{font-family:'Orbitron';font-size:8px;color:var(--dim);letter-spacing:2px;}
+
+/* SCANLINES */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.02) 3px,rgba(0,0,0,.02) 4px);pointer-events:none;z-index:99997;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:11px 18px;}
+  .nlinks{display:none;}
+  .sw{padding:70px 22px;}
+  .trivia-opts{grid-template-columns:1fr;}
+  #mem-game{grid-template-columns:repeat(4,1fr);}
+  .simon-grid{max-width:260px;}
+  .sbtn{height:100px;}
+  .cinner{padding:70px 22px;}
+  .fav-games{flex-direction:column;align-items:center;}
+}
+@media(max-width:600px){
+  #mem-game{grid-template-columns:repeat(4,1fr);}
+  .hstats{gap:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── SCROLL PROGRESS ── -->
+<div id="spb"></div>
+
+<!-- ── LOADING ── -->
+<div id="ls">
+  <div class="ll">ROBLOX</div>
+  <div class="lbw"><div class="lb" id="lb"></div></div>
+  <div class="lt" id="lt">LOADING THE LEGEND...</div>
+  <div id="lp2">0%</div>
+</div>
+
+<!-- ── MATRIX ── -->
+<canvas id="mc"></canvas>
+
+<!-- ── CURSOR ── -->
+<div class="co" id="co"></div>
+<div class="ci" id="ci"></div>
+
+<!-- ════ NAV ════ -->
+<nav>
+  <div class="nl">ROBLOX</div>
+  <div class="nlinks">
+    <a href="#history">History</a>
+    <a href="#events-wrap">Events</a>
+    <a href="#encyclopedia">Encyclopedia</a>
+    <a href="#founders">People</a>
+    <a href="#youtubers">YouTubers</a>
+    <a href="#hackers">Legends</a>
+    <a href="#minigames">Play</a>
+    <a href="#facts">Facts</a>
+    <a href="#credits">Credits</a>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<div id="hero">
+  <div class="bbg" id="bbg"></div>
+  <canvas id="pc"></canvas>
+  <div class="hcont">
+    <div class="hey">The Complete Encyclopedia — Est. 2004</div>
+    <div class="hlw">
+      <div class="hl"><span class="lr">R</span><span class="lo">O</span><span class="lb2">B</span><span class="ll2">L</span><span class="lo2">O</span><span class="lx">X</span></div>
+      <div class="hlg1">ROBLOX</div>
+      <div class="hlg2">ROBLOX</div>
+    </div>
+    <div class="hsub">From DynaBlocks to a $45B Metaverse Empire</div>
+    <div class="hstats">
+      <div class="sbox"><div class="si"><div class="sn"><span data-count="380">0</span>M+</div><div class="sl">Monthly Users</div></div></div>
+      <div class="sbox"><div class="si"><div class="sn"><span data-count="2004">0</span></div><div class="sl">Year Founded</div></div></div>
+      <div class="sbox"><div class="si"><div class="sn"><span data-count="40">0</span>M+</div><div class="sl">Games Made</div></div></div>
+      <div class="sbox"><div class="si"><div class="sn">$<span data-count="45">0</span>B</div><div class="sl">Peak Value</div></div></div>
+    </div>
+  </div>
+  <div class="sca"><span>SCROLL DOWN</span><div class="sarr"></div></div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 01 — HISTORY ◆</span></div>
+
+<!-- ════ HISTORY ════ -->
+<div id="history" style="background:var(--darker)">
+<div class="sw">
+  <div class="stag">// Origin Story</div>
+  <h2 class="st">The <span class="r">History</span> of Roblox</h2>
+  <p class="sd">From a physics sandbox built in a garage to a platform reshaping how an entire generation plays, creates, and earns.</p>
+  <div class="tl">
+    <div class="ti" style="--ic:var(--blue)"><div class="td"></div><div class="tiy">2003</div><div class="tit">The Idea Is Born</div><div class="tib">David Baszucki, fresh from selling his physics simulation company, begins sketching a multiplayer physics sandbox with Erik Cassel. Inspired by watching users joyfully crash blocks and collapse bridges in "Interactive Physics," he imagines something far bigger: a world where players aren't consumers — they're creators. Development begins.</div><div class="badge bb">SPARK OF GENIUS</div></div>
+    <div class="ti" style="--ic:var(--red)"><div class="td"></div><div class="tiy">2004</div><div class="tit">DynaBlocks — The First Prototype</div><div class="tib">The platform is first coded as <strong>DynaBlocks</strong>. Internal testing begins. The engine lets blocks collide, stack, and react to gravity. The pair are convinced that letting users <em>build</em> rather than just play is the future. Rough servers, temperamental physics, but the dream is crystal clear.</div><div class="badge br">PROTOTYPE</div></div>
+    <div class="ti" style="--ic:var(--green)"><div class="td"></div><div class="tiy">2005</div><div class="tit">Renamed ROBLOX — Alpha Launch</div><div class="tib">DynaBlocks is rebranded as <strong>Roblox</strong> — fusing "robots" and "blocks." The alpha goes live with a tiny tester group. User #1 is the official Roblox account. User #2 becomes the legendary "John Doe." User #3 is "Jane Doe." The mythology begins.</div><div class="badge bg2">ALPHA LAUNCH</div></div>
+    <div class="ti" style="--ic:var(--yellow)"><div class="td"></div><div class="tiy">2006</div><div class="tit">Public Beta — September 1st</div><div class="tib">Roblox opens to the public on <strong>September 1, 2006</strong>. Roblox Studio debuts with Lua scripting — transforming Roblox from a game into a platform. Early iconic creations emerge: obstacle courses, sword arenas, roleplay worlds. Players share links on forums and school computers. The community ignites.</div><div class="badge by">PUBLIC LAUNCH</div></div>
+    <div class="ti" style="--ic:var(--orange)"><div class="td"></div><div class="tiy">2007</div><div class="tit">Robux & Tix — The Dual Economy</div><div class="tib">Roblox introduces <strong>Robux</strong> (paid currency) and <strong>Tix</strong> (free daily login currency). Players can buy hats, gear, and accessories. Social status is established through catalog ownership. The first virtual millionaires emerge among top game developers.</div><div class="badge bo2">ECONOMY LAUNCH</div></div>
+    <div class="ti" style="--ic:var(--blue)"><div class="td"></div><div class="tiy">2010</div><div class="tit">1 Million Users Milestone</div><div class="tib">Roblox crosses <strong>1 million registered users</strong>. Forums buzz with clan wars and game reviews. Famous early games: Natural Disaster Survival, Sword Fight on the Heights, Work at a Pizza Place, Flood Escape. The first YouTube channels emerge recording Roblox gameplay.</div><div class="badge bb">1M USERS</div></div>
+    <div class="ti" style="--ic:var(--red)"><div class="td"></div><div class="tiy">2012</div><div class="tit">iOS & Android — Mobile Invasion</div><div class="tib">Roblox launches on <strong>iOS and Android</strong>. The blocky aesthetic — once a limitation — is a mobile advantage. Developer Exchange (DevEx) launches, allowing creators to convert Robux to real USD. Teenage developers start earning thousands monthly. Roblox becomes more than a hobby.</div><div class="badge br">MOBILE LAUNCH</div></div>
+    <div class="ti" style="--ic:var(--purple)"><div class="td"></div><div class="tiy">2013</div><div class="tit">Erik Cassel Passes Away</div><div class="tib">On <strong>February 11, 2013</strong>, co-founder <strong>Erik Cassel</strong> passes away after a three-year battle with cancer. The community holds in-game vigils. Baszucki wrote: "Erik was my co-founder, my partner, and my friend." His engineering legacy lives in every block of the platform.</div><div class="badge bp">IN MEMORIAM</div></div>
+    <div class="ti" style="--ic:var(--yellow)"><div class="td"></div><div class="tiy">2016</div><div class="tit">Tix Removed. Xbox & VR Arrive.</div><div class="tib">Roblox removes <strong>Tix on April 14, 2016</strong> — one of its most controversial decisions. Forums erupt. Simultaneously, Roblox launches on <strong>Xbox One</strong> and adds <strong>VR support</strong>. YouTubers like Flamingo, Denis, and The Pals explode in popularity, each gaining millions of subscribers.</div><div class="badge by">TIX REMOVED • XBOX LAUNCH</div></div>
+    <div class="ti" style="--ic:var(--blue)"><div class="td"></div><div class="tiy">2018</div><div class="tit">Jailbreak, Adopt Me & The Golden Era</div><div class="tib"><strong>Jailbreak</strong> by asimo3089 and badcc becomes the most played game on the platform. <strong>Adopt Me!</strong> begins its meteoric rise. Roblox invests heavily in its developer community through summits and grants. The platform matures from a kids' game into a creative economy.</div><div class="badge bb">GOLDEN ERA</div></div>
+    <div class="ti" style="--ic:var(--red)"><div class="td"></div><div class="tiy">2020</div><div class="tit">The COVID Explosion</div><div class="tib">Global pandemic locks the world indoors. Daily active users surge to <strong>37 million</strong>. The Lil Nas X virtual concert draws <strong>33M+ attendees</strong>. Roblox processes over a billion hours of gameplay monthly. Servers strain. Records shatter. Nothing is ever the same.</div><div class="badge br">PANDEMIC EXPLOSION</div></div>
+    <div class="ti" style="--ic:var(--green)"><div class="td"></div><div class="tiy">2021</div><div class="tit">NYSE IPO — $45 Billion Valuation</div><div class="tib">On <strong>March 10, 2021</strong>, Roblox goes public on the NYSE under <strong>RBLX</strong>. Opening valuation: <strong>$45.2 billion</strong>. Developers collectively earned <strong>$538 million</strong> through DevEx that year alone. Corporate America takes notice. Roblox is no longer just a kids' game.</div><div class="badge bg2">NYSE:RBLX IPO</div></div>
+    <div class="ti" style="--ic:var(--yellow)"><div class="td"></div><div class="tiy">2023–2026</div><div class="tit">AI Tools, 17+ Content & Beyond</div><div class="tib">AI-powered creation tools launch — users generate terrain, code, and items using natural language. A <strong>17+ content rating</strong> opens the door to mature themes. Spatial voice chat, avatar upgrades, and brand partnerships multiply. In 2026, with 380M+ users, Roblox continues evolving at warp speed.</div><div class="badge by">AI ERA • 2026</div></div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 02 — EVENTS ◆</span></div>
+
+<!-- ════ EVENTS ════ -->
+<div id="events-wrap" style="background:linear-gradient(180deg,var(--darker),#07070f)">
+<div class="sw" style="padding-bottom:0">
+  <div class="stag">// The Incident Log</div>
+  <h2 class="st">Major <span class="b">Events</span> & Incidents</h2>
+  <p class="sd">Server crashes, hacker panics, record concerts, viral controversies — the moments that defined Roblox culture from 2006 to 2026.</p>
+</div>
+<div class="sw" style="padding-top:10px;overflow:hidden">
+  <div class="escroll"><div class="etrack" id="etrack"></div></div>
+</div>
+<div style="height:50px"></div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 03 — ENCYCLOPEDIA ◆</span></div>
+
+<!-- ════ ENCYCLOPEDIA ════ -->
+<div id="encyclopedia">
+<div class="sw">
+  <div class="stag">// The Roblox Wiki</div>
+  <h2 class="st">The <span class="c">Encyclopedia</span></h2>
+  <p class="sd">Every term, mechanic, slang word, item type, and concept you need to know to understand Roblox — from A to Z.</p>
+  <div class="enc-controls">
+    <input class="enc-search" id="enc-search" placeholder="🔍 Search terms...">
+    <button class="enc-filter-btn active" data-cat="ALL">ALL</button>
+    <button class="enc-filter-btn" data-cat="CURRENCY">CURRENCY</button>
+    <button class="enc-filter-btn" data-cat="MECHANIC">MECHANIC</button>
+    <button class="enc-filter-btn" data-cat="SLANG">SLANG</button>
+    <button class="enc-filter-btn" data-cat="GAME TYPE">GAME TYPE</button>
+    <button class="enc-filter-btn" data-cat="ITEM">ITEM</button>
+    <button class="enc-filter-btn" data-cat="FEATURE">FEATURE</button>
+    <button class="enc-filter-btn" data-cat="PERSON">PERSON</button>
+    <button class="enc-filter-btn" data-cat="EVENT">EVENT</button>
+  </div>
+  <div class="enc-count" id="enc-count">Showing <span id="enc-num">0</span> entries</div>
+  <div class="enc-grid" id="enc-grid">
+    <div class="enc-empty" id="enc-empty">NO RESULTS FOUND</div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 04 — PEOPLE ◆</span></div>
+
+<!-- ════ FOUNDERS ════ -->
+<div id="founders" style="background:linear-gradient(180deg,var(--darker),var(--panel))">
+<div class="sw">
+  <div class="stag">// The Architects</div>
+  <h2 class="st">Founders & <span class="r">Key People</span></h2>
+  <p class="sd">The visionaries, engineers, and creators who built the platform — and the legends who made it legendary.</p>
+  <div class="cgrid">
+    <div class="pc2" style="--pc:var(--red)"><div class="pav">👤</div><div class="pro">Co-Founder & CEO</div><div class="pnm">David Baszucki</div><div class="pde">Known in-game as "builderman" (User #156). Stanford-educated engineer who co-founded Roblox after selling his physics-sim company. His vision — a platform where imagination is the only limit — became gaming's most consequential bet. Led Roblox from a garage to a $45B NYSE listing.</div></div>
+    <div class="pc2" style="--pc:var(--blue)"><div class="pav">🛠</div><div class="pro">Co-Founder (1968–2013)</div><div class="pnm">Erik Cassel</div><div class="pde">The quiet architect of Roblox's soul. Handled the deep engineering behind Roblox's physics engine, Studio tools, and early server infrastructure. Passed away from cancer in February 2013. His legacy is woven into every block of the platform — the most important name many players have never heard.</div></div>
+    <div class="pc2" style="--pc:var(--green)"><div class="pav">💰</div><div class="pro">Top Developer</div><div class="pnm">Asimo3089</div><div class="pde">Co-created <strong>Jailbreak</strong> — one of Roblox's most played games ever. A self-taught teenager-turned-millionaire through DevEx. His transparent updates and community engagement set the gold standard for Roblox development. Proof that two developers with shared vision can beat a studio of hundreds.</div></div>
+    <div class="pc2" style="--pc:var(--yellow)"><div class="pav">⚡</div><div class="pro">Top Developer</div><div class="pnm">Badcc</div><div class="pde">Co-creator of Jailbreak alongside asimo3089. Handles the scripting and systems programming that makes the cop-robber mechanics tick. Writes notoriously clean Lua code. Active on social media sharing dev tips. Together with asimo, they changed what two people could achieve on Roblox.</div></div>
+    <div class="pc2" style="--pc:var(--orange)"><div class="pav">🌟</div><div class="pro">Iconic Account • User #1</div><div class="pnm">ROBLOX (Official)</div><div class="pde">User ID #1. The first account ever created, representing the platform. Holds legendary status — the original catalog owner, builder of first maps, and subject of endless fan theories. Many players spent hours trying to "crack" the account. Its blank avatar staring back is pure Roblox mythology.</div></div>
+    <div class="pc2" style="--pc:var(--purple)"><div class="pav">🏠</div><div class="pro">Legendary Developer</div><div class="pnm">Litozinnamon</div><div class="pde">Creator of the legendary <strong>Sword Fight on the Heights</strong> — one of the oldest and most beloved Roblox games. A pioneer of competitive skill-based gameplay. His maps defined what "classic Roblox" felt like to an entire generation: raw, no-frills, deeply nostalgic. The definition of a Roblox legend.</div></div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 05 — YOUTUBERS ◆</span></div>
+
+<!-- ════ YOUTUBERS ════ -->
+<div id="youtubers" style="background:var(--darker)">
+<div class="sw">
+  <div class="stag">// Content Creators</div>
+  <h2 class="st">Famous <span class="b">YouTubers</span></h2>
+  <p class="sd">These creators shaped Roblox culture, introduced millions to the platform, and became generational legends.</p>
+  <div class="ygrid">
+    <div class="ytc" style="--yc:var(--red)"><div class="ytico" style="background:linear-gradient(135deg,#ff4020,#c0000c)">F</div><div class="ytnm">Flamingo</div><div class="ytsub">13M+ SUBS</div><div class="ytde">Albert Spencer Aretz (mrflimflam). King of chaotic Roblox content — admin commands, broken games, troll accounts. Unfiltered humor and genuine love for Roblox made him the platform's biggest star.</div></div>
+    <div class="ytc" style="--yc:var(--blue)"><div class="ytico" style="background:linear-gradient(135deg,#2266ff,#0033aa)">D</div><div class="ytnm">Denis</div><div class="ytsub">9M+ SUBS</div><div class="ytde">Denis Kopotun. Formed "The Pals" with Sub, Alex, Corl, and Sketch. Family-friendly, warm, iconic. "Let's go!" became a battle cry for an entire generation of young Roblox players.</div></div>
+    <div class="ytc" style="--yc:var(--green)"><div class="ytico" style="background:linear-gradient(135deg,#00aa44,#006622)">K</div><div class="ytnm">KreekCraft</div><div class="ytsub">6M+ SUBS</div><div class="ytde">Forrest Starling. Exploded during COVID with Piggy content. Known for grinding Tower of Hell live, covering every Roblox event. Infectious energy in every upload.</div></div>
+    <div class="ytc" style="--yc:var(--yellow)"><div class="ytico" style="background:linear-gradient(135deg,#ffcc00,#ff8800)">P</div><div class="ytnm">Poke</div><div class="ytsub">7M+ SUBS</div><div class="ytde">Aleksander Oniszczak. The Pals' most competitive member. Murder mystery runs, challenge series, and legendary group dynamics. His reactions are pure gold.</div></div>
+    <div class="ytc" style="--yc:var(--orange)"><div class="ytico" style="background:linear-gradient(135deg,#ff7700,#aa4400)">S</div><div class="ytnm">Sketch</div><div class="ytsub">5M+ SUBS</div><div class="ytde">Dry humor, sarcastic commentary, long-running Pals collabs. Sketch brought a cooler, older-sibling energy that defined Roblox YouTube's golden age.</div></div>
+    <div class="ytc" style="--yc:var(--purple)"><div class="ytico" style="background:linear-gradient(135deg,#9955ff,#6600cc)">R</div><div class="ytnm">RussoPlays</div><div class="ytsub">4M+ SUBS</div><div class="ytde">Veteran Roblox creator who survived every era. Known for honest game reviews, secret area exploration, and being one of the most trusted voices in Roblox content.</div></div>
+    <div class="ytc" style="--yc:var(--cyan)"><div class="ytico" style="background:linear-gradient(135deg,#00ccff,#005588)">Su</div><div class="ytnm">Sub</div><div class="ytsub">3M+ SUBS</div><div class="ytde">The wildcard of The Pals. Random humor and editing style ahead of its time. His chemistry with Denis created some of Roblox YouTube's most memorable moments.</div></div>
+    <div class="ytc" style="--yc:var(--pink)"><div class="ytico" style="background:linear-gradient(135deg,#ff3cac,#880055)">G</div><div class="ytnm">Guava Juice</div><div class="ytsub">15M+ SUBS</div><div class="ytde">Roi Fabito blended Roblox with mainstream family comedy, reaching audiences who'd never heard of the platform. Helped legitimize Roblox as mainstream entertainment.</div></div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 06 — LEGENDS ◆</span></div>
+
+<!-- ════ HACKERS ════ -->
+<div id="hackers" style="background:var(--panel)">
+<div class="sw">
+  <div class="stag">// The Mythology</div>
+  <h2 class="st">Hackers & <span class="r">Legends</span></h2>
+  <p class="sd">Some were myths born of imagination. Some were real threats. All became permanent parts of Roblox's folklore.</p>
+  <div class="hgrid">
+    <div class="hc"><div class="hnm">JOHN DOE</div><span class="hst sm">MYTH</span><div class="hde">User #2. A staff test account that sparked a 2017 viral panic: "John Doe will hack all accounts on March 18th." Schools banned Roblox. Parents called tech support. News articles ran. Complete fabrication — but John Doe became Roblox's most iconic ghost forever.</div><div class="badge by" style="margin-top:10px">USER #2 • 2017 PANIC</div></div>
+    <div class="hc"><div class="hnm">GUEST 666</div><span class="hst sm">CREEPYPASTA</span><div class="hde">A "demon guest" who appeared in your server, stood motionless, stared at your character, then crashed your game. Fan videos were shared millions of times. Screenshots were manipulated to "prove" his existence. Guests were real (unregistered players) but #666 was pure fiction — terrifying to a 10-year-old at 2am.</div></div>
+    <div class="hc"><div class="hnm">1x1x1x1</div><span class="hst sb">BANNED</span><div class="hde">The most notorious alleged hacker account. Roblox confirmed and terminated it. Whether 1x1x1x1 had real server-level exploit capabilities or was mythologized remains debated. The name became synonymous with Roblox's dark side and spawned novels, ARGs, and short films.</div><div class="badge br" style="margin-top:10px">CONFIRMED BANNED</div></div>
+    <div class="hc"><div class="hnm">LILLY_S</div><span class="hst sl2">MYSTERY</span><div class="hde">One of Roblox's most authentic mysteries. An all-black avatar appearing in games during 2013–2014, standing still and watching before vanishing. Unlike most myths, genuine independent screenshots exist. Roblox never officially explained the account. One of the few legends that might actually be real.</div></div>
+    <div class="hc"><div class="hnm">JANE DOE</div><span class="hst sm">MYTH</span><div class="hde">User #3. The female counterpart to John Doe — also a staff test account. Often paired with John Doe in myths, described as a "couple" haunting players together. Both became cultural shorthand for "mysterious Roblox figure," inspiring thousands of fan stories and animated videos.</div></div>
+    <div class="hc"><div class="hnm">REAL HACKERS</div><span class="hst sr">DOCUMENTED</span><div class="hde">Beyond myths, real threats exist. A 2020 exploit exposed inappropriate content on a child's account in a widely-reported incident. In 2023, internal Roblox DevCon data was breached. Robux scams, phishing sites, and script injection attacks cost players millions annually. Roblox employs hundreds in Trust & Safety to fight back.</div></div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 07 — PLAY ◆</span></div>
+
+<!-- ════ MINIGAMES ════ -->
+<div id="minigames">
+<div class="sw">
+  <div class="stag">// Interactive Zone</div>
+  <h2 class="st">Play <span class="g">Minigames</span></h2>
+  <p class="sd">Six Roblox-inspired browser games — built right into this page. No downloads, no Robux needed.</p>
+
+  <!-- GAME TABS -->
+  <div class="gtabs">
+    <button class="gtab active" data-game="obby">⬜ OBBY RUNNER</button>
+    <button class="gtab" data-game="blaster">🟩 BLOCK BLASTER</button>
+    <button class="gtab" data-game="memory">🃏 MEMORY MATCH</button>
+    <button class="gtab" data-game="scramble">🔤 WORD SCRAMBLE</button>
+    <button class="gtab" data-game="simon">🎮 SIMON SAYS</button>
+    <button class="gtab" data-game="trivia">🟨 TRIVIA CHALLENGE</button>
+  </div>
+
+  <!-- OBBY RUNNER -->
+  <div class="gpanel active" id="gp-obby">
+    <div class="gbox" style="--gc:var(--blue)">
+      <div class="ghdr"><span>⬜ OBBY RUNNER</span><span id="obby-sc">SCORE: 0</span></div>
+      <canvas id="obby-canvas"></canvas>
+      <div class="gctrls">
+        <button class="btn btn-b" id="ob-start">▶ START</button>
+        <button class="btn btn-r" id="ob-reset">↺ RESET</button>
+        <span class="ginfo">SPACE / TAP TO JUMP · AVOID LAVA · SPEED INCREASES!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK BLASTER -->
+  <div class="gpanel" id="gp-blaster">
+    <div class="gbox" style="--gc:var(--green)">
+      <div class="ghdr"><span>🟩 BLOCK BLASTER</span><span id="clk-td">30s</span></div>
+      <div id="clicker-area"></div>
+      <div class="cscore" id="clk-sc">0</div>
+      <div class="cinfo" id="clk-info">HIT START TO PLAY</div>
+      <div class="gctrls">
+        <button class="btn btn-g" id="clk-start">▶ START</button>
+        <button class="btn btn-r" id="clk-reset">↺ RESET</button>
+        <span class="ginfo">🟧=10pts · 🟨=5pts · 🟩=3pts · 🟦=2pts · 🟥=1pt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMORY MATCH -->
+  <div class="gpanel" id="gp-memory">
+    <div class="gbox" style="--gc:var(--purple)">
+      <div class="ghdr"><span>🃏 ROBLOX MEMORY MATCH</span><span id="mem-moves-disp">MOVES: 0</span></div>
+      <div id="mem-game"></div>
+      <div class="mem-info">
+        <div class="mem-stat">MATCHES: <span id="mem-matches">0</span>/12</div>
+        <div class="mem-stat">MOVES: <span id="mem-moves">0</span></div>
+        <div class="mem-stat">TIME: <span id="mem-time">0s</span></div>
+        <div class="mem-stat" id="mem-best-disp">BEST: <span id="mem-best">—</span></div>
+      </div>
+      <div class="gctrls">
+        <button class="btn btn-p" id="mem-start">▶ NEW GAME</button>
+        <span id="mem-msg" style="font-family:'Press Start 2P';font-size:9px;align-self:center"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORD SCRAMBLE -->
+  <div class="gpanel" id="gp-scramble">
+    <div class="gbox" style="--gc:var(--orange)">
+      <div class="ghdr"><span>🔤 ROBLOX WORD SCRAMBLE</span><span id="ws-score-disp" style="color:var(--orange)">SCORE: 0</span></div>
+      <div style="text-align:center;margin-bottom:8px;font-family:'Orbitron';font-size:10px;color:var(--dim)">UNSCRAMBLE THE ROBLOX WORD!</div>
+      <div class="ws-word" id="ws-word">— — — — —</div>
+      <div class="ws-hint" id="ws-hint">Press START to begin</div>
+      <div class="ws-timer-bar"><div class="ws-timer-fill" id="ws-timer-fill" style="width:100%"></div></div>
+      <div class="ws-input-row">
+        <input class="ws-input" id="ws-input" placeholder="TYPE YOUR ANSWER..." maxlength="20" autocomplete="off">
+        <button class="btn btn-b" id="ws-submit">CHECK</button>
+      </div>
+      <div class="ws-feedback" id="ws-fb"></div>
+      <div class="ws-score-row">
+        <div class="ws-stat">SCORE: <span id="ws-score">0</span></div>
+        <div class="ws-stat">ROUND: <span id="ws-round">0</span>/10</div>
+        <div class="ws-stat">STREAK: <span id="ws-streak">0</span>🔥</div>
+      </div>
+      <div class="gctrls">
+        <button class="btn btn-b" id="ws-start">▶ START</button>
+        <button class="btn btn-r" id="ws-skip">⏭ SKIP</button>
+        <span class="ginfo">15 SECONDS PER WORD · STREAK BONUS!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIMON SAYS -->
+  <div class="gpanel" id="gp-simon">
+    <div class="gbox" style="--gc:var(--cyan)">
+      <div class="ghdr"><span>🎮 SIMON SAYS</span><span id="simon-level-disp" style="color:var(--cyan)">LEVEL: 0</span></div>
+      <div id="simon-msg">Press START to play!</div>
+      <div class="simon-grid">
+        <button class="sbtn" id="s0" style="background:var(--green)" data-color="green"></button>
+        <button class="sbtn" id="s1" style="background:var(--red)"   data-color="red"></button>
+        <button class="sbtn" id="s2" style="background:var(--yellow)"data-color="yellow"></button>
+        <button class="sbtn" id="s3" style="background:var(--blue)"  data-color="blue"></button>
+      </div>
+      <div class="simon-stats" style="margin-top:14px">
+        <div class="simon-stat">LEVEL: <span id="simon-lv">0</span></div>
+        <div class="simon-stat">BEST: <span id="simon-best">0</span></div>
+      </div>
+      <div class="gctrls">
+        <button class="btn btn-b" style="--gc:var(--cyan);color:var(--cyan);border-color:var(--cyan)" id="simon-start">▶ START</button>
+        <span class="ginfo">WATCH THE PATTERN · REPEAT IT BACK!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRIVIA -->
+  <div class="gpanel" id="gp-trivia">
+    <div class="gbox" style="--gc:var(--yellow);background:rgba(255,215,0,.015);border-color:rgba(255,215,0,.15)">
+      <div class="ghdr"><span>🟨 ROBLOX TRIVIA CHALLENGE</span></div>
+      <div class="trivia-meta">
+        <div class="trivia-sc" id="trivia-sc">0 pts</div>
+        <div class="trivia-track"><div class="trivia-fill" id="trivia-fill"></div></div>
+        <div class="trivia-qn" id="trivia-qn">Q 0/20</div>
+      </div>
+      <div class="trivia-q" id="trivia-q">Press START to test your Roblox knowledge! 20 questions. Can you get a perfect score?</div>
+      <div class="trivia-opts" id="trivia-opts">
+        <button class="topt" disabled>A) ...</button>
+        <button class="topt" disabled>B) ...</button>
+        <button class="topt" disabled>C) ...</button>
+        <button class="topt" disabled>D) ...</button>
+      </div>
+      <div class="gctrls">
+        <button class="btn btn-y" id="trivia-start">▶ START TRIVIA</button>
+        <span id="trivia-fb" style="font-family:'Press Start 2P';font-size:9px;align-self:center"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CHAPTER 08 — FACTS ◆</span></div>
+
+<!-- ════ FACTS ════ -->
+<div id="facts" style="background:var(--darker)">
+<div class="sw">
+  <div class="stag">// Did You Know?</div>
+  <h2 class="st">Mind-Blowing <span class="y">Facts</span></h2>
+  <p class="sd">Numbers and stories so wild they sound made up. They aren't.</p>
+  <div class="fgrid">
+    <div class="fcd" style="--fc:var(--red)"><div class="fnum">01</div><div class="ftxt">Roblox processes over <strong>500 million</strong> chat messages daily — more than Twitter's total daily tweet volume.</div></div>
+    <div class="fcd" style="--fc:var(--blue)"><div class="fnum">02</div><div class="ftxt">Developers earned <strong>$740M+</strong> through DevEx in 2022 alone — a real economy powering real lives inside a game.</div></div>
+    <div class="fcd" style="--fc:var(--green)"><div class="fnum">03</div><div class="ftxt">The Lil Nas X Roblox concert had <strong>33 million+ virtual attendees</strong> — more than any real-world concert in history.</div></div>
+    <div class="fcd" style="--fc:var(--yellow)"><div class="fnum">04</div><div class="ftxt">"MeepCity" crossed <strong>10 billion visits</strong> — more traffic than many of the world's top websites receive annually.</div></div>
+    <div class="fcd" style="--fc:var(--orange)"><div class="fnum">05</div><div class="ftxt">Roblox has more <strong>daily active users under 13</strong> than TikTok, Snapchat, and Instagram combined in the US.</div></div>
+    <div class="fcd" style="--fc:var(--purple)"><div class="fnum">06</div><div class="ftxt">The original blocky avatar was partly inspired by <strong>LEGO</strong>. Baszucki even explored a licensing deal before going original.</div></div>
+    <div class="fcd" style="--fc:var(--red)"><div class="fnum">07</div><div class="ftxt">"Adopt Me!" reached <strong>1.6 million concurrent players</strong>, crashing Roblox servers multiple times in a single week.</div></div>
+    <div class="fcd" style="--fc:var(--cyan)"><div class="fnum">08</div><div class="ftxt">Roblox Studio's Lua scripting has created <strong>real software engineers</strong>. Many professionals list Roblox as their first coding experience.</div></div>
+    <div class="fcd" style="--fc:var(--green)"><div class="fnum">09</div><div class="ftxt">At peak COVID traffic, Roblox handled <strong>over 1 billion hours</strong> of gameplay per month — equivalent to 114,000 years.</div></div>
+    <div class="fcd" style="--fc:var(--yellow)"><div class="fnum">10</div><div class="ftxt">The word "Roblox" is Googled <strong>over 20 million times monthly</strong> — more searches than Minecraft, Fortnite, or FIFA.</div></div>
+    <div class="fcd" style="--fc:var(--blue)"><div class="fnum">11</div><div class="ftxt">Roblox's <strong>Tix currency</strong>, removed in 2016, remains the most mourned feature in platform history — 8+ years later, players still post memorials.</div></div>
+    <div class="fcd" style="--fc:var(--pink)"><div class="fnum">12</div><div class="ftxt">By 2026, Roblox had partnered with <strong>Gucci, Nike, Vans, NFL, and Warner Bros</strong> — making it a serious digital fashion and entertainment platform.</div></div>
+  </div>
+</div>
+</div>
+
+<div class="div"><span class="dicon">◆ CREDITS ◆</span></div>
+
+<!-- ════ CREDITS ════ -->
+<div id="credits">
+  <canvas id="crc"></canvas>
+  <div class="cinner">
+    <div class="cbuilt">DESIGNED & DEVELOPED BY</div>
+    <div class="cname">Sswayam</div>
+    <p class="csub">WEB DEVELOPER • ROBLOX ENTHUSIAST • 2026</p>
+
+    <!-- ROBLOX PROFILE -->
+    <div class="crbox">
+      <div class="crbi">
+        <div class="cricon">🎮</div>
+        <div class="crbl">Find Me On Roblox</div>
+        <div class="crbu">Sswayam12341</div>
+        <div class="crmsg">Feel free to <strong>add or follow me</strong> on Roblox!<br>I'd love to play with you — drop a friend request and mention this website! 👋</div>
+      </div>
+    </div>
+
+    <!-- FAVORITE GAMES -->
+    <div style="margin:30px 0 10px;font-family:'Press Start 2P';font-size:9px;color:var(--dim);letter-spacing:3px;">⭐ MY FAVOURITE ROBLOX GAMES ⭐</div>
+    <div class="fav-games">
+      <div class="fav-card rank1">
+        <div class="fav-rank" style="color:var(--yellow)">🥇</div>
+        <div class="fav-name">Blox Fruits</div>
+        <div class="fav-tag">RANK #1 · ALL-TIME FAVOURITE</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:8px;font-family:'Rajdhani';line-height:1.5">The ultimate One Piece-inspired adventure. Devil fruits, swords, raids, and seas to conquer. Sswayam's #1 pick!</div>
+      </div>
+      <div class="fav-card rank2">
+        <div class="fav-rank" style="color:#c0c0c0">🥈</div>
+        <div class="fav-name">HyperShot</div>
+        <div class="fav-tag">RANK #2 · FAVOURITE SHOOTER</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:8px;font-family:'Rajdhani';line-height:1.5">Fast-paced projectile shooter with insane mechanics. Pure skill and reflexes — a hidden gem of Roblox.</div>
+      </div>
+      <div class="fav-card rank3">
+        <div class="fav-rank" style="color:#cd7f32">🥉</div>
+        <div class="fav-name">Forsaken</div>
+        <div class="fav-tag">RANK #3 · FAVOURITE HORROR</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:8px;font-family:'Rajdhani';line-height:1.5">Dark, atmospheric, and terrifying. Forsaken delivers pure horror unlike anything else on Roblox. Not for the faint-hearted.</div>
+      </div>
+    </div>
+
+    <div class="chearts"><span>❤️</span><span>🟥</span><span>🟦</span><span>🟩</span><span>🟨</span><span>🟧</span><span>❤️</span></div>
+
+    <div class="ccopy">
+      <p>THIS IS A FAN-MADE EDUCATIONAL PROJECT — NOT AFFILIATED WITH ROBLOX CORPORATION</p>
+      <p class="cr" style="margin-top:8px">ROBLOX™ © 2004–2026 ROBLOX CORPORATION</p>
+      <p style="margin-top:8px">WEBSITE © 2026 SSWAYAM · ALL CREATIVE RIGHTS RESERVED</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fbar">
+    <a href="#hero">Home</a><a href="#history">History</a><a href="#events-wrap">Events</a>
+    <a href="#encyclopedia">Encyclopedia</a><a href="#founders">People</a>
+    <a href="#youtubers">YouTubers</a><a href="#hackers">Legends</a>
+    <a href="#minigames">Play</a><a href="#facts">Facts</a><a href="#credits">Credits</a>
+  </div>
+  <p>MADE WITH ❤ BY SSWAYAM · ROBLOX: SSWAYAM12341 · 2026</p>
+</footer>
+
+<script>
+const qs=s=>document.querySelector(s), qsa=s=>document.querySelectorAll(s);
+
+/* ─── LOADING ─────────────────────────────────── */
+(()=>{
+  const b=qs('#lb'),p=qs('#lp2'),t=qs('#lt');
+  const msgs=['LOADING BLOCKS...','PHYSICS ENGINE...','SPAWNING PLAYERS...','CONNECTING SERVERS...','BUILDING WORLD...','DONE!'];
+  let v=0;
+  const iv=setInterval(()=>{
+    v+=Math.random()*8+2; if(v>100)v=100;
+    b.style.width=v+'%'; p.textContent=Math.floor(v)+'%';
+    t.textContent=msgs[Math.min(Math.floor(v/20),5)];
+    if(v>=100){clearInterval(iv);setTimeout(()=>qs('#ls').classList.add('gone'),600);}
+  },60);
+})();
+
+/* ─── SCROLL PROGRESS ────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  qs('#spb').style.width=(window.scrollY/(s.scrollHeight-s.clientHeight)*100)+'%';
+});
+
+/* ─── CURSOR ─────────────────────────────────── */
+const co=qs('#co'),ci=qs('#ci');
+let mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function ac(){ox+=(mx-ox)*.12;oy+=(my-oy)*.12;co.style.left=ox+'px';co.style.top=oy+'px';ci.style.left=mx+'px';ci.style.top=my+'px';requestAnimationFrame(ac);})();
+document.addEventListener('mousedown',()=>{co.classList.add('click');ci.classList.add('click');});
+document.addEventListener('mouseup',()=>{co.classList.remove('click');ci.classList.remove('click');});
+
+/* ─── MATRIX ─────────────────────────────────── */
+(()=>{
+  const c=qs('#mc'),ctx=c.getContext('2d');
+  const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};
+  resize(); window.addEventListener('resize',resize);
+  const chars='ROBLOX0123456789ABCDEF◆●▲';
+  const cols=Math.floor(c.width/16),drops=Array(cols).fill(0);
+  setInterval(()=>{
+    ctx.fillStyle='rgba(0,0,0,.05)';ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#E8192C';ctx.font='12px "Press Start 2P"';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,y*16);
+      if(y*16>c.height&&Math.random()>.975)drops[i]=0; else drops[i]=y+1;
+    });
+  },65);
+})();
+
+/* ─── HERO BLOCKS ────────────────────────────── */
+(()=>{
+  const bg=qs('#bbg');
+  const cols=['#E8192C','#00A2FF','#02B757','#FFD700','#FF6B00','#9B5DE5','#00F5FF'];
+  for(let i=0;i<32;i++){
+    const b=document.createElement('div'); b.className='blk';
+    const sz=Math.random()*32+16;
+    b.style.cssText=`left:${Math.random()*100}%;width:${sz}px;height:${sz}px;animation-duration:${Math.random()*18+10}s;animation-delay:${Math.random()*15}s;`;
+    const f=document.createElement('div'); f.className='bface';
+    f.style.cssText=`background:${cols[Math.floor(Math.random()*cols.length)]};opacity:0.12;`;
+    b.appendChild(f); bg.appendChild(b);
+  }
+})();
+
+/* ─── PARTICLE NET ───────────────────────────── */
+(()=>{
+  const c=qs('#pc'),ctx=c.getContext('2d');
+  const resize=()=>{c.width=c.offsetWidth;c.height=c.offsetHeight;};
+  resize(); window.addEventListener('resize',resize);
+  const pts=Array.from({length:80},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,a:Math.random()}));
+  (function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,1.2,0,Math.PI*2);ctx.fillStyle=`rgba(232,25,44,${p.a*.4})`;ctx.fill();
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
+    });
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+      if(d<90){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,162,255,${(1-d/90)*.07})`;ctx.lineWidth=.5;ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ─── COUNTERS ───────────────────────────────── */
+const cobs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target,target=+el.dataset.count;
+    let cur=0;const iv=setInterval(()=>{cur=Math.min(cur+target/70,target);el.textContent=Math.floor(cur);if(cur>=target){el.textContent=target;clearInterval(iv);}},25);
+    cobs.unobserve(el);
+  });
+},{threshold:.5});
+qsa('[data-count]').forEach(e=>cobs.observe(e));
+
+/* ─── SCROLL REVEAL ──────────────────────────── */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting)setTimeout(()=>e.target.classList.add('v'),i*70); });
+},{threshold:.1});
+qsa('.ti,.pc2,.ytc,.hc,.fcd').forEach(el=>ro.observe(el));
+
+/* ─── EVENTS DATA ────────────────────────────── */
+const EVS=[
+  {y:'2006',t:'Roblox.com Goes Live',d:'Platform opens Sept 1. Community explodes instantly.',tp:'LAUNCH',c:'var(--green)'},
+  {y:'2007',t:'First Server Crash',d:'Viral "Sword Fight" game spikes traffic. Servers down 4+ hours.',tp:'SERVER CRASH',c:'var(--red)'},
+  {y:'2008',t:'Builderman\'s First Place',d:'Baszucki publishes the first official Roblox place. Community celebrates.',tp:'MILESTONE',c:'var(--blue)'},
+  {y:'2009',t:'Mass Hack Scare',d:'Widespread rumor of account-stealing scripts. Roblox issues emergency security advisory.',tp:'HACKER ALERT',c:'var(--red)'},
+  {y:'2010',t:'1M Users Milestone',d:'Roblox crosses 1 million registered accounts. Community-wide celebration.',tp:'MILESTONE',c:'var(--yellow)'},
+  {y:'2011',t:'Guest 666 Panic',d:'Creepypasta goes viral. Thousands "report encounters." YouTube explodes with "proof" videos.',tp:'MYTH PANIC',c:'var(--purple)'},
+  {y:'2012',t:'NDS Server Meltdown',d:'Natural Disaster Survival becomes so popular it causes repeated multi-hour outages.',tp:'SERVER CRASH',c:'var(--red)'},
+  {y:'2013',t:'Erik Cassel Passes Away',d:'Co-founder dies of cancer Feb 11. Community holds in-game vigils. A true hero lost.',tp:'IN MEMORIAM',c:'var(--blue)'},
+  {y:'2013',t:'DevEx Launches',d:'Developers can now convert Robux to real USD. The first Roblox millionaires are created.',tp:'ECONOMIC SHIFT',c:'var(--green)'},
+  {y:'2015',t:'1x1x1x1 Banned',d:'Roblox confirms and bans the notorious hacker account. Forums erupt. Legend is born.',tp:'HACKER BANNED',c:'var(--red)'},
+  {y:'2016',t:'Tix Removed',d:'Roblox kills Tix on April 14. Mass outrage. #SaveTix trends. Thousands quit.',tp:'CONTROVERSY',c:'var(--orange)'},
+  {y:'2016',t:'Xbox One Launch',d:'Roblox on Xbox breaks concurrent player records on launch day.',tp:'PLATFORM LAUNCH',c:'var(--green)'},
+  {y:'2017',t:'John Doe March 18 Panic',d:'Hoax: John Doe will "hack all accounts." Schools ban Roblox. News articles run. Pure fiction.',tp:'MASS PANIC',c:'var(--red)'},
+  {y:'2018',t:'Jailbreak Hits 1B Visits',d:'asimo3089 & badcc\'s game breaks all records. New concurrent player peak.',tp:'RECORD BROKEN',c:'var(--blue)'},
+  {y:'2018',t:'Bacon Hair Cultural Moment',d:'New default avatar sparks a phenomenon. "Bacon Hairs" become Roblox\'s most iconic meme.',tp:'CULTURE',c:'var(--orange)'},
+  {y:'2019',t:'Adopt Me! Server Meltdown',d:'Pet update causes 48-hour platform meltdown. 1.6M concurrent players. Historic crash.',tp:'SERVER CRASH',c:'var(--red)'},
+  {y:'2019',t:'Robux Scam Wave',d:'Massive phishing campaign steals thousands of accounts. Trust & Safety overhaul begins.',tp:'SECURITY BREACH',c:'var(--red)'},
+  {y:'2020',t:'Lil Nas X Concert',d:'33 million virtual attendees. Servers strain. Virtual entertainment is forever changed.',tp:'RECORD EVENT',c:'var(--yellow)'},
+  {y:'2020',t:'COVID Surge Crashes Servers',d:'Lockdown causes platform-wide outages in March. "Unprecedented demand" statement released.',tp:'SERVER CRASH',c:'var(--red)'},
+  {y:'2021',t:'NYSE IPO $45B',d:'RBLX goes public March 10, 2021. Opening valuation: $45.2 billion. Historic day.',tp:'HISTORIC IPO',c:'var(--green)'},
+  {y:'2022',t:'Twenty One Pilots Concert',d:'Event breaks Roblox\'s own attendance record. Server queues reach 2-hour waits.',tp:'RECORD EVENT',c:'var(--blue)'},
+  {y:'2022',t:'DevCon Data Breach',d:'Internal Roblox developer conference data leaked. Breach notifications sent to creators.',tp:'DATA BREACH',c:'var(--red)'},
+  {y:'2023',t:'AI Creation Tools Launch',d:'Users can now generate terrain, code, and items with natural language. Biggest Studio update ever.',tp:'TECH MILESTONE',c:'var(--blue)'},
+  {y:'2023',t:'17+ Content Rating',d:'Roblox introduces 17+ rating. Massive debate about platform identity erupts.',tp:'POLICY CHANGE',c:'var(--yellow)'},
+  {y:'2024',t:'380M User Milestone',d:'Roblox exceeds 380M monthly active users — larger than Twitter/X\'s entire userbase.',tp:'MILESTONE',c:'var(--green)'},
+  {y:'2026',t:'Roblox in 2026',d:'AI tools expanded, full spatial audio, UGC economy valued at $1B+. Platform keeps evolving.',tp:'PRESENT DAY',c:'var(--cyan)'},
+];
+(()=>{
+  const tr=qs('#etrack');
+  EVS.forEach((ev,i)=>{
+    const card=document.createElement('div'); card.className='ecard';
+    const isOdd=i%2===0;
+    card.innerHTML=`
+      <div class="edot" style="--ec:${ev.c};background:${ev.c};box-shadow:0 0 12px ${ev.c};"></div>
+      <div class="ebox" style="--ec:${ev.c};position:relative;top:${isOdd?'65px':'-65px'}">
+        <div class="eyr" style="color:${ev.c}">${ev.y}</div>
+        <div class="etit">${ev.t}</div>
+        <div class="edesc">${ev.d}</div>
+        <div class="etype" style="color:${ev.c}">${ev.tp}</div>
+      </div>`;
+    tr.appendChild(card);
+  });
+})();
+
+/* ─── ENCYCLOPEDIA DATA ──────────────────────── */
+const ENC=[
+  // CURRENCY
+  {term:'Robux',cat:'CURRENCY',def:'The primary virtual currency of Roblox. Purchased with real money, used to buy items, game passes, avatar accessories, and more. Also earnable by developers through DevEx. As of 2026 one Robux is worth approximately $0.0035 USD.',tags:['R$','virtual money']},
+  {term:'Tix (Tickets)',cat:'CURRENCY',def:'A secondary free currency removed in April 2016. Earned by logging in daily and having players visit your place. Extremely controversial removal — to this day considered one of Roblox\'s biggest mistakes by old-school players.',tags:['removed 2016','deprecated']},
+  {term:'DevEx',cat:'CURRENCY',def:'Developer Exchange — the program allowing creators to convert Robux into real-world USD. Requires meeting a minimum threshold. Has paid out over $740 million to creators in a single year at peak.',tags:['developer','USD','cash out']},
+  {term:'Premium',cat:'CURRENCY',def:'Roblox\'s monthly subscription service (replaced Builders Club). Gives monthly Robux stipends, the ability to trade items, and a premium badge on your profile. Three tiers: $4.99, $9.99, $19.99/month.',tags:['subscription','membership']},
+  // MECHANIC
+  {term:'Obby',cat:'MECHANIC',def:'Short for "Obstacle Course." One of the most popular Roblox game genres. Players navigate platforms, avoid hazards, and reach the end. Ranges from simple beginner obbies to brutally hard "rage" obbies with pixel-perfect jumps.',tags:['obstacle course','platformer','genre']},
+  {term:'Spawn Point',cat:'MECHANIC',def:'The location where a player appears when they join a game or respawn after dying. In many games, spawn points can be moved by purchasing "spawn points" or checkpoints.',tags:['respawn','checkpoint']},
+  {term:'Baseplate',cat:'MECHANIC',def:'The default flat terrain piece in Roblox Studio. A gray or green flat plate that serves as the ground for new games. Experienced developers often remove it or replace it with custom terrain.',tags:['studio','terrain','build']},
+  {term:'Server Hopping',cat:'MECHANIC',def:'The practice of repeatedly leaving and rejoining a game to find a different server with better conditions — usually to find rare items, specific players, or lower-latency servers.',tags:['strategy','gameplay']},
+  {term:'Lag',cat:'MECHANIC',def:'Latency or performance issues causing delayed or choppy gameplay. Common causes: poor internet connection, overcrowded servers, unoptimized game scripts, or Roblox server overload. A universal complaint across all Roblox players.',tags:['performance','internet','servers']},
+  {term:'Hitbox',cat:'MECHANIC',def:'The invisible collision area of a player or object used for damage calculations. "Hitbox manipulation" was a common early exploit. Many competitive Roblox games have very specific hitbox configurations that define their feel.',tags:['collision','combat','exploit']},
+  {term:'Datastores',cat:'MECHANIC',def:'Roblox\'s built-in system for saving player data between sessions. Used to save currency, inventory, progress, and achievements. Critical for any persistent game. Has a limit on how often data can be saved per minute.',tags:['save system','developer','lua']},
+  // SLANG
+  {term:'Noob',cat:'SLANG',def:'Originally a derogatory term for new or inexperienced players. Over time it evolved — in Roblox culture "noob" now also refers to the default character appearance (grey shirt, blue pants) regardless of actual skill level.',tags:['insult','default','new player']},
+  {term:'Bacon Hair',cat:'SLANG',def:'The unofficial name for the default male Roblox hairstyle introduced around 2018 — a reddish, wavy style that looks like a strip of bacon. Became the symbol of "noob" identity despite being shared by millions of players.',tags:['default','avatar','meme']},
+  {term:'Robloxian',cat:'SLANG',def:'The collective term for all Roblox players and characters. "I\'m a Robloxian" means you\'re a Roblox player. Also sometimes refers to the blocky character model itself.',tags:['player','community','identity']},
+  {term:'OOF',cat:'SLANG',def:'The iconic Roblox death sound — a deep, goofy "OOF" that plays when a character dies. Became a massive internet meme. Roblox controversially replaced it in 2022 due to a licensing dispute with its creator Tommy Tallarico.',tags:['death sound','meme','iconic','removed']},
+  {term:'Exploiter / Hacker',cat:'SLANG',def:'A player who uses unauthorized scripts or programs to gain unfair advantages — flying, teleporting, infinite jump, ESP (seeing through walls), etc. Roblox bans exploiters but new exploits are constantly developed.',tags:['cheater','banned','scripts']},
+  {term:'Roblox Condo',cat:'SLANG',def:'Unofficial term for inappropriate user-created games bypassing Roblox\'s content filters. Roblox actively bans these games and the accounts that create them as part of their Trust & Safety enforcement.',tags:['inappropriate','banned','safety']},
+  {term:'FNF',cat:'SLANG',def:'"For No Fee" — offering to trade or give something for free. Opposite of "FTT" (Fair Trade Terms). Common in trading and adopt me communities.',tags:['trading','community']},
+  {term:'Touch Trade',cat:'SLANG',def:'A high-risk trading practice where both parties briefly equip items for each other to view before completing an off-platform trade. Generally considered unsafe and often leads to scams.',tags:['trading','risk','scam']},
+  {term:'ODer',cat:'SLANG',def:'Online Dater — a player who uses Roblox for inappropriate romantic roleplay. Against Roblox\'s Terms of Service. Often mocked by the community. Safety features have made ODing harder but not impossible.',tags:['TOS violation','safety','community']},
+  // GAME TYPE
+  {term:'Simulator',cat:'GAME TYPE',def:'One of Roblox\'s most popular genres. Games that simulate activities like pet collecting, mining, clicking, weight lifting, or trading — usually with exponential progression and prestige systems. Examples: Pet Simulator X, Mining Simulator.',tags:['genre','tycoon','clicking']},
+  {term:'Tycoon',cat:'GAME TYPE',def:'Games where players build and manage a base or business by pressing buttons that generate income over time. Classic Roblox genre dating back to the early days. Examples: Restaurant Tycoon, Lumber Tycoon 2.',tags:['genre','idle','base-building']},
+  {term:'Battle Royale',cat:'GAME TYPE',def:'Last-player-standing games inspired by PUBG and Fortnite. Many Roblox versions exist. Examples: Island Royale, Strucid, Arsenal. Popular for competitive play with short match cycles.',tags:['genre','competitive','pvp']},
+  {term:'Horror',cat:'GAME TYPE',def:'Roblox horror games range from jump-scare experiences to atmospheric psychological horror. The blocky aesthetic creates an uncanny valley effect. Notable examples: The Mimic, Dead Silence, Forsaken, DOORS, Identity Fraud.',tags:['genre','scary','forsaken']},
+  {term:'Roleplay (RP)',cat:'GAME TYPE',def:'Games where players take on characters and act out scenarios — from school life to medieval kingdoms to post-apocalyptic survival. One of Roblox\'s oldest and largest genres. Examples: Welcome to Bloxburg, Royale High, Work at a Pizza Place.',tags:['genre','social','story']},
+  {term:'Fighting/Combat',cat:'GAME TYPE',def:'Games focused on player vs player combat — swords, powers, martial arts, or firearms. Examples: Arsenal, Shindo Life, Blox Fruits, BedWars. One of the most competitive genres on the platform.',tags:['genre','pvp','competitive']},
+  // ITEM
+  {term:'Limiteds',cat:'ITEM',def:'Rare catalog items with a fixed quantity that can be traded between players. Often appreciate greatly in value over time. Some limiteds are worth tens of thousands of Robux. The foundation of Roblox\'s player-driven fashion economy.',tags:['rare','trading','catalog','value']},
+  {term:'UGC (User-Generated Content)',cat:'ITEM',def:'Items created by approved community designers rather than Roblox itself. The UGC program launched in 2019 and has dramatically expanded the catalog, with thousands of creator-made hats, accessories, and gear.',tags:['creator','catalog','economy','2019']},
+  {term:'Gear',cat:'ITEM',def:'Special items given to players in specific games that grant powers or tools — bombs, swords, vehicles, magic wands. Gear was a major early feature, declined in popularity, and is rarely used in modern games.',tags:['powerup','weapon','item','classic']},
+  {term:'Game Pass',cat:'ITEM',def:'One-time purchases within specific games that unlock permanent perks — extra pets, VIP rooms, double XP, special abilities. The primary way individual games monetize. Developers earn 70% of each game pass sale.',tags:['mtx','purchase','developer']},
+  {term:'Developer Product',cat:'ITEM',def:'Consumable in-game purchases that players can buy repeatedly — typically used for buying in-game currency, potions, or buffs. Unlike game passes, these reset and can be purchased multiple times.',tags:['purchase','consumable','developer']},
+  {term:'Avatar',cat:'ITEM',def:'Your Roblox character\'s visual appearance. Customizable with heads, faces, clothing, hats, accessories, and body colors. The avatar is your identity on the platform — a deeply personal expression for many players.',tags:['character','customization','identity']},
+  // FEATURE
+  {term:'Roblox Studio',cat:'FEATURE',def:'The free development application for creating Roblox games. Uses Lua scripting, a built-in terrain editor, part-based building, and a physics engine. It\'s been used to create everything from simple obstacle courses to complex MMORPGs — and it\'s available to anyone.',tags:['development','lua','game creation']},
+  {term:'Lua',cat:'FEATURE',def:'The lightweight scripting language used in Roblox Studio. Adapted from the Brazilian-developed Lua 5.1 language. Powers all game logic, AI, UI, physics interactions, and server communication. Has taught millions of people their first programming language.',tags:['programming','scripting','coding','studio']},
+  {term:'Spatial Voice Chat',cat:'FEATURE',def:'A feature launched in 2021 allowing players to communicate via microphone with proximity-based audio — voices get quieter as players move apart. Requires age verification. Dramatically changed social experiences on the platform.',tags:['voice','communication','social','2021']},
+  {term:'Roblox Connect',cat:'FEATURE',def:'A feature allowing players to video chat as their Roblox avatars — face-tracking maps your real expressions onto your character in real time. Part of Roblox\'s push toward immersive social metaverse experiences.',tags:['video chat','metaverse','face tracking']},
+  {term:'Layered Clothing',cat:'FEATURE',def:'An advanced avatar feature launched 2021 allowing clothes to realistically layer on top of each other — shirts under jackets, pants with boots, etc. A major visual upgrade over the old flat 2D clothing system.',tags:['avatar','clothing','3D','realistic']},
+  // PERSON
+  {term:'Builderman',cat:'PERSON',def:'The in-game username of David Baszucki, Roblox\'s co-founder and CEO. User #156. Builderman\'s account is one of the most followed on the platform. His avatar — a construction worker in a yellow hard hat — is iconic in Roblox culture.',tags:['CEO','founder','David Baszucki']},
+  {term:'Hackers (Mythology)',cat:'PERSON',def:'Refers collectively to the legendary hacker accounts of Roblox lore — John Doe, Jane Doe, Guest 666, 1x1x1x1, and Lilly_S. Most are myths or heavily exaggerated test accounts. See the Legends section for full profiles.',tags:['myth','legend','folklore']},
+  // EVENT
+  {term:'March 18th Incident',cat:'EVENT',def:'The 2017 viral hoax claiming John Doe would hack all Roblox accounts on March 18th. Caused genuine widespread panic — schools banned the platform, parents called tech support, news sites ran warnings. Entirely fabricated, but became one of the most famous events in Roblox history.',tags:['John Doe','2017','hoax','panic']},
+  {term:'Tix Removal Day',cat:'EVENT',def:'April 14, 2016 — the day Roblox removed the Tix (tickets) currency system. Met with massive community outrage. Forums, Reddit, and YouTube erupted with protests. Still considered one of the most controversial decisions Roblox ever made.',tags:['2016','controversy','currency','Tix']},
+  {term:'The Lil Nas X Concert',cat:'EVENT',def:'A 2020 virtual concert held inside Roblox starring Lil Nas X. Drew 33 million+ attendees across multiple showings — more than any physical concert in history. Featured exclusive avatar items, in-concert experiences, and live chat. Defined virtual entertainment.',tags:['2020','concert','virtual','record']},
+  {term:'The Great OOF Removal',cat:'EVENT',def:'In 2022, Roblox removed the iconic "OOF" death sound due to a licensing dispute with composer Tommy Tallarico. The internet declared it the end of an era. The sound had been a meme for years. Replaced with a softer, less memorable sound.',tags:['2022','OOF','death sound','controversy']},
+];
+
+(()=>{
+  const grid=qs('#enc-grid'), search=qs('#enc-search');
+  const catMap={'CURRENCY':'var(--yellow)','MECHANIC':'var(--blue)','SLANG':'var(--red)','GAME TYPE':'var(--green)','ITEM':'var(--orange)','FEATURE':'var(--cyan)','PERSON':'var(--purple)','EVENT':'var(--pink)'};
+  let activeCat='ALL';
+
+  function render(filter='',cat='ALL'){
+    const cards=grid.querySelectorAll('.enc-card');
+    cards.forEach(c=>c.remove());
+    qs('#enc-empty').style.display='none';
+    const filtered=ENC.filter(e=>{
+      const matchCat=cat==='ALL'||e.cat===cat;
+      const matchSearch=!filter||e.term.toLowerCase().includes(filter)||e.def.toLowerCase().includes(filter)||e.cat.toLowerCase().includes(filter);
+      return matchCat&&matchSearch;
+    });
+    qs('#enc-num').textContent=filtered.length;
+    if(filtered.length===0){qs('#enc-empty').style.display='block';return;}
+    filtered.forEach((e,i)=>{
+      const col=catMap[e.cat]||'var(--blue)';
+      const card=document.createElement('div');
+      card.className='enc-card';
+      card.style.cssText=`--ec2:${col};transition-delay:${(i%12)*40}ms;`;
+      card.innerHTML=`<div class="enc-cat" style="color:${col}">${e.cat}</div><div class="enc-term">${e.term}</div><div class="enc-def">${e.def}</div>${e.tags.map(t=>`<span class="enc-tag">#${t}</span>`).join('')}`;
+      grid.insertBefore(card,qs('#enc-empty'));
+      setTimeout(()=>card.classList.add('v'),i*30+50);
+    });
+  }
+
+  render();
+  search.addEventListener('input',e=>render(e.target.value.toLowerCase(),activeCat));
+  qsa('.enc-filter-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      qsa('.enc-filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat=btn.dataset.cat;
+      render(search.value.toLowerCase(),activeCat);
+    });
+  });
+})();
+
+/* ─── GAME TABS ──────────────────────────────── */
+qsa('.gtab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    qsa('.gtab').forEach(t=>t.classList.remove('active'));
+    qsa('.gpanel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    qs('#gp-'+tab.dataset.game).classList.add('active');
+  });
+});
+
+/* ─── GAME 1: OBBY RUNNER ────────────────────── */
+(()=>{
+  const cv=qs('#obby-canvas'),ctx=cv.getContext('2d');
+  let state='idle',score=0,animId,speed=3.8,frame=0;
+  const R=()=>{cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;};
+  R(); window.addEventListener('resize',R);
+  const GRAV=.55,J=-13,PW=30,PH=36;
+  let pl={x:70,y:100,vy:0,og:false},plats=[],parts=[];
+  const COLS=['#E8192C','#00A2FF','#02B757','#FFD700','#FF6B00','#9B5DE5'];
+  function init(){
+    pl={x:70,y:100,vy:0,og:false};
+    plats=[{x:0,y:cv.height-28,w:cv.width*2,h:28,t:'solid',c:'#222'}];
+    for(let i=0;i<6;i++)plats.push({x:160+i*180,y:cv.height-90-i*12,w:110,h:14,t:'solid',c:COLS[i%COLS.length]});
+    parts=[];score=0;speed=3.8;frame=0;
+  }
+  function spawn(){
+    const w=Math.random()*90+55,y=cv.height-60-Math.random()*(cv.height*.44);
+    const t=Math.random()<.14?'lava':'solid';
+    plats.push({x:cv.width+20,y,w,h:14,t,c:t==='lava'?'#FF4400':COLS[Math.floor(Math.random()*COLS.length)]});
+  }
+  function addP(x,y,c){for(let i=0;i<10;i++)parts.push({x,y,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*7,life:1,c,sz:Math.random()*7+3});}
+  function drawPl(x,y){const px=Math.floor(x),py=Math.floor(y);ctx.fillStyle='#E8192C';ctx.fillRect(px,py+11,PW,PH-11);ctx.fillStyle='#FFD090';ctx.fillRect(px+4,py,PW-8,14);ctx.fillStyle='#00A2FF';ctx.fillRect(px,py+11,PW,5);ctx.fillStyle='#000';ctx.fillRect(px+7,py+4,5,5);ctx.fillRect(px+17,py+4,5,5);}
+  function drawPlt(p){ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(p.x,p.y,p.w,4);ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(p.x,p.y+p.h-5,p.w,5);if(p.t==='lava'){ctx.fillStyle='rgba(255,220,0,.5)';for(let i=0;i<p.w;i+=16)ctx.fillRect(p.x+i+3,p.y+3,8,3);}}
+  function drawDead(){ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#E8192C';ctx.font='14px "Press Start 2P"';ctx.textAlign='center';ctx.fillText('YOU DIED',cv.width/2,cv.height/2-20);ctx.fillStyle='#fff';ctx.font='8px "Press Start 2P"';ctx.fillText('SCORE:'+score,cv.width/2,cv.height/2+10);ctx.fillText('PRESS RESET',cv.width/2,cv.height/2+34);ctx.textAlign='left';}
+  function idle(){ctx.fillStyle='#07090e';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#00A2FF';ctx.font='9px "Press Start 2P"';ctx.textAlign='center';ctx.fillText('PRESS START',cv.width/2,cv.height/2);ctx.fillStyle='#444';ctx.font='6px "Press Start 2P"';ctx.fillText('SPACE/TAP = JUMP',cv.width/2,cv.height/2+24);ctx.textAlign='left';}
+  function loop(){
+    if(state!=='playing')return;
+    frame++;score=Math.floor(frame/5);qs('#obby-sc').textContent='SCORE:'+score;
+    if(frame%180===0)speed+=.25;if(frame%65===0)spawn();
+    ctx.fillStyle='#07090e';ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.fillStyle='rgba(255,255,255,.2)';
+    for(let i=0;i<40;i++)ctx.fillRect(((i*97+frame*.5)%cv.width),(i*41)%cv.height,1+(i%2),1+(i%2));
+    plats.forEach(p=>p.x-=speed);plats=plats.filter(p=>p.x+p.w>-20);
+    pl.vy+=GRAV;pl.y+=pl.vy;pl.og=false;
+    for(const p of plats){if(pl.x+PW>p.x&&pl.x<p.x+p.w&&pl.y+PH>p.y&&pl.y+PH<p.y+p.h+Math.abs(pl.vy)+3&&pl.vy>=0){if(p.t==='lava'){addP(pl.x+PW/2,pl.y+PH,'#FF4400');state='dead';drawDead();return;}pl.y=p.y-PH;pl.vy=0;pl.og=true;}}
+    if(pl.y>cv.height+60){state='dead';drawDead();return;}
+    plats.forEach(drawPlt);
+    parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.25;p.life-=.04;ctx.globalAlpha=p.life;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,p.sz,p.sz);});
+    ctx.globalAlpha=1;parts=parts.filter(p=>p.life>0);
+    drawPl(pl.x,pl.y);
+    ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,cv.width,26);ctx.fillStyle='#fff';ctx.font='7px "Press Start 2P"';ctx.fillText('DIST:'+score,8,18);
+    animId=requestAnimationFrame(loop);
+  }
+  const jump=()=>{if(pl.og&&state==='playing')pl.vy=J;};
+  qs('#ob-start').onclick=()=>{if(state!=='playing'){cancelAnimationFrame(animId);init();state='playing';loop();}};
+  qs('#ob-reset').onclick=()=>{cancelAnimationFrame(animId);state='idle';init();idle();qs('#obby-sc').textContent='SCORE:0';};
+  document.addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowUp')&&qs('#gp-obby').classList.contains('active')){e.preventDefault();jump();}});
+  qs('#obby-canvas').addEventListener('click',jump);
+  qs('#obby-canvas').addEventListener('touchstart',e=>{e.preventDefault();jump();});
+  setTimeout(idle,1800);
+})();
+
+/* ─── GAME 2: BLOCK BLASTER ──────────────────── */
+(()=>{
+  const area=qs('#clicker-area');
+  let running=false,time=30,score=0,iv,spawnIv;
+  const E=['🟥','🟦','🟩','🟨','🟧'],P={'🟥':1,'🟦':2,'🟩':3,'🟨':5,'🟧':10};
+  function spawn(){
+    const em=E[Math.floor(Math.random()*E.length)];
+    const el=document.createElement('div');el.className='cblk';el.textContent=em;
+    const mx=area.offsetWidth-52,my=area.offsetHeight-52;
+    el.style.left=Math.random()*mx+'px';el.style.top=Math.random()*my+'px';
+    el.addEventListener('click',ev=>{
+      const pts=P[em]||1;score+=pts;qs('#clk-sc').textContent=score;
+      const ft=document.createElement('div');ft.className='fplus';ft.textContent='+'+pts;
+      ft.style.left=ev.offsetX+'px';ft.style.top=(ev.offsetY-10)+'px';ft.style.color=pts>=5?'#FFD700':'#02B757';
+      area.appendChild(ft);setTimeout(()=>ft.remove(),800);
+      el.remove();if(running)spawn();
+    });
+    setTimeout(()=>{if(el.parentNode)el.remove();},Math.random()*1400+900);
+    area.appendChild(el);
+  }
+  function start(){
+    area.innerHTML='';score=0;time=30;running=true;
+    qs('#clk-sc').textContent='0';qs('#clk-info').textContent='SMASH THE BLOCKS!';
+    for(let i=0;i<5;i++)spawn();
+    spawnIv=setInterval(()=>{if(running)spawn();},540);
+    iv=setInterval(()=>{
+      time--;qs('#clk-td').textContent=time+'s';
+      if(time<=0){
+        clearInterval(iv);clearInterval(spawnIv);running=false;area.innerHTML='';
+        const g=score>=60?'LEGENDARY🏆':score>=35?'GREAT⭐':score>=18?'DECENT👍':'KEEP TRYING!';
+        qs('#clk-info').textContent='SCORE:'+score+' — '+g;qs('#clk-td').textContent='DONE!';
+      }
+    },1000);
+  }
+  qs('#clk-start').onclick=()=>{if(!running)start();};
+  qs('#clk-reset').onclick=()=>{clearInterval(iv);clearInterval(spawnIv);running=false;area.innerHTML='';score=0;qs('#clk-sc').textContent='0';qs('#clk-info').textContent='HIT START TO PLAY';qs('#clk-td').textContent='30s';};
+})();
+
+/* ─── GAME 3: MEMORY MATCH ───────────────────── */
+(()=>{
+  const EMOJIS=['🟥','🟦','🟩','🟨','🟧','🎮','⭐','🏆','👾','🎯','🔥','💎'];
+  let flipped=[],matched=0,moves=0,locked=false,timeEl,timerIv,startTime,best=null;
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function init(){
+    clearInterval(timerIv);flipped=[];matched=0;moves=0;locked=false;
+    qs('#mem-matches').textContent='0';qs('#mem-moves').textContent='0';qs('#mem-time').textContent='0s';qs('#mem-msg').textContent='';
+    const grid=qs('#mem-game');grid.innerHTML='';
+    const deck=shuffle([...EMOJIS,...EMOJIS]);
+    startTime=Date.now();
+    timerIv=setInterval(()=>{qs('#mem-time').textContent=Math.floor((Date.now()-startTime)/1000)+'s';},1000);
+    deck.forEach((em,i)=>{
+      const card=document.createElement('div');card.className='mcard';card.dataset.em=em;card.dataset.idx=i;
+      card.innerHTML=`<div class="mfront">?</div><div class="mback">${em}</div>`;
+      card.addEventListener('click',()=>flip(card));
+      grid.appendChild(card);
+    });
+  }
+  function flip(card){
+    if(locked||card.classList.contains('flip')||card.classList.contains('matched'))return;
+    card.classList.add('flip');flipped.push(card);
+    if(flipped.length===2){
+      locked=true;moves++;qs('#mem-moves').textContent=moves;qs('#mem-moves-disp').textContent='MOVES:'+moves;
+      if(flipped[0].dataset.em===flipped[1].dataset.em){
+        flipped.forEach(c=>{c.classList.add('matched');});
+        matched++;qs('#mem-matches').textContent=matched;
+        flipped=[];locked=false;
+        if(matched===12){
+          clearInterval(timerIv);
+          const elapsed=Math.floor((Date.now()-startTime)/1000);
+          if(best===null||elapsed<best){best=elapsed;qs('#mem-best').textContent=best+'s';}
+          qs('#mem-msg').textContent='🏆 COMPLETE! '+elapsed+'s / '+moves+' moves';
+        }
+      } else {
+        setTimeout(()=>{flipped.forEach(c=>c.classList.remove('flip'));flipped=[];locked=false;},900);
+      }
+    }
+  }
+  qs('#mem-start').onclick=init;
+  init();
+})();
+
+/* ─── GAME 4: WORD SCRAMBLE ──────────────────── */
+(()=>{
+  const WORDS=[
+    {w:'ROBLOX',hint:'The platform itself!'},
+    {w:'OBBY',hint:'Obstacle course game type'},
+    {w:'ROBUX',hint:'The virtual currency'},
+    {w:'JAILBREAK',hint:'Police vs criminal game'},
+    {w:'STUDIO',hint:'Where games are built'},
+    {w:'NOOB',hint:'A new or inexperienced player'},
+    {w:'TYCOON',hint:'Build and earn money over time'},
+    {w:'BUILDERMAN',hint:'David Baszucki\'s username'},
+    {w:'FLAMINGO',hint:'Famous Roblox YouTuber'},
+    {w:'BACON',hint:'The default hairstyle nickname'},
+    {w:'FORSAKEN',hint:'Famous Roblox horror game'},
+    {w:'BLOXFRUITS',hint:'One Piece inspired adventure game'},
+    {w:'DEVEX',hint:'Convert Robux to real money'},
+    {w:'EXPLOIT',hint:'Cheating using scripts'},
+    {w:'AVATAR',hint:'Your character appearance'},
+    {w:'TICKETS',hint:'The old free currency (Tix)'},
+    {w:'PREMIUM',hint:'Monthly Roblox subscription'},
+    {w:'CATALOG',hint:'Where you buy avatar items'},
+    {w:'SCRIPTING',hint:'Coding with Lua in Studio'},
+    {w:'BASEPLATE',hint:'Default flat ground in Studio'},
+  ];
+  function scramble(w){let a=w.split('');for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}const s=a.join('');return s===w?scramble(w):s;}
+  let idx=0,score=0,streak=0,round=0,timerIv=null,timeLeft=15,active=false,order=[];
+  function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+  function setTimer(){
+    clearInterval(timerIv);timeLeft=15;updateTimerBar();
+    timerIv=setInterval(()=>{timeLeft--;updateTimerBar();if(timeLeft<=0){clearInterval(timerIv);skip(true);}},1000);
+  }
+  function updateTimerBar(){qs('#ws-timer-fill').style.width=(timeLeft/15*100)+'%';}
+  function loadWord(){
+    if(round>=10){endGame();return;}
+    const wp=order[round];
+    qs('#ws-word').textContent=scramble(wp.w);
+    qs('#ws-hint').textContent='Hint: '+wp.hint;
+    qs('#ws-input').value='';qs('#ws-fb').textContent='';
+    qs('#ws-round').textContent=(round+1);
+    setTimer();
+  }
+  function start(){
+    order=shuffle(WORDS).slice(0,10);
+    score=0;streak=0;round=0;active=true;
+    qs('#ws-score').textContent='0';qs('#ws-streak').textContent='0';
+    qs('#ws-score-disp').textContent='SCORE:0';
+    qs('#ws-start').style.display='none';
+    loadWord();
+  }
+  function check(){
+    if(!active)return;
+    const ans=qs('#ws-input').value.trim().toUpperCase();
+    const correct=order[round].w;
+    if(ans===correct){
+      clearInterval(timerIv);streak++;
+      const bonus=streak>=3?streak*5:10;score+=bonus;
+      qs('#ws-fb').textContent='✓ CORRECT! +'+bonus+'pts'+(streak>=3?' 🔥STREAK BONUS!':'');
+      qs('#ws-fb').style.color='var(--green)';
+      qs('#ws-score').textContent=score;qs('#ws-streak').textContent=streak;qs('#ws-score-disp').textContent='SCORE:'+score;
+      round++;setTimeout(loadWord,900);
+    } else {
+      qs('#ws-fb').textContent='✗ TRY AGAIN!';qs('#ws-fb').style.color='var(--red)';
+      qs('#ws-input').value='';
+    }
+  }
+  function skip(timeout=false){
+    if(!active)return;
+    clearInterval(timerIv);streak=0;
+    qs('#ws-fb').textContent=timeout?'⏰ TIME UP! Answer: '+order[round].w:'SKIPPED — '+order[round].w;
+    qs('#ws-fb').style.color='var(--orange)';qs('#ws-streak').textContent='0';
+    round++;setTimeout(loadWord,1200);
+  }
+  function endGame(){
+    active=false;clearInterval(timerIv);
+    qs('#ws-word').textContent='DONE!';
+    const g=score>=100?'🏆 LEGEND!':score>=70?'⭐ EXPERT!':score>=40?'👍 DECENT':'😅 PRACTICE MORE!';
+    qs('#ws-hint').textContent='Final score: '+score+'/100+ — '+g;
+    qs('#ws-fb').textContent='GAME OVER';qs('#ws-fb').style.color='var(--yellow)';
+    qs('#ws-start').style.display='inline-block';qs('#ws-start').textContent='↺ PLAY AGAIN';
+    qs('#ws-timer-fill').style.width='0%';
+  }
+  qs('#ws-start').onclick=start;
+  qs('#ws-submit').onclick=check;
+  qs('#ws-skip').onclick=()=>skip(false);
+  qs('#ws-input').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+})();
+
+/* ─── GAME 5: SIMON SAYS ─────────────────────── */
+(()=>{
+  const btns=[qs('#s0'),qs('#s1'),qs('#s2'),qs('#s3')];
+  const sounds=[264,330,396,528]; // frequencies
+  let seq=[],playerSeq=[],level=0,best=0,canPlay=false;
+  function playSound(freq){
+    try{const a=new(window.AudioContext||window.webkitAudioContext)();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=freq;g.gain.setValueAtTime(.3,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.4);o.start();o.stop(a.currentTime+.4);}catch(e){}
+  }
+  function light(i,on){btns[i].classList.toggle('lit',on);}
+  function flash(i){return new Promise(r=>{light(i,true);playSound(sounds[i]);setTimeout(()=>{light(i,false);setTimeout(r,150);},400);});}
+  async function showSeq(){
+    canPlay=false;qs('#simon-msg').textContent='WATCH THE PATTERN...';qs('#simon-msg').style.color='var(--cyan)';
+    for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,200));await flash(seq[i]);}
+    canPlay=true;playerSeq=[];qs('#simon-msg').textContent='YOUR TURN! REPEAT IT!';qs('#simon-msg').style.color='var(--yellow)';
+  }
+  async function nextLevel(){
+    level++;seq.push(Math.floor(Math.random()*4));
+    qs('#simon-lv').textContent=level;qs('#simon-level-disp').textContent='LEVEL:'+level;
+    if(level>best){best=level;qs('#simon-best').textContent=best;}
+    await new Promise(r=>setTimeout(r,600));
+    showSeq();
+  }
+  btns.forEach((btn,i)=>{
+    btn.addEventListener('click',()=>{
+      if(!canPlay)return;
+      light(i,true);playSound(sounds[i]);setTimeout(()=>light(i,false),250);
+      playerSeq.push(i);
+      const pos=playerSeq.length-1;
+      if(playerSeq[pos]!==seq[pos]){
+        canPlay=false;qs('#simon-msg').textContent='❌ WRONG! Game over at level '+level;qs('#simon-msg').style.color='var(--red)';
+        seq=[];level=0;qs('#simon-lv').textContent=0;
+        setTimeout(()=>{qs('#simon-msg').textContent='Press START to play again!';qs('#simon-msg').style.color='var(--text)';},2000);
+      } else if(playerSeq.length===seq.length){
+        qs('#simon-msg').textContent='✓ CORRECT!';qs('#simon-msg').style.color='var(--green)';
+        canPlay=false;setTimeout(nextLevel,800);
+      }
+    });
+  });
+  qs('#simon-start').onclick=()=>{seq=[];level=0;qs('#simon-lv').textContent=0;nextLevel();};
+})();
+
+/* ─── GAME 6: TRIVIA ─────────────────────────── */
+(()=>{
+  const Q=[
+    {q:'What year did Roblox officially launch to the public?',a:1,o:['2004','2006','2008','2010']},
+    {q:'What was Roblox originally called during development?',a:0,o:['DynaBlocks','BlockWorld','BrickEngine','BuilderGame']},
+    {q:'What currency did Roblox controversially remove in April 2016?',a:2,o:['Robux','BlockCoin','Tix','Credits']},
+    {q:'Who are Roblox\'s two co-founders?',a:3,o:['Mark & Jeff','Steve & Bill','Elon & Sam','David Baszucki & Erik Cassel']},
+    {q:'What is the User ID of the official "Roblox" account?',a:0,o:['1','2','100','999']},
+    {q:'What programming language does Roblox Studio use for scripting?',a:2,o:['Python','JavaScript','Lua','C#']},
+    {q:'Which YouTuber is also known by the username "mrflimflam"?',a:1,o:['Denis','Flamingo','KreekCraft','Poke']},
+    {q:'What game caused a 1.6 million concurrent player server crash?',a:0,o:['Adopt Me!','Jailbreak','MeepCity','Natural Disaster Survival']},
+    {q:'What year did Roblox go public on the New York Stock Exchange?',a:2,o:['2019','2020','2021','2022']},
+    {q:'What is John Doe\'s user ID on Roblox?',a:1,o:['1','2','666','1000']},
+    {q:'How many attendees did the Lil Nas X Roblox concert draw?',a:3,o:['5 million','10 million','20 million','33 million']},
+    {q:'What is the nickname for the default Roblox male hairstyle introduced in 2018?',a:2,o:['Noodle Hair','Basic Hair','Bacon Hair','Default Hair']},
+    {q:'What does "DevEx" stand for in Roblox?',a:1,o:['Device Extension','Developer Exchange','Developer Experience','Digital Exchange']},
+    {q:'Sswayam\'s favourite Roblox game is ranked #1 — which game is it?',a:3,o:['Forsaken','Jailbreak','HyperShot','Blox Fruits']},
+    {q:'Which Roblox game is ranked #2 in Sswayam\'s favourites?',a:2,o:['Blox Fruits','Forsaken','HyperShot','Adopt Me!']},
+    {q:'What is Sswayam\'s Roblox username?',a:0,o:['Sswayam12341','Sswayam_RBX','SSWayam','Sswayam99']},
+    {q:'What iconic Roblox death sound was removed in 2022 due to a licensing dispute?',a:1,o:['OUCH','OOF','BONK','UGH']},
+    {q:'What was the peak valuation of Roblox at its NYSE IPO in 2021?',a:2,o:['$10 billion','$25 billion','$45 billion','$100 billion']},
+    {q:'What does "UGC" stand for in the Roblox catalog?',a:0,o:['User-Generated Content','Ultra Game Content','Universal Gaming Currency','User Grade Currency']},
+    {q:'Blox Fruits is inspired by which famous anime/manga series?',a:3,o:['Naruto','Dragon Ball Z','Bleach','One Piece']},
+  ];
+  let idx=0,sc=0;
+  function load(i){
+    const q=Q[i];
+    qs('#trivia-q').textContent=`Q${i+1}: ${q.q}`;
+    qs('#trivia-qn').textContent=`Q ${i+1}/${Q.length}`;
+    qs('#trivia-fill').style.width=(i/Q.length*100)+'%';
+    qs('#trivia-fb').textContent='';
+    qsa('.topt').forEach((b,j)=>{b.textContent=String.fromCharCode(65+j)+') '+q.o[j];b.className='topt';b.disabled=false;b.onclick=()=>ans(j,q.a);});
+  }
+  function ans(chosen,correct){
+    qsa('.topt').forEach(b=>b.disabled=true);
+    qsa('.topt')[chosen].classList.add(chosen===correct?'correct':'wrong');
+    qsa('.topt')[correct].classList.add('correct');
+    const fb=qs('#trivia-fb');
+    if(chosen===correct){sc+=10;qs('#trivia-sc').textContent=sc+' pts';fb.textContent='✓ CORRECT!';fb.style.color='var(--green)';}
+    else{fb.textContent='✗ WRONG!';fb.style.color='var(--red)';}
+    setTimeout(()=>{
+      idx++;
+      if(idx<Q.length){load(idx);}
+      else{
+        qs('#trivia-fill').style.width='100%';
+        const pct=(sc/(Q.length*10))*100;
+        const g=pct===100?'🏆 PERFECT SCORE!':pct>=85?'⭐ EXPERT!':pct>=65?'👍 SOLID PLAYER!':pct>=45?'😐 DECENT':'😅 NOOB STATUS';
+        qs('#trivia-q').textContent=`GAME OVER! ${sc}/${Q.length*10} pts — ${g}`;
+        qsa('.topt').forEach(b=>b.style.display='none');
+        qs('#trivia-start').textContent='↺ PLAY AGAIN';qs('#trivia-start').style.display='inline-block';
+        fb.textContent='';
+      }
+    },1900);
+  }
+  qs('#trivia-start').addEventListener('click',function(){
+    idx=0;sc=0;qs('#trivia-sc').textContent='0 pts';qs('#trivia-fill').style.width='0%';
+    qsa('.topt').forEach(b=>{b.style.display='';});this.style.display='none';load(0);
+  });
+})();
+
+/* ─── CREDITS STARFIELD ──────────────────────── */
+(()=>{
+  const c=qs('#crc'),ctx=c.getContext('2d');
+  const R=()=>{c.width=c.offsetWidth;c.height=c.offsetHeight;};
+  R();window.addEventListener('resize',R);
+  const stars=Array.from({length:220},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.8+.2,speed:Math.random()*.6+.1,a:Math.random()}));
+  const rc=['#E8192C','#00A2FF','#02B757','#FFD700','#FF6B00'];
+  (function draw(){
+    ctx.fillStyle='rgba(0,0,0,.15)';ctx.fillRect(0,0,c.width,c.height);
+    stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();s.y+=s.speed;if(s.y>c.height){s.y=0;s.x=Math.random()*c.width;}});
+    if(Math.random()<.03){const col=rc[Math.floor(Math.random()*rc.length)];const sx=Math.random()*c.width,sy=Math.random()*c.height;ctx.beginPath();ctx.arc(sx,sy,3,0,Math.PI*2);ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=12;ctx.fill();ctx.shadowBlur=0;}
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ─── PARALLAX ───────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY;
+  const hc=qs('.hcont');if(hc)hc.style.transform=`translateY(${sy*.24}px)`;
+  const bg=qs('#bbg');if(bg)bg.style.transform=`translateY(${sy*.11}px)`;
+});
+
+/* ─── INIT ───────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  qsa('.pnm,.ytnm,.hnm').forEach(el=>{
+    el.addEventListener('mouseenter',()=>el.style.textShadow='0 0 18px rgba(232,25,44,.6)');
+    el.addEventListener('mouseleave',()=>el.style.textShadow='');
+  });
+});
+</script>
+</body>
+</html>
