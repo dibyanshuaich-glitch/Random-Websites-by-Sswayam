@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Endurance</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Segoe UI', sans-serif; }
+        
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; user-select: none;
+        }
+
+        #crosshair {
+            position: absolute; top: 50%; left: 50%;
+            width: 12px; height: 12px;
+            background-color: transparent; 
+            border: 2px solid rgba(255, 255, 255, 0.9); border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 4px black;
+        }
+        
+        #crosshair::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 4px; height: 4px; background: red; border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #inventory {
+            position: absolute; top: 20px; left: 20px;
+            color: white; background: rgba(0,0,0,0.7);
+            padding: 20px; border-radius: 12px; border: 2px solid #666;
+            min-width: 240px;
+            font-family: monospace; font-size: 14px;
+        }
+
+        #quest-box {
+            position: absolute; top: 20px; left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700; background: rgba(0,0,0,0.8);
+            padding: 15px 30px; border-radius: 8px; border: 2px solid #FFD700;
+            font-size: 20px; font-weight: bold; text-align: center;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        #stamina-container {
+            position: absolute; top: 20px; right: 20px;
+            width: 250px; display: flex; flex-direction: column; gap: 5px;
+        }
+
+        #status-container {
+            position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            width: 400px; display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .bar-bg { width: 100%; height: 26px; background: #222; border: 3px solid #444; border-radius: 6px; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; transition: width 0.1s linear, background-color 0.3s; display: block; }
+        .bar-text { position: absolute; top:0; width: 100%; text-align: center; color: white; font-weight: 900; font-size: 14px; line-height: 26px; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; z-index: 2; }
+
+        #notifications {
+            position: absolute; top: 20%; left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700; font-size: 28px; font-weight: bold;
+            text-shadow: 3px 3px 0 #000; opacity: 0; transition: opacity 0.5s;
+        }
+
+        #loading-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.8); padding: 20px;
+        }
+        
+        #time-display {
+            position: absolute; top: 60px; right: 20px;
+            color: white; font-size: 18px; font-weight: bold; 
+            background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px;
+        }
+        
+        #intro-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; opacity: 1; transition: opacity 3s;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-size: 40px; pointer-events: none; z-index: 999;
+        }
+    </style>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="intro-overlay">Waking up...</div>
+
+    <div id="ui-layer">
+        <div id="crosshair"></div>
+        <div id="loading-text">Loading Models...</div>
+        <div id="time-display">Time: 08:00 AM</div>
+        <div id="quest-box">QUEST: Loading...</div>
+        
+        <div id="inventory">
+            <div style="border-bottom: 2px solid #555; margin-bottom: 10px; padding-bottom: 5px; font-weight:bold; color:#FFD700;">BACKPACK</div>
+            <div>🌲 WOOD: <span id="wood-count" style="color:lime">0</span></div>
+            <div>🪨 STONE: <span id="stone-count" style="color:gray">0</span></div>
+            <div>🥩 MEAT: <span id="meat-count" style="color:pink">0</span></div>
+            <div>🍖 COOKED: <span id="cooked-count" style="color:orange">0</span></div>
+            <br>
+            <div id="tool-status" style="font-weight:bold; color:cyan; border-top:1px solid #555; padding-top:5px;">HAND: EMPTY</div>
+            <div id="craft-hint" style="color: #bbb; font-size: 0.8em; margin-top: 10px; line-height: 1.5em;">
+                [Shift] Sprint<br>
+                [E] Pick Up / Interact<br>
+                [Q] Eat Food<br>
+                [1-4] Tools | [5-6] Build<br>
+                [C] Pick | [X] Sword | [B] Fire<br>
+                [F] Cook | [R-Click] Flashlight<br>
+                <span style="color:#555">Type 'esp' for hints</span>
+            </div>
+        </div>
+
+        <div id="stamina-container">
+            <div class="bar-bg">
+                <div id="stamina-fill" class="bar-fill" style="width: 100%; background-color: #00BFFF;"></div>
+                <div class="bar-text">STAMINA</div>
+            </div>
+        </div>
+
+        <div id="status-container">
+            <div class="bar-bg">
+                <div id="health-fill" class="bar-fill" style="width: 100%; background-color: lime;"></div>
+                <div class="bar-text">HEALTH</div>
+            </div>
+            <div class="bar-bg">
+                <div id="hunger-fill" class="bar-fill" style="width: 100%; background-color: orange;"></div>
+                <div class="bar-text">HUNGER</div>
+            </div>
+        </div>
+
+        <div id="notifications"></div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        let camera, scene, renderer, controls;
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+        let isSprinting = false;
+        let canJump = false;
+        let raycaster;
+        let loader; 
+
+        // Stats
+        let wood = 0, stone = 0, rawMeat = 0, cookedMeat = 0;
+        let health = 100, hunger = 100, stamina = 100;
+        let lastHungerTime = performance.now();
+        
+        // Quests
+        let questStage = 1;
+        let hasPetrol = false;
+        let hasCarKey = false;
+        
+        // Tools & Inventory
+        let hasAxe = false; 
+        let hasPickaxe = false; 
+        let hasSword = false;
+        let hasFlashlight = false; 
+        
+        let currentTool = 'none'; 
+        let axeGroup, pickaxeGroup, swordGroup, flashlightGroup;
+        let isSwinging = false;
+        let swingPhase = "none"; 
+        
+        // Flashlight Logic
+        let spotLight, ambientFlashlight; 
+        let isLightOn = true;
+
+        let cheatBuffer = "";
+        let isESPOn = false;
+        let espLines = [];
+
+        // World Data
+        const worldObjects = []; 
+        const lootables = []; 
+        const enemies = [];      
+        const campfires = [];
+        const buildings = []; 
+        
+        // Quest Items
+        const petrolPos = new THREE.Vector3(200, 2, -200);
+        const carPos = new THREE.Vector3(-300, 0.5, 300); 
+        let keyHitbox; 
+        
+        // Day/Night Cycle
+        let dayTime = 0.3; 
+        let sunLight, hemiLight;
+        const dayDuration = 600; 
+
+        let prevTime = performance.now();
+        const velocity = new THREE.Vector3();
+        const direction = new THREE.Vector3();
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); 
+            scene.fog = new THREE.Fog(0x87CEEB, 10, 500); 
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.y = 15; 
+
+            // --- LOAD THE MODELS ---
+            loadTools();
+            loadQuestItems();
+
+            // --- LIGHTING ---
+            hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0); 
+            hemiLight.position.set(0, 200, 0);
+            scene.add(hemiLight);
+
+            sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            sunLight.position.set(100, 200, 50);
+            sunLight.castShadow = true;
+            sunLight.shadow.mapSize.width = 1024; 
+            sunLight.shadow.mapSize.height = 1024;
+            sunLight.shadow.camera.near = 0.5;
+            sunLight.shadow.camera.far = 500;
+            sunLight.shadow.camera.left = -100;
+            sunLight.shadow.camera.right = 100;
+            sunLight.shadow.camera.top = 100;
+            sunLight.shadow.camera.bottom = -100;
+            scene.add(sunLight);
+
+            controls = new PointerLockControls(camera, document.body);
+            raycaster = new THREE.Raycaster();
+            raycaster.far = 40; 
+
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.opacity = 0;
+                setTimeout(() => document.getElementById('intro-overlay').style.display = 'none', 3000);
+            }, 500);
+
+            document.addEventListener('click', () => {
+                if (!controls.isLocked) controls.lock();
+                else trySwingTool();
+            });
+            
+            document.addEventListener('mousedown', (event) => {
+                if (event.button === 2 && currentTool === 'flashlight' && hasFlashlight) { 
+                    isLightOn = !isLightOn;
+                    if(spotLight) spotLight.visible = isLightOn;
+                    if(ambientFlashlight) ambientFlashlight.visible = isLightOn;
+                }
+            });
+
+            scene.add(controls.getObject());
+
+            // Inputs
+            const onKeyDown = (event) => {
+                cheatBuffer += event.key.toLowerCase();
+                if(cheatBuffer.length > 10) cheatBuffer = cheatBuffer.slice(-10);
+                
+                if(cheatBuffer.endsWith("all")) {
+                    hasAxe = true; hasPickaxe = true; hasSword = true; hasFlashlight = true;
+                    wood += 200; stone += 200;
+                    notify("CHEAT: ALL ITEMS + RESOURCES!");
+                    updateUI();
+                    cheatBuffer = "";
+                }
+                
+                if(cheatBuffer.endsWith("esp")) {
+                    if(questStage >= 4) {
+                        isESPOn = !isESPOn;
+                        notify(isESPOn ? "ESP: ON" : "ESP: OFF");
+                        if(!isESPOn) removeESPLines();
+                    } else {
+                        notify("ESP locked! Need Quest 4.");
+                    }
+                    cheatBuffer = "";
+                }
+
+                switch (event.code) {
+                    case 'ArrowUp': case 'KeyW': moveForward = true; break;
+                    case 'ArrowLeft': case 'KeyA': moveLeft = true; break;
+                    case 'ArrowDown': case 'KeyS': moveBackward = true; break;
+                    case 'ArrowRight': case 'KeyD': moveRight = true; break;
+                    case 'Space': if (canJump && hunger > 0) { velocity.y += 350; canJump = false; } break;
+                    case 'ShiftLeft': case 'ShiftRight': isSprinting = true; break;
+                    
+                    case 'Digit1': if(hasAxe) switchTool('axe'); else notify("Don't have Axe!"); break;
+                    case 'Digit2': if(hasPickaxe) switchTool('pickaxe'); else notify("Don't have Pickaxe!"); break;
+                    case 'Digit3': if(hasSword) switchTool('sword'); else notify("Don't have Sword!"); break;
+                    case 'Digit4': if(hasFlashlight) switchTool('flashlight'); else notify("Don't have Flashlight!"); break;
+                    
+                    case 'Digit5': buildStructure('wall'); break;
+                    case 'Digit6': buildStructure('floor'); break;
+                    
+                    case 'KeyC': craft('pickaxe'); break;
+                    case 'KeyX': craft('sword'); break;
+                    case 'KeyB': buildCampfire(); break;
+                    
+                    case 'KeyE': tryInteraction(); break; 
+                    case 'KeyQ': eatFood(); break;   
+                    case 'KeyF': cookFood(); break;
+                }
+            };
+            const onKeyUp = (event) => {
+                switch (event.code) {
+                    case 'ArrowUp': case 'KeyW': moveForward = false; break;
+                    case 'ArrowLeft': case 'KeyA': moveLeft = false; break;
+                    case 'ArrowDown': case 'KeyS': moveBackward = false; break;
+                    case 'ArrowRight': case 'KeyD': moveRight = false; break;
+                    case 'ShiftLeft': case 'ShiftRight': isSprinting = false; break;
+                }
+            };
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), new THREE.MeshStandardMaterial({ color: 0x228B22 }));
+            floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true;
+            scene.add(floor);
+
+            for(let i=0; i<300; i++) createBigTree(rPos(), rPos());
+            for(let i=0; i<150; i++) createStone(rPos(), rPos());
+            for(let i=0; i<15; i++) createWolf(rPos(), rPos());
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+            window.addEventListener('resize', onWindowResize);
+            updateQuestUI();
+            updateUI();
+        }
+
+        function rPos() { return (Math.random() * 2000 - 1000) + 50; } 
+
+        // --- MODEL LOADING ---
+
+        function loadTools() {
+            loader = new GLTFLoader();
+
+            const createToolGroup = (posX = 3, posY = -3, posZ = -5) => {
+                const g = new THREE.Group();
+                g.position.set(posX, posY, posZ); 
+                g.rotation.set(0, 0, 0); 
+                g.visible = false;
+                camera.add(g);
+                return g;
+            };
+
+            // TOOLS
+            axeGroup = createToolGroup(); axeGroup.visible = false; 
+            loader.load('models/simple_axe.glb', (gltf) => {
+                const model = gltf.scene; model.scale.set(8.0, 8.0, 8.0); model.rotation.set(0, Math.PI, 0); axeGroup.add(model);
+                const groundAxe = model.clone(); groundAxe.position.set(-5, 5, -20); groundAxe.rotation.set(0, 0, Math.PI/4); groundAxe.userData = { id: 'axe' };
+                scene.add(groundAxe); lootables.push(groundAxe);
+            });
+
+            pickaxeGroup = createToolGroup();
+            loader.load('models/standard_picaxe.glb', (gltf) => {
+                const model = gltf.scene; model.scale.set(2.5, 2.5, 2.5); pickaxeGroup.add(model);
+            });
+
+            swordGroup = createToolGroup(3, -2.5, -6);
+            loader.load('models/minecraft__two_handed_iron_sword.glb', (gltf) => {
+                const model = gltf.scene; model.scale.set(3.0, 3.0, 3.0); swordGroup.add(model);
+            });
+
+            flashlightGroup = createToolGroup(2.5, -3, -4);
+            loader.load('models/low_poly_flashlight.glb', (gltf) => {
+                const model = gltf.scene; model.scale.set(1.0, 1.0, 1.0); flashlightGroup.add(model);
+                spotLight = new THREE.SpotLight(0xffffff, 500); spotLight.angle = 0.8; spotLight.penumbra = 0.5; spotLight.decay = 2; spotLight.distance = 200; spotLight.castShadow = true;
+                const target = new THREE.Object3D(); target.position.set(0, 0, -10); flashlightGroup.add(target); spotLight.target = target;
+                spotLight.position.set(0, 0, 0); flashlightGroup.add(spotLight);
+                ambientFlashlight = new THREE.PointLight(0xffffff, 50, 20); ambientFlashlight.position.set(0, 0, -2); flashlightGroup.add(ambientFlashlight);
+                document.getElementById('loading-text').style.display = 'none';
+
+                const groundLight = model.clone(); groundLight.position.set(5, 2, -20); groundLight.userData = { id: 'flashlight' };
+                scene.add(groundLight); lootables.push(groundLight);
+            });
+        }
+
+        // --- QUEST ITEMS & MODELS ---
+
+        function loadQuestItems() {
+            // 1. PETROL CAN
+            loader.load('models/low_poly_rusty_petrol_can_game_ready.glb', (gltf) => {
+                const petrol = gltf.scene;
+                petrol.scale.set(15.0, 15.0, 15.0); 
+                petrol.position.copy(petrolPos);
+                petrol.userData = { id: 'petrol' };
+                scene.add(petrol);
+                lootables.push(petrol);
+            });
+
+            // 2. CAR
+            loader.load('models/low_poly_car (1).glb', (gltf) => {
+                const car = gltf.scene;
+                car.scale.set(0.5, 0.5, 0.5); 
+                car.position.copy(carPos);
+                car.rotation.y = Math.PI / 4;
+                car.userData = { id: 'car', type: 'wall' }; 
+                scene.add(car);
+                worldObjects.push(car);
+                
+                // 3. KEY (NEW UPLOADED MODEL) - With Hitbox
+                const hitboxGeo = new THREE.BoxGeometry(4, 4, 4); 
+                const hitboxMat = new THREE.MeshBasicMaterial({ visible: false }); 
+                const hitbox = new THREE.Mesh(hitboxGeo, hitboxMat);
+                
+                // Key BESIDE the petrol can
+                hitbox.position.set(petrolPos.x + 5, petrolPos.y + 1, petrolPos.z); 
+                hitbox.userData = { id: 'carkey' }; 
+
+                loader.load('models/a_low_poly_key.glb', (gltf) => {
+                    const keyModel = gltf.scene;
+                    keyModel.scale.set(0.5, 0.5, 0.5); 
+                    
+                    const keyLight = new THREE.PointLight(0xFFD700, 5, 20);
+                    keyModel.add(keyLight);
+                    
+                    hitbox.add(keyModel);
+                });
+
+                scene.add(hitbox);
+                lootables.push(hitbox);
+                keyHitbox = hitbox; 
+            });
+        }
+
+        // --- QUEST SYSTEM ---
+
+        function updateQuestUI() {
+            const qBox = document.getElementById('quest-box');
+            if (questStage === 1) qBox.innerText = "QUEST 1: Gather 20 Wood";
+            else if (questStage === 2) qBox.innerText = "QUEST 2: Build a Campfire [B]";
+            else if (questStage === 3) qBox.innerText = "QUEST 3: Hunt a Wolf";
+            else if (questStage === 4) qBox.innerText = "QUEST 4: Find Petrol & Key";
+            else if (questStage === 5) qBox.innerText = "QUEST 5: Find Car & Escape!";
+            else { qBox.innerText = "SURVIVED!"; qBox.style.color = "lime"; qBox.style.borderColor = "lime"; }
+        }
+
+        function checkQuestProgress(action) {
+            let updated = false;
+            // Linear progression + State Tracking
+            if(questStage === 1 && action === 'wood' && wood >= 20) { questStage = 2; updated = true; }
+            else if(questStage === 2 && action === 'campfire') { questStage = 3; updated = true; }
+            else if(questStage === 3 && action === 'killwolf') { questStage = 4; updated = true; notify("Type 'esp' to find items"); }
+            
+            // Check Final Condition
+            if(hasPetrol && hasCarKey && questStage < 5) {
+                questStage = 5; 
+                updated = true;
+            }
+            
+            if(updated) {
+                notify("QUEST UPDATED!");
+                updateQuestUI();
+            }
+        }
+
+        // --- ESP CHEAT ---
+
+        function removeESPLines() {
+            espLines.forEach(line => scene.remove(line));
+            espLines = [];
+        }
+
+        function updateESP() {
+            if(!isESPOn) return;
+            removeESPLines(); 
+
+            const pPos = controls.getObject().position;
+            const targets = [];
+            
+            if(!hasPetrol) targets.push(petrolPos);
+            if(!hasCarKey) targets.push(new THREE.Vector3(petrolPos.x + 5, petrolPos.y, petrolPos.z));
+            targets.push(carPos);
+
+            targets.forEach(target => {
+                const points = [pPos.clone().add(new THREE.Vector3(0, -1, 0)), target];
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 2, opacity: 0.5, transparent: true });
+                const line = new THREE.Line(geometry, material);
+                scene.add(line);
+                espLines.push(line);
+            });
+        }
+
+        // --- INTERACTION ---
+
+        function tryInteraction() {
+            raycaster.setFromCamera(new THREE.Vector2(), camera);
+            const intersects = raycaster.intersectObjects(lootables, true);
+            
+            if(intersects.length > 0 && intersects[0].distance < 30) {
+                const item = findParentLoot(intersects[0].object);
+                if(item) {
+                    // UNLOCKED LOOT LOGIC
+                    if(item.userData.id === 'axe') { hasAxe = true; notify("Got Axe!"); switchTool('axe'); scene.remove(item); }
+                    else if(item.userData.id === 'flashlight') { hasFlashlight = true; notify("Got Flashlight!"); switchTool('flashlight'); scene.remove(item); }
+                    
+                    else if(item.userData.id === 'petrol') { 
+                        hasPetrol = true; notify("Got Petrol!"); checkQuestProgress('petrol'); scene.remove(item);
+                    }
+                    else if(item.userData.id === 'carkey') {
+                        hasCarKey = true; notify("Got Car Key!"); checkQuestProgress('carkey'); scene.remove(item);
+                    }
+                    
+                    if(item.parent === scene) { 
+                        const index = lootables.indexOf(item);
+                        if (index > -1) lootables.splice(index, 1);
+                    }
+                    updateUI();
+                    return;
+                }
+            }
+
+            const pPos = controls.getObject().position;
+            if(pPos.distanceTo(carPos) < 20) { 
+                if(hasPetrol && hasCarKey) {
+                    document.exitPointerLock();
+                    alert("YOU FILLED THE CAR AND ESCAPED!\nYOU WIN!");
+                    location.reload();
+                } else {
+                    if(!hasPetrol) notify("Need Petrol!");
+                    if(!hasCarKey) notify("Need Key!");
+                }
+            }
+        }
+
+        function findParentLoot(mesh) {
+            let curr = mesh;
+            while(curr) {
+                if(curr.userData && curr.userData.id) return curr;
+                curr = curr.parent;
+            }
+            return null;
+        }
+
+        // --- BUILDING ---
+
+        function buildStructure(type) {
+            if(wood < 10) return notify("Need 10 Wood!");
+            wood -= 10;
+            
+            const pPos = controls.getObject().position;
+            const dir = new THREE.Vector3();
+            controls.getDirection(dir);
+            const placeX = Math.round((pPos.x + dir.x * 15) / 10) * 10;
+            const placeZ = Math.round((pPos.z + dir.z * 15) / 10) * 10;
+            
+            let mesh;
+            if(type === 'wall') {
+                const geo = new THREE.BoxGeometry(10, 15, 2);
+                const mat = new THREE.MeshStandardMaterial({map: getWoodTexture()}); 
+                mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(placeX, 7.5, placeZ);
+                if(Math.abs(dir.x) > Math.abs(dir.z)) mesh.rotation.y = Math.PI/2;
+                mesh.userData = { type: 'wall' }; 
+            } else {
+                const geo = new THREE.BoxGeometry(10, 2, 10);
+                const mat = new THREE.MeshStandardMaterial({map: getWoodTexture()});
+                mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(placeX, 1, placeZ);
+            }
+            mesh.castShadow = true; mesh.receiveShadow = true;
+            scene.add(mesh); buildings.push(mesh); worldObjects.push(mesh);
+            notify("Built " + type.toUpperCase());
+            updateUI();
+        }
+
+        function getWoodTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#8B4513'; ctx.fillRect(0,0,64,64);
+            ctx.fillStyle = '#A0522D'; for(let i=0; i<10; i++) ctx.fillRect(Math.random()*64, 0, 2, 64);
+            const tex = new THREE.CanvasTexture(canvas); tex.magFilter = THREE.NearestFilter; return tex;
+        }
+
+        // --- COLLISION ---
+
+        function checkCollision(nextPos) {
+            for(let obj of worldObjects) {
+                let radius = 8; 
+                if(obj.userData && obj.userData.type === 'wall') radius = 12; 
+                if(obj.userData && obj.userData.id === 'car') radius = 4; 
+
+                const dist = Math.sqrt(Math.pow(nextPos.x - obj.position.x, 2) + Math.pow(nextPos.z - obj.position.z, 2));
+                if(dist < radius) return true; 
+            }
+            return false;
+        }
+
+        // --- DAY/NIGHT ---
+
+        function updateDayNightCycle(delta) {
+            dayTime += delta / dayDuration;
+            if(dayTime > 1) dayTime = 0; 
+
+            const angle = dayTime * Math.PI * 2;
+            const radius = 400;
+            sunLight.position.x = Math.cos(angle) * radius;
+            sunLight.position.y = Math.sin(angle) * radius;
+            sunLight.position.z = 50;
+
+            const noon = new THREE.Color(0x87CEEB);
+            const sunset = new THREE.Color(0xFF4500);
+            const night = new THREE.Color(0x000015); 
+            
+            let skyColor, intensity;
+            if (dayTime < 0.25) { skyColor = night.clone().lerp(noon, dayTime * 4); intensity = dayTime * 4; } 
+            else if (dayTime < 0.7) { skyColor = noon; intensity = 1.0; } 
+            else if (dayTime < 0.8) { skyColor = noon.clone().lerp(sunset, (dayTime - 0.7) * 10); intensity = 1.0 - (dayTime - 0.7) * 5; } 
+            else { skyColor = sunset.clone().lerp(night, Math.min(1, (dayTime - 0.8) * 10)); intensity = 0.05; }
+
+            scene.background = skyColor;
+            scene.fog.color = skyColor;
+            hemiLight.intensity = Math.max(0.05, intensity);
+            sunLight.intensity = Math.max(0, intensity * 1.5);
+
+            const hours = Math.floor(dayTime * 24);
+            const minutes = Math.floor((dayTime * 24 * 60) % 60);
+            document.getElementById('time-display').innerText = `Time: ${hours}:${minutes < 10 ? '0'+minutes : minutes}`;
+        }
+
+        // --- GAME FUNCTIONS ---
+
+        function createWolf(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0x999999 }); 
+            const body = new THREE.Mesh(new THREE.BoxGeometry(4, 4, 8), mat); body.position.y = 4; group.add(body);
+            const head = new THREE.Mesh(new THREE.BoxGeometry(3.2, 3.2, 4), mat); head.position.set(0, 6, 5); group.add(head);
+            const snout = new THREE.Mesh(new THREE.BoxGeometry(2, 1.5, 2), mat); snout.position.set(0, 5.5, 7.5); group.add(snout);
+            const legGeo = new THREE.BoxGeometry(1.2, 4, 1.2);
+            const l1 = new THREE.Mesh(legGeo, mat); l1.position.set(-1.5, 2, 3); group.add(l1);
+            const l2 = new THREE.Mesh(legGeo, mat); l2.position.set(1.5, 2, 3); group.add(l2);
+            const l3 = new THREE.Mesh(legGeo, mat); l3.position.set(-1.5, 2, -3); group.add(l3);
+            const l4 = new THREE.Mesh(legGeo, mat); l4.position.set(1.5, 2, -3); group.add(l4);
+            group.position.set(x, 0, z); group.userData = { type: 'wolf', hp: 3, lastAttack: 0 };
+            scene.add(group); enemies.push(group);
+        }
+
+        function createCampfire(x, z) {
+            const group = new THREE.Group();
+            const lGeo = new THREE.CylinderGeometry(0.5, 0.5, 4);
+            const lMat = new THREE.MeshStandardMaterial({color:0x8B4513});
+            const l1 = new THREE.Mesh(lGeo, lMat); l1.rotation.z = Math.PI/2; l1.position.y=0.5; group.add(l1);
+            const l2 = new THREE.Mesh(lGeo, lMat); l2.rotation.x = Math.PI/2; l2.position.y=0.5; group.add(l2);
+            const fire = new THREE.Mesh(new THREE.ConeGeometry(2, 4, 8), new THREE.MeshBasicMaterial({color:0xFFA500}));
+            fire.position.y = 2; group.add(fire);
+            const light = new THREE.PointLight(0xFF4500, 10, 40);
+            light.position.y = 3; group.add(light);
+            group.position.set(x, 0, z); group.userData = { type: 'campfire' };
+            scene.add(group); campfires.push(group);
+        }
+
+        function updateUI() {
+            document.getElementById('wood-count').innerText = wood;
+            document.getElementById('stone-count').innerText = stone;
+            document.getElementById('meat-count').innerText = rawMeat;
+            document.getElementById('cooked-count').innerText = cookedMeat;
+            document.getElementById('health-fill').style.width = health + "%";
+            document.getElementById('hunger-fill').style.width = hunger + "%";
+            document.getElementById('stamina-fill').style.width = stamina + "%";
+        }
+
+        function craft(item) {
+            if(item === 'pickaxe' && !hasPickaxe && wood >= 20) { wood -= 20; hasPickaxe = true; notify("Crafted Pickaxe!"); }
+            else if(item === 'sword' && !hasSword && wood >= 15 && stone >= 10) { wood -= 15; stone -= 10; hasSword = true; notify("Crafted Sword!"); }
+            else notify("Cannot craft! Materials?");
+            updateUI();
+        }
+
+        function buildCampfire() {
+            if(wood >= 20 && stone >= 15) {
+                wood -= 20; stone -= 15;
+                const pPos = controls.getObject().position;
+                const dir = new THREE.Vector3(); controls.getDirection(dir);
+                createCampfire(pPos.x + dir.x * 10, pPos.z + dir.z * 10);
+                checkQuestProgress('campfire'); 
+                notify("Campfire Built!"); updateUI();
+            } else notify("Need 20 Wood + 15 Stone");
+        }
+
+        function cookFood() {
+            if(rawMeat > 0) {
+                let nearFire = false;
+                const pPos = controls.getObject().position;
+                campfires.forEach(f => { if(pPos.distanceTo(f.position) < 30) nearFire = true; });
+                if(nearFire) { rawMeat--; notify("Cooking..."); setTimeout(() => { cookedMeat++; notify("Meat Cooked!"); updateUI(); }, 2000); updateUI(); } 
+                else notify("Too far from Campfire!");
+            } else notify("No Raw Meat!");
+        }
+
+        function eatFood() {
+            if(cookedMeat > 0) { cookedMeat--; health = Math.min(100, health+20); hunger = Math.min(100, hunger+30); notify("Ate Steak (+20 HP)"); }
+            else if(rawMeat > 0) { rawMeat--; health -= 10; hunger += 10; notify("Ate Raw Meat (-10 HP)"); }
+            else notify("No Food!");
+            updateUI();
+        }
+
+        function switchTool(t) {
+            currentTool = t;
+            if(axeGroup) axeGroup.visible = (t==='axe');
+            if(pickaxeGroup) pickaxeGroup.visible = (t==='pickaxe');
+            if(swordGroup) swordGroup.visible = (t==='sword');
+            if(flashlightGroup) flashlightGroup.visible = (t==='flashlight');
+            document.getElementById('tool-status').innerText = "HAND: " + t.toUpperCase();
+        }
+
+        function notify(msg) {
+            const el = document.getElementById('notifications'); el.innerText = msg; el.style.opacity = 1; setTimeout(() => el.style.opacity=0, 1500);
+        }
+
+        function updateWolfAI(delta) {
+            const pPos = controls.getObject().position;
+            enemies.forEach(wolf => {
+                const dist = wolf.position.distanceTo(pPos);
+                if(dist < 80) { 
+                    wolf.lookAt(pPos.x, wolf.position.y, pPos.z);
+                    wolf.translateZ(15 * delta); 
+                    if(dist < 20) { 
+                        if(performance.now() - wolf.userData.lastAttack > 1000) { health -= 15; notify("Ouch! (-15 HP)"); wolf.userData.lastAttack = performance.now(); updateUI(); }
+                    }
+                }
+            });
+        }
+
+        function updateToolAnimation(delta) {
+            if(!isSwinging) return;
+            let group;
+            if(currentTool === 'axe') group = axeGroup; else if(currentTool === 'pickaxe') group = pickaxeGroup; else if(currentTool === 'sword') group = swordGroup; else group = null; 
+            
+            if(!group) return;
+            const speed = 15;
+            
+            if(swingPhase === 'down') {
+                group.rotation.x -= speed * delta;
+                if(group.rotation.x < -1.8) { group.rotation.x = -1.8; swingPhase = 'up'; }
+            } else {
+                group.rotation.x += speed * delta;
+                if(group.rotation.x > 0) { 
+                    group.rotation.set(0, 0, 0); 
+                    isSwinging = false;
+                }
+            }
+        }
+
+        function trySwingTool() {
+            if(currentTool === 'flashlight') return; 
+            if(isSwinging) return;
+            isSwinging = true; swingPhase = 'down'; 
+            
+            raycaster.setFromCamera(new THREE.Vector2(), camera);
+            const enemyIntersects = raycaster.intersectObjects(enemies, true); 
+            if(enemyIntersects.length > 0) {
+                const hitWolf = findParent(enemyIntersects[0].object);
+                if(hitWolf && currentTool === 'sword') {
+                    hitWolf.userData.hp--; hitWolf.position.add(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(5)); notify("Slash!");
+                    if(hitWolf.userData.hp <= 0) { 
+                        scene.remove(hitWolf); enemies.splice(enemies.indexOf(hitWolf), 1); 
+                        rawMeat += 2; checkQuestProgress('killwolf'); 
+                        notify("Wolf Slain!"); updateUI(); 
+                    }
+                } else if(hitWolf) notify("Need Sword!");
+                return; 
+            }
+            const intersects = raycaster.intersectObjects(worldObjects, true);
+            if(intersects.length > 0) {
+                const group = findParent(intersects[0].object);
+                if(group) {
+                    const type = group.userData.type;
+                    if(type === 'tree' && currentTool === 'axe') { mine(group, 'wood', 5); checkQuestProgress('wood'); }
+                    else if(type === 'stone' && currentTool === 'pickaxe') mine(group, 'stone', 3);
+                }
+            }
+        }
+
+        function findParent(mesh) { return (mesh.parent && mesh.parent.type === 'Group') ? mesh.parent : null; }
+        function mine(group, res, amount) { scene.remove(group); worldObjects.splice(worldObjects.indexOf(group), 1); if(res === 'wood') wood+=amount; if(res === 'stone') stone+=amount; updateUI(); }
+        function createBigTree(x,z) { const g=new THREE.Group(); const t=new THREE.Mesh(new THREE.CylinderGeometry(5,6,40,8),new THREE.MeshStandardMaterial({color:0x3d2817}));t.position.y=20;g.add(t); const l=new THREE.Mesh(new THREE.ConeGeometry(18,50,8),new THREE.MeshStandardMaterial({color:0x004400}));l.position.y=55;g.add(l); g.position.set(x,0,z); g.userData={type:'tree'}; scene.add(g); worldObjects.push(g); }
+        function createStone(x,z) { const g=new THREE.Group(); const s=new THREE.Mesh(new THREE.DodecahedronGeometry(8),new THREE.MeshStandardMaterial({color:0x888888}));s.position.y=6;g.add(s); g.position.set(x,0,z); g.userData={type:'stone'}; scene.add(g); worldObjects.push(g); }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = performance.now();
+            const delta = (time - prevTime) / 1000;
+            prevTime = time;
+            
+            updateDayNightCycle(delta);
+            updateESP(); // UPDATE ESP LINES
+            
+            // KEY ANIMATION (Floating & Spinning)
+            if(keyHitbox) {
+                keyHitbox.rotation.y += 2 * delta; // Spin
+                // keyHitbox.position.y = (petrolPos.y + 1) + Math.sin(time * 0.003) * 0.5; // Float
+            }
+
+            if(controls.isLocked) {
+                if(health <= 0) { document.exitPointerLock(); alert("GAME OVER"); return; }
+                velocity.x -= velocity.x * 10.0 * delta; velocity.z -= velocity.z * 10.0 * delta; velocity.y -= 9.8 * 100.0 * delta; 
+                direction.z = Number(moveForward) - Number(moveBackward); direction.x = Number(moveRight) - Number(moveLeft); direction.normalize();
+                
+                let speed = 400.0;
+                if(isSprinting && stamina > 0) { speed = 800.0; stamina -= 30 * delta; if(stamina < 0) stamina = 0; } 
+                else if(stamina < 100) stamina += 15 * delta;
+                updateUI();
+
+                if (moveForward || moveBackward) velocity.z -= direction.z * speed * delta; if (moveLeft || moveRight) velocity.x -= direction.x * speed * delta;
+                
+                const oldPos = controls.getObject().position.clone();
+                controls.moveRight(-velocity.x * delta); controls.moveForward(-velocity.z * delta); controls.getObject().position.y += (velocity.y * delta); 
+                
+                if(checkCollision(controls.getObject().position)) {
+                    controls.getObject().position.copy(oldPos); velocity.x = 0; velocity.z = 0;
+                }
+
+                if (controls.getObject().position.y < 15) { velocity.y = 0; controls.getObject().position.y = 15; canJump = true; }
+                updateWolfAI(delta); updateToolAnimation(delta);
+                if(time - lastHungerTime > 4000) { hunger -= 1; lastHungerTime = time; updateUI(); if(hunger <= 0) health -= 1; }
+            }
+            renderer.render(scene, camera);
+        }
+        function onWindowResize() { camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth,window.innerHeight); }
+    </script>
+</body>
+</html>
