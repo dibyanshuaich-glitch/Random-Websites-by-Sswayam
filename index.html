@@ -3,101 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sswayam's Project Hub</title>
+    <title>Sswayam's websites Hub</title>
     <style>
-        /* Dark Mafia/Horror Aesthetic */
+        :root {
+            --roblox-red: #ff3232;
+            --aethoria-purple: #a020f0;
+            --endurance-blue: #00d4ff;
+            --minecraft-green: #46bb42;
+            --bg-dark: #0f172a;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        h1 {
-            color: #b30000; /* Dark Red */
-            text-shadow: 2px 2px 5px #000;
-            letter-spacing: 3px;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #888;
-            margin-bottom: 2rem;
-            font-style: italic;
+        /* Floating Animation for the whole container */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         .container {
-            background-color: #151515;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
             padding: 3rem;
-            border-radius: 15px;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             text-align: center;
-            width: 80%;
-            max-width: 400px;
+            width: 90%;
+            max-width: 450px;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .project-link {
-            display: block;
+        h1 {
+    font-size: 2.8rem;
+    background: linear-gradient(to right, #00d4ff, #a020f0);
+    
+    /* Add this standard property */
+    background-clip: text; 
+    
+    /* Keep this for Chrome/Safari compatibility */
+    -webkit-background-clip: text; 
+    
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0;
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+}
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* Button Logic */
+        .project-card {
+            position: relative;
             text-decoration: none;
-            padding: 18px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 1.5rem;
+            padding: 20px;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .project-name {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .description {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-top: 8px;
+            max-height: 0;
+            opacity: 0;
             transition: all 0.3s ease;
-            border: 1px solid transparent;
         }
 
-        /* Roblox Button Style */
-        .btn-roblox {
-            background-color: #b30000;
-            color: white;
-        }
-
-        .btn-roblox:hover {
-            background-color: #ff0000;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-        }
-
-        /* Aethoria Button Style */
-        .btn-aethoria {
-            background-color: #1a1a1a;
-            color: #b30000;
-            border: 1px solid #b30000;
-        }
-
-        .btn-aethoria:hover {
-            background-color: #b30000;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.4);
-        }
-
-        /* Endurance Button Style - New! */
-        .btn-endurance {
-            background-color: #2c3e50; /* Dark Steel Blue */
-            color: #ecf0f1;
-            border: 1px solid #34495e;
-        }
-
-        .btn-endurance:hover {
-            background-color: #34495e;
+        /* Hover States */
+        .project-card:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
+
+        .project-card:hover .description {
+            max-height: 50px;
+            opacity: 1;
+        }
+
+        /* Individual Colors */
+        .btn-roblox:hover { border-color: var(--roblox-red); box-shadow: 0 0 20px rgba(255, 50, 50, 0.3); }
+        .btn-aethoria:hover { border-color: var(--aethoria-purple); box-shadow: 0 0 20px rgba(160, 32, 240, 0.3); }
+        .btn-endurance:hover { border-color: var(--endurance-blue); box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        .btn-minecraft:hover { border-color: var(--minecraft-green); box-shadow: 0 0 20px rgba(70, 187, 66, 0.3); }
 
         .footer {
             margin-top: 2rem;
-            font-size: 0.8rem;
-            color: #444;
+            font-size: 0.75rem;
+            color: #64748b;
         }
     </style>
 </head>
@@ -105,15 +126,30 @@
 
     <div class="container">
         <h1>PROJECT HUB</h1>
-        <p class="subtitle">Property of Sswayam</p>
+        <p class="subtitle">Secure Access: Sswayam</p>
 
-        <a href="Roblox-Encyclopedia.html" class="project-link btn-roblox">Roblox Encyclopedia</a>
-        <a href="Aethoria.html" class="project-link btn-aethoria">Aethoria: The Game</a>
+        <a href="Roblox-Encyclopedia.html" class="project-card btn-roblox">
+            <span class="project-name">Roblox Encyclopedia</span>
+            <div class="description">Explore the massive lore and history of Roblox.</div>
+        </a>
 
-        <a href="Endurance/Endurance.html" class="project-link btn-endurance">Endurance</a>
+        <a href="Aethoria.html" class="project-card btn-aethoria">
+            <span class="project-name">Aethoria: The Game</span>
+            <div class="description">Enter a unique world of mystery (Under Construction) Probably be discarded in future.</div>
+        </a>
+
+        <a href="Minecraft-Encyclopedia.html" class="project-card btn-minecraft">
+            <span class="project-name">Minecraft Encyclopedia</span>
+            <div class="description">The ultimate guide to the history of Minecraft.</div>
+        </a>
+
+        <a href="Endurance/Endurance.html" class="project-card btn-endurance">
+            <span class="project-name">Endurance</span>
+            <div class="description">Test your skills in this high-intensity 3D experience.</div>
+        </a>
 
         <div class="footer">
-            EST. 2026 | Made with love and code by Sswayam
+            EST. 2026 | Built for the Future by Sswayam
         </div>
     </div>
 

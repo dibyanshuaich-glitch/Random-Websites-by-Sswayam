@@ -1,0 +1,3878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Minecraft World — The Ultimate Encyclopedia</title>
+<style>
+/* ============================================
+   MOJANGLES FONT — loaded from CDN
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Mojangles-like fallback via dataURI snippet + Press Start 2P as closest web match */
+:root {
+  --font-main: 'Press Start 2P', 'Courier New', monospace;
+
+  /* Minecraft Color Palette */
+  --grass-top:    #5d9732;
+  --grass-side:   #8db360;
+  --dirt:         #866043;
+  --stone:        #888888;
+  --wood:         #9c6b2e;
+  --planks:       #b8935a;
+  --sand:         #dbd3a0;
+  --water:        #3f76e4;
+  --lava:         #e25822;
+  --gold:         #f5c518;
+  --diamond:      #5ae4e4;
+  --emerald:      #17dd62;
+  --redstone:     #c91919;
+  --nether:       #7a0c00;
+  --end:          #1c1c2e;
+  --coal:         #222222;
+  --sky:          #87ceeb;
+  --night:        #0a0a1a;
+  --creeper:      #3d7a3d;
+  --gui-bg:       #1a1a1a;
+  --gui-border:   #555555;
+  --gui-light:    #ffffff55;
+  --gui-shadow:   #00000099;
+  --parchment:    #c8b97f;
+  --menu-bg:      rgba(0,0,0,0.85);
+
+  /* UI */
+  --btn-bg:       #5a5a5a;
+  --btn-top:      #7a7a7a;
+  --btn-bottom:   #2a2a2a;
+  --btn-hover:    #7bcd40;
+  --btn-hover-top:#a8e06b;
+  --btn-hover-bot:#4a9222;
+
+  --section-pad: 80px 20px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--font-main);
+  background: #1a1a1a;
+  color: #f0f0f0;
+  overflow-x: hidden;
+  image-rendering: pixelated;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect x='0' y='0' width='16' height='16' fill='%238B6914'/%3E%3Crect x='2' y='2' width='12' height='12' fill='%23C4922A'/%3E%3Crect x='4' y='4' width='8' height='8' fill='%23D4A030'/%3E%3C/svg%3E") 8 8, crosshair;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 14px; }
+::-webkit-scrollbar-track { background: #1a1a1a; border-left: 3px solid #333; }
+::-webkit-scrollbar-thumb { background: var(--grass-top); border: 2px solid var(--grass-side); image-rendering: pixelated; }
+::-webkit-scrollbar-thumb:hover { background: var(--emerald); }
+
+/* ============================================
+   PIXEL BORDER MIXIN (via box-shadow)
+   ============================================ */
+.pixel-border {
+  box-shadow:
+    inset -4px -4px 0 var(--btn-bottom),
+    inset 4px 4px 0 var(--btn-top),
+    0 0 0 3px #000;
+}
+.pixel-border-green {
+  box-shadow:
+    inset -4px -4px 0 var(--btn-hover-bot),
+    inset 4px 4px 0 var(--btn-hover-top),
+    0 0 0 3px #000;
+}
+.pixel-border-dark {
+  box-shadow:
+    inset -4px -4px 0 #111,
+    inset 4px 4px 0 #555,
+    0 0 0 3px #000;
+}
+
+/* ============================================
+   MINECRAFT BUTTON
+   ============================================ */
+.mc-btn {
+  display: inline-block;
+  font-family: var(--font-main);
+  font-size: 11px;
+  padding: 12px 22px;
+  background: var(--btn-bg);
+  color: #e0e0e0;
+  text-decoration: none;
+  text-shadow: 2px 2px #000;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  box-shadow:
+    inset -3px -3px 0 var(--btn-bottom),
+    inset 3px 3px 0 var(--btn-top),
+    0 0 0 2px #000;
+  transition: background 0.1s, color 0.1s;
+  letter-spacing: 1px;
+}
+.mc-btn:hover, .mc-btn:focus {
+  background: var(--btn-hover);
+  color: #fff;
+  text-shadow: 2px 2px #2a5c10;
+  box-shadow:
+    inset -3px -3px 0 var(--btn-hover-bot),
+    inset 3px 3px 0 var(--btn-hover-top),
+    0 0 0 2px #000;
+}
+.mc-btn:active { transform: translate(2px,2px); }
+
+/* ============================================
+   NAV
+   ============================================ */
+#navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.92);
+  border-bottom: 4px solid var(--grass-top);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#nav-logo {
+  font-size: 13px;
+  color: var(--grass-side);
+  text-shadow: 2px 2px #000, 0 0 10px var(--emerald);
+  letter-spacing: 2px;
+}
+#nav-logo span { color: var(--gold); }
+
+#nav-links {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+#nav-links a {
+  font-family: var(--font-main);
+  font-size: 7px;
+  color: #ccc;
+  text-decoration: none;
+  padding: 6px 10px;
+  text-shadow: 1px 1px #000;
+  transition: color 0.2s;
+  letter-spacing: 1px;
+}
+#nav-links a:hover { color: var(--grass-side); }
+
+/* ============================================
+   HERO SECTION — floating blocks
+   ============================================ */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a3d5c 0%, #5a8abf 30%, #87ceeb 60%, #6ea832 75%, #5d8a2e 78%, #4a6e25 82%, #3a5218 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 70px;
+}
+
+/* Sun */
+#hero::before {
+  content: '';
+  position: absolute;
+  top: 80px; right: 15%;
+  width: 80px; height: 80px;
+  background: var(--gold);
+  box-shadow: 0 0 0 8px #f7d94e, 0 0 30px 10px #f7d94e88;
+  animation: sunRise 8s ease-in-out infinite alternate;
+}
+@keyframes sunRise {
+  from { top: 90px; box-shadow: 0 0 0 8px #f7d94e, 0 0 20px 5px #f7d94e44; }
+  to   { top: 70px; box-shadow: 0 0 0 8px #f7d94e, 0 0 40px 15px #f7d94e88; }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: rgba(255,255,255,0.9);
+  height: 24px;
+  image-rendering: pixelated;
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,255,255,0.9);
+  height: 24px;
+}
+.c1 { width:64px; top:18%; left:-100px; animation: cloudFloat 30s linear infinite; }
+.c1::before { width:32px; height:24px; top:-24px; left:8px; }
+.c1::after  { width:48px; height:24px; top:-24px; right:4px; }
+.c2 { width:80px; top:28%; left:-150px; animation: cloudFloat 45s linear infinite 10s; }
+.c2::before { width:40px; height:24px; top:-24px; left:12px; }
+.c2::after  { width:56px; height:24px; top:-24px; right:6px; }
+.c3 { width:56px; top:12%; left:-120px; animation: cloudFloat 36s linear infinite 5s; }
+.c3::before { width:28px; height:24px; top:-24px; left:6px; }
+@keyframes cloudFloat { to { left: 110vw; } }
+
+/* Floating blocks */
+.float-block {
+  position: absolute;
+  width: 48px; height: 48px;
+  animation: blockFloat 6s ease-in-out infinite;
+}
+.fb-grass {
+  background: linear-gradient(180deg, var(--grass-top) 30%, var(--dirt) 30%);
+  top: 55%; left: 8%;
+  animation-delay: 0s;
+}
+.fb-stone { background: var(--stone); top: 60%; left: 80%; animation-delay: 1s; }
+.fb-wood  { background: var(--wood); top: 52%; left: 60%; animation-delay: 2s; }
+.fb-gold  { background: var(--gold); top: 65%; left: 45%; animation-delay: 3s; }
+.fb-diamond { background: var(--diamond); top: 58%; left: 25%; animation-delay: 1.5s; }
+@keyframes blockFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Hero text */
+#hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 20px;
+}
+#hero-title {
+  font-size: clamp(28px, 6vw, 72px);
+  color: var(--grass-side);
+  text-shadow: 4px 4px #000, 0 0 30px var(--grass-top), 8px 8px #000;
+  letter-spacing: 4px;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  animation: titlePulse 3s ease-in-out infinite;
+}
+#hero-title span { color: var(--gold); text-shadow: 4px 4px #000, 0 0 20px #f7d94e; }
+@keyframes titlePulse {
+  0%,100% { text-shadow: 4px 4px #000, 0 0 20px var(--grass-top), 8px 8px #000; }
+  50%     { text-shadow: 4px 4px #000, 0 0 40px var(--emerald), 8px 8px #000; }
+}
+#hero-sub {
+  font-size: clamp(7px, 1.5vw, 12px);
+  color: #ddd;
+  text-shadow: 2px 2px #000;
+  margin-bottom: 30px;
+  line-height: 2;
+  letter-spacing: 2px;
+}
+#hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+/* Grass terrain at bottom */
+#hero-terrain {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--grass-top) 0px, var(--grass-top) 48px,
+    var(--grass-side) 48px, var(--grass-side) 50px
+  );
+  background-size: 50px 30px;
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
+/* Creeper eyes */
+.creeper-face {
+  display: inline-block;
+  width: 64px; height: 64px;
+  background: var(--creeper);
+  position: relative;
+  image-rendering: pixelated;
+  margin: 0 6px;
+}
+.creeper-face::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: 10px;
+  width: 14px; height: 14px;
+  background: #000;
+  box-shadow: 30px 0 0 #000, 6px 22px 0 #000, 8px 30px 0 #000, 16px 30px 0 #000, 24px 30px 0 #000, 14px 22px 0 #000;
+}
+
+/* ============================================
+   SECTION GENERIC
+   ============================================ */
+section {
+  padding: var(--section-pad);
+  position: relative;
+}
+.section-title {
+  font-size: clamp(14px, 3vw, 26px);
+  text-align: center;
+  margin-bottom: 60px;
+  letter-spacing: 3px;
+  text-shadow: 3px 3px #000;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--grass-top) 0 8px, transparent 8px 12px);
+  margin: 16px auto 0;
+  width: 200px;
+}
+.section-title.gold { color: var(--gold); }
+.section-title.green { color: var(--grass-side); }
+.section-title.diamond { color: var(--diamond); }
+.section-title.red { color: var(--redstone); }
+
+/* ============================================
+   ABOUT SECTION
+   ============================================ */
+#about { background: #1e2a1e; }
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.about-card {
+  background: #2a2a2a;
+  padding: 24px;
+  border: 3px solid #000;
+  box-shadow: inset -4px -4px 0 #111, inset 4px 4px 0 #444;
+  position: relative;
+  transition: transform 0.2s;
+}
+.about-card:hover { transform: translateY(-6px); }
+.about-card .icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  display: block;
+  filter: drop-shadow(2px 2px 0 #000);
+}
+.about-card h3 {
+  font-size: 11px;
+  color: var(--grass-side);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px #000;
+}
+.about-card p {
+  font-size: 7px;
+  line-height: 2.2;
+  color: #ccc;
+  text-shadow: 1px 1px #000;
+}
+.about-card .tag {
+  display: inline-block;
+  font-size: 6px;
+  background: var(--grass-top);
+  color: #fff;
+  padding: 3px 6px;
+  margin-top: 10px;
+  text-shadow: 1px 1px #000;
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+#timeline { background: #161616; }
+.timeline {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 6px;
+  background: repeating-linear-gradient(180deg, var(--grass-top) 0 8px, transparent 8px 14px);
+  transform: translateX(-50%);
+}
+.tl-item {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: calc(50% + 40px);
+  margin-bottom: 50px;
+  position: relative;
+}
+.tl-item:nth-child(even) {
+  justify-content: flex-start;
+  padding-right: 0;
+  padding-left: calc(50% + 40px);
+}
+.tl-item::before {
+  content: attr(data-year);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 10px;
+  background: var(--grass-top);
+  color: #fff;
+  font-size: 7px;
+  padding: 5px 8px;
+  text-shadow: 1px 1px #000;
+  white-space: nowrap;
+  z-index: 2;
+  box-shadow: 0 0 0 3px #000;
+}
+.tl-card {
+  background: #2a2a2a;
+  border: 3px solid #000;
+  padding: 18px;
+  max-width: 340px;
+  box-shadow: inset -3px -3px 0 #111, inset 3px 3px 0 #444;
+  position: relative;
+  transition: transform 0.2s;
+}
+.tl-card:hover { transform: scale(1.03); }
+.tl-card h3 {
+  font-size: 9px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  text-shadow: 2px 2px #000;
+}
+.tl-card p {
+  font-size: 6.5px;
+  line-height: 2.2;
+  color: #ccc;
+  text-shadow: 1px 1px #000;
+}
+.tl-card .tl-badge {
+  display: inline-block;
+  font-size: 6px;
+  background: var(--dirt);
+  padding: 3px 6px;
+  margin-top: 8px;
+  color: #fff;
+  text-shadow: 1px 1px #000;
+}
+
+/* ============================================
+   PROMINENT FIGURES
+   ============================================ */
+#figures { background: #1a1a2e; }
+.figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.figure-card {
+  background: #1e1e3a;
+  border: 3px solid #000;
+  box-shadow: inset -4px -4px 0 #0a0a18, inset 4px 4px 0 #2e2e50;
+  padding: 28px 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.figure-card:hover {
+  transform: translateY(-8px);
+  box-shadow: inset -4px -4px 0 #0a0a18, inset 4px 4px 0 #2e2e50, 0 12px 30px rgba(93,151,50,0.3);
+}
+.figure-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--grass-top);
+}
+.figure-avatar {
+  width: 80px; height: 80px;
+  margin: 0 auto 16px;
+  display: block;
+  image-rendering: pixelated;
+  position: relative;
+}
+/* Pixel art Steve/Alex-style avatars */
+.avatar-notch  { background: #6b4c2a; }
+.avatar-jeb    { background: #2a4c8a; }
+.avatar-carl   { background: #4a2a6b; }
+.avatar-dinnerbone { background: #8a2a2a; }
+
+.figure-avatar .head {
+  width: 40px; height: 40px;
+  position: absolute;
+  top: 0; left: 20px;
+}
+.figure-avatar .body {
+  width: 32px; height: 24px;
+  position: absolute;
+  top: 42px; left: 24px;
+}
+.figure-card h3 {
+  font-size: 10px;
+  color: var(--diamond);
+  text-align: center;
+  text-shadow: 2px 2px #000;
+  margin-bottom: 4px;
+}
+.figure-card .alias {
+  font-size: 7px;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 14px;
+  text-shadow: 1px 1px #000;
+}
+.figure-card p {
+  font-size: 6.5px;
+  line-height: 2.2;
+  color: #bbb;
+  text-shadow: 1px 1px #000;
+}
+.figure-card .role {
+  display: inline-block;
+  background: var(--emerald);
+  color: #000;
+  font-size: 6px;
+  padding: 3px 7px;
+  margin-top: 10px;
+  text-shadow: none;
+}
+/* Pixel person SVG */
+.pixel-person {
+  width: 80px; height: 80px;
+  display: block;
+  margin: 0 auto 16px;
+  image-rendering: pixelated;
+}
+
+/* ============================================
+   YOUTUBERS / GAMERS
+   ============================================ */
+#youtubers { background: #1a0a0a; }
+.yt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.yt-card {
+  background: #2a1515;
+  border: 3px solid #000;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+  box-shadow: inset -3px -3px 0 #110808, inset 3px 3px 0 #3d2020;
+}
+.yt-card:hover { transform: translateY(-6px) scale(1.02); }
+.yt-card.legend { border-color: var(--gold); box-shadow: 0 0 20px rgba(245,197,24,0.3), inset -3px -3px 0 #110808, inset 3px 3px 0 #3d2020; }
+.yt-card.rip { border-color: var(--redstone); box-shadow: 0 0 20px rgba(201,25,25,0.3), inset -3px -3px 0 #110808, inset 3px 3px 0 #3d2020; }
+.yt-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.yt-icon {
+  width: 48px; height: 48px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+.yt-name { font-size: 10px; color: #ff4444; text-shadow: 2px 2px #000; }
+.yt-name.green { color: var(--grass-side); }
+.yt-name.gold  { color: var(--gold); }
+.yt-name.blue  { color: var(--water); }
+.yt-name.diamond { color: var(--diamond); }
+.yt-name.purple { color: #b44cff; }
+.yt-subs { font-size: 6px; color: #888; margin-top: 3px; }
+.yt-card p { font-size: 6.5px; line-height: 2.2; color: #ccc; text-shadow: 1px 1px #000; }
+.yt-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.yt-tag {
+  font-size: 5.5px;
+  padding: 3px 6px;
+  background: #333;
+  color: #aaa;
+  border: 1px solid #555;
+}
+.rip-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--redstone);
+  color: #fff;
+  font-size: 6px;
+  padding: 4px 7px;
+  text-shadow: 1px 1px #000;
+  box-shadow: 0 0 0 2px #000;
+}
+.legend-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--gold);
+  color: #000;
+  font-size: 6px;
+  padding: 4px 7px;
+  box-shadow: 0 0 0 2px #000;
+}
+
+/* ============================================
+   GAME MODES SECTION
+   ============================================ */
+#gamemodes { background: #0d1f0d; }
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.mode-card {
+  background: #162416;
+  border: 3px solid #000;
+  padding: 20px;
+  text-align: center;
+  box-shadow: inset -3px -3px 0 #0a140a, inset 3px 3px 0 #1e351e;
+  transition: transform 0.2s;
+}
+.mode-card:hover { transform: translateY(-4px); }
+.mode-icon { font-size: 36px; margin-bottom: 12px; filter: drop-shadow(2px 2px 0 #000); }
+.mode-card h3 { font-size: 9px; color: var(--grass-side); text-shadow: 2px 2px #000; margin-bottom: 8px; }
+.mode-card p  { font-size: 6px; color: #aaa; line-height: 2.1; text-shadow: 1px 1px #000; }
+
+/* ============================================
+   CRAFTING RECIPE SECTION
+   ============================================ */
+#crafting { background: #2a1a00; }
+.craft-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.craft-desc {
+  font-size: 7px;
+  color: #ccc;
+  text-align: center;
+  line-height: 2.2;
+  margin-bottom: 40px;
+  text-shadow: 1px 1px #000;
+}
+.crafting-table {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.craft-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(3, 64px);
+  gap: 4px;
+  background: #6b5a3e;
+  padding: 12px;
+  border: 4px solid #000;
+  box-shadow: inset -4px -4px 0 #3a3020, inset 4px 4px 0 #8a7050;
+}
+.craft-slot {
+  width: 64px; height: 64px;
+  background: #3d3028;
+  border: 3px solid #000;
+  box-shadow: inset -2px -2px 0 #1a1208, inset 2px 2px 0 #5a4838;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: background 0.15s;
+  image-rendering: pixelated;
+}
+.craft-slot:hover { background: #5a4838; }
+.craft-slot.filled { background: #4a3a28; }
+.craft-arrow {
+  font-size: 36px;
+  color: var(--gold);
+  text-shadow: 2px 2px #000;
+}
+.craft-output {
+  width: 80px; height: 80px;
+  background: #4a3a28;
+  border: 4px solid #000;
+  box-shadow: inset -3px -3px 0 #1a1208, inset 3px 3px 0 #6a5838, 0 0 15px rgba(245,197,24,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+.craft-label {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 7px;
+  color: var(--gold);
+  text-shadow: 1px 1px #000;
+}
+.recipes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+.recipe-mini {
+  background: #2a2010;
+  border: 3px solid #000;
+  padding: 14px;
+  text-align: center;
+  box-shadow: inset -2px -2px 0 #110e06, inset 2px 2px 0 #3d3018;
+  transition: transform 0.2s;
+}
+.recipe-mini:hover { transform: translateY(-3px); }
+.recipe-mini .r-icon { font-size: 28px; margin-bottom: 8px; }
+.recipe-mini h4 { font-size: 7px; color: var(--planks); text-shadow: 1px 1px #000; margin-bottom: 5px; }
+.recipe-mini p { font-size: 5.5px; color: #888; line-height: 1.9; text-shadow: 1px 1px #000; }
+
+/* ============================================
+   WORLDS / DIMENSIONS
+   ============================================ */
+#worlds { background: #0a0014; }
+.worlds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.world-card {
+  padding: 28px 24px;
+  border: 3px solid #000;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.world-card:hover { transform: scale(1.03); }
+.world-overworld { background: linear-gradient(135deg, #1a3a1a, #0d2a0d); box-shadow: 0 0 20px rgba(93,151,50,0.4), inset -3px -3px 0 #0a180a, inset 3px 3px 0 #2a4a2a; }
+.world-nether    { background: linear-gradient(135deg, #2a0a00, #1a0500); box-shadow: 0 0 20px rgba(200,50,0,0.4), inset -3px -3px 0 #110300, inset 3px 3px 0 #3d1500; }
+.world-end       { background: linear-gradient(135deg, #0a0820, #050412); box-shadow: 0 0 20px rgba(100,50,200,0.4), inset -3px -3px 0 #030210, inset 3px 3px 0 #18143a; }
+.world-card .world-icon { font-size: 48px; margin-bottom: 16px; filter: drop-shadow(3px 3px 0 #000); }
+.world-card h3 { font-size: 14px; text-shadow: 3px 3px #000; margin-bottom: 10px; }
+.world-overworld h3 { color: var(--grass-side); }
+.world-nether h3    { color: #ff6633; }
+.world-end h3       { color: #bb88ff; }
+.world-card p { font-size: 6.5px; line-height: 2.2; color: #bbb; text-shadow: 1px 1px #000; }
+.world-card ul { list-style: none; margin-top: 14px; }
+.world-card ul li {
+  font-size: 6.5px;
+  color: #aaa;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  text-shadow: 1px 1px #000;
+}
+.world-card ul li::before { content: '▶ '; color: var(--gold); }
+
+/* ============================================
+   MOBS SECTION
+   ============================================ */
+#mobs { background: #1a1a1a; }
+.mobs-container { max-width: 1200px; margin: 0 auto; }
+.mob-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+.mob-tab {
+  font-family: var(--font-main);
+  font-size: 7px;
+  padding: 8px 14px;
+  background: #333;
+  color: #aaa;
+  border: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #000;
+  box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #555, 0 0 0 2px #000;
+  transition: background 0.15s, color 0.15s;
+}
+.mob-tab.active, .mob-tab:hover {
+  background: var(--grass-top);
+  color: #fff;
+  box-shadow: inset -2px -2px 0 var(--btn-hover-bot), inset 2px 2px 0 var(--btn-hover-top), 0 0 0 2px #000;
+}
+.mob-panel { display: none; }
+.mob-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+.mob-card {
+  background: #252525;
+  border: 3px solid #000;
+  padding: 18px 14px;
+  text-align: center;
+  box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #3d3d3d;
+  transition: transform 0.2s;
+}
+.mob-card:hover { transform: translateY(-4px); }
+.mob-card .mob-sprite { font-size: 40px; margin-bottom: 10px; display: block; filter: drop-shadow(2px 2px 0 #000); }
+.mob-card h4 { font-size: 8px; margin-bottom: 8px; text-shadow: 2px 2px #000; }
+.mob-card.passive h4 { color: var(--grass-side); }
+.mob-card.neutral h4 { color: var(--gold); }
+.mob-card.hostile h4 { color: var(--redstone); }
+.mob-card.boss h4 { color: var(--diamond); }
+.mob-card p { font-size: 6px; color: #999; line-height: 2; text-shadow: 1px 1px #000; }
+.mob-card .mob-hp { font-size: 5.5px; color: var(--redstone); margin-top: 8px; text-shadow: 1px 1px #000; }
+
+/* ============================================
+   MINI GAMES SECTION
+   ============================================ */
+#minigames { background: #0d0d1f; }
+.minigames-tabs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.mg-tab {
+  font-family: var(--font-main);
+  font-size: 8px;
+  padding: 12px 20px;
+  background: #2a2a4a;
+  color: #aaa;
+  border: 3px solid #000;
+  cursor: pointer;
+  text-shadow: 1px 1px #000;
+  box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #3d3d60, 0 0 0 2px #000;
+  transition: all 0.2s;
+}
+.mg-tab.active, .mg-tab:hover {
+  background: var(--diamond);
+  color: #000;
+  text-shadow: none;
+  box-shadow: inset -2px -2px 0 #2a9090, inset 2px 2px 0 #8af0f0, 0 0 0 2px #000;
+}
+.mg-panel { display: none; max-width: 900px; margin: 0 auto; }
+.mg-panel.active { display: block; }
+
+/* === QUIZ GAME === */
+#quiz-container { text-align: center; }
+.quiz-score-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: var(--gold);
+  text-shadow: 1px 1px #000;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  background: #1a1a1a;
+  border: 3px solid #000;
+  box-shadow: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #2a2a2a;
+}
+.quiz-hearts { color: var(--redstone); }
+#quiz-question {
+  background: #1e1e2e;
+  border: 3px solid #000;
+  padding: 24px;
+  margin-bottom: 24px;
+  font-size: 9px;
+  color: #fff;
+  text-shadow: 2px 2px #000;
+  line-height: 2;
+  text-align: center;
+  box-shadow: inset -3px -3px 0 #0a0a18, inset 3px 3px 0 #2e2e44;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.quiz-opt {
+  font-family: var(--font-main);
+  font-size: 7px;
+  padding: 14px 10px;
+  background: #2a2a4a;
+  color: #ddd;
+  border: 3px solid #000;
+  cursor: pointer;
+  text-shadow: 1px 1px #000;
+  box-shadow: inset -2px -2px 0 #111, inset 2px 2px 0 #3d3d60, 0 0 0 2px #000;
+  transition: all 0.15s;
+  text-align: center;
+  line-height: 1.8;
+}
+.quiz-opt:hover { background: #3a3a5a; }
+.quiz-opt.correct { background: var(--grass-top); color: #fff; box-shadow: inset -2px -2px 0 var(--btn-hover-bot), inset 2px 2px 0 var(--btn-hover-top), 0 0 0 2px #000; }
+.quiz-opt.wrong   { background: var(--redstone); color: #fff; }
+#quiz-result {
+  font-size: 10px;
+  margin: 16px 0;
+  text-shadow: 2px 2px #000;
+  min-height: 30px;
+}
+
+/* === MEMORY GAME === */
+#memory-container { text-align: center; }
+.memory-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 8px;
+  color: var(--gold);
+  text-shadow: 1px 1px #000;
+  margin-bottom: 20px;
+}
+#memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+.mem-card {
+  aspect-ratio: 1;
+  background: #333;
+  border: 3px solid #000;
+  box-shadow: inset -3px -3px 0 #111, inset 3px 3px 0 #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-size: clamp(20px, 5vw, 36px);
+  transition: all 0.3s;
+  user-select: none;
+}
+.mem-card .mem-front { display: none; }
+.mem-card .mem-back { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.mem-card.flipped { background: #4a3a28; box-shadow: inset -3px -3px 0 #1a1208, inset 3px 3px 0 #6a5838; }
+.mem-card.flipped .mem-back { display: none; }
+.mem-card.flipped .mem-front { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.mem-card.matched { background: var(--grass-top); box-shadow: inset -3px -3px 0 var(--btn-hover-bot), inset 3px 3px 0 var(--btn-hover-top); cursor: default; }
+.mem-card:hover:not(.matched) { transform: scale(1.05); background: #444; }
+
+/* === WORD SCRAMBLE === */
+#scramble-container { text-align: center; }
+.scramble-word-display {
+  font-size: clamp(18px, 4vw, 32px);
+  color: var(--diamond);
+  text-shadow: 3px 3px #000;
+  letter-spacing: 8px;
+  margin: 20px 0;
+  background: #1a1a2e;
+  padding: 20px;
+  border: 3px solid #000;
+  box-shadow: inset -3px -3px 0 #0a0a18, inset 3px 3px 0 #2e2e44;
+}
+.scramble-hint {
+  font-size: 7px;
+  color: var(--gold);
+  text-shadow: 1px 1px #000;
+  margin-bottom: 16px;
+}
+#scramble-input {
+  font-family: var(--font-main);
+  font-size: 10px;
+  padding: 12px 18px;
+  background: #1a1a1a;
+  color: #fff;
+  border: 3px solid var(--grass-top);
+  box-shadow: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #2a2a2a;
+  text-align: center;
+  width: 260px;
+  text-shadow: 1px 1px #000;
+  outline: none;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+#scramble-input:focus { border-color: var(--diamond); }
+.scramble-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+#scramble-feedback {
+  font-size: 9px;
+  margin: 12px 0;
+  text-shadow: 2px 2px #000;
+  min-height: 28px;
+}
+#scramble-score {
+  font-size: 8px;
+  color: var(--gold);
+  text-shadow: 1px 1px #000;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   ACHIEVEMENTS / STATS
+   ============================================ */
+#stats { background: #0d0d0d; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto 50px;
+}
+.stat-card {
+  background: #1a1a1a;
+  border: 3px solid #000;
+  padding: 22px;
+  text-align: center;
+  box-shadow: inset -3px -3px 0 #0a0a0a, inset 3px 3px 0 #2a2a2a;
+  transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-icon { font-size: 36px; margin-bottom: 10px; filter: drop-shadow(2px 2px 0 #000); }
+.stat-num {
+  font-size: 18px;
+  color: var(--gold);
+  text-shadow: 3px 3px #000;
+  margin-bottom: 6px;
+  animation: countUp 2s ease-out forwards;
+}
+.stat-label { font-size: 7px; color: #888; text-shadow: 1px 1px #000; line-height: 1.8; }
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.achievement {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #1e1a10;
+  border: 3px solid #000;
+  padding: 16px;
+  box-shadow: inset -2px -2px 0 #0a0806, inset 2px 2px 0 #2e2a18;
+  transition: transform 0.2s;
+}
+.achievement:hover { transform: translateX(6px); }
+.ach-icon { font-size: 32px; flex-shrink: 0; filter: drop-shadow(2px 2px 0 #000); }
+.ach-text h4 { font-size: 8px; color: var(--gold); text-shadow: 1px 1px #000; margin-bottom: 4px; }
+.ach-text p  { font-size: 6px; color: #888; line-height: 1.8; text-shadow: 1px 1px #000; }
+
+/* ============================================
+   LEGACY / IMPACT SECTION
+   ============================================ */
+#legacy { background: #111a11; }
+.legacy-content { max-width: 900px; margin: 0 auto; }
+.legacy-para {
+  font-size: 7px;
+  line-height: 2.8;
+  color: #ccc;
+  text-shadow: 1px 1px #000;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: #1a241a;
+  border: 3px solid #000;
+  border-left: 6px solid var(--grass-top);
+  box-shadow: inset -2px -2px 0 #0a120a, inset 2px 2px 0 #242e24;
+}
+.legacy-para strong { color: var(--grass-side); }
+.legacy-para .highlight { color: var(--gold); }
+.legacy-quote {
+  text-align: center;
+  font-size: 8px;
+  color: var(--diamond);
+  text-shadow: 2px 2px #000;
+  padding: 30px;
+  border: 3px dashed var(--diamond);
+  margin: 30px 0;
+  background: rgba(90,228,228,0.05);
+  line-height: 2.5;
+  font-style: italic;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: #000;
+  border-top: 4px solid var(--grass-top);
+  padding: 50px 20px 30px;
+  text-align: center;
+}
+.footer-logo {
+  font-size: 20px;
+  color: var(--grass-side);
+  text-shadow: 3px 3px #000;
+  margin-bottom: 20px;
+}
+.footer-links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 7px;
+  color: #888;
+  text-decoration: none;
+  text-shadow: 1px 1px #000;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--grass-side); }
+.footer-credits {
+  font-size: 6px;
+  color: #444;
+  text-shadow: 1px 1px #000;
+  line-height: 2.5;
+}
+.footer-grass {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 30px;
+}
+.fg-block {
+  width: 32px; height: 32px;
+  background: linear-gradient(180deg, var(--grass-top) 35%, var(--dirt) 35%);
+  border: 1px solid #000;
+}
+
+/* ============================================
+   PARTICLES / STARS (End sky background)
+   ============================================ */
+.star-field {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: #fff;
+  animation: twinkle 3s infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.2; transform: scale(0.5); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+
+/* ============================================
+   PIXEL ART BLOCK DECORATORS
+   ============================================ */
+.block-row {
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+  height: 24px;
+}
+.block-row .b {
+  flex: 1;
+  height: 24px;
+  min-width: 24px;
+}
+.b-grass { background: var(--grass-top); }
+.b-dirt  { background: var(--dirt); }
+.b-stone { background: var(--stone); }
+.b-wood  { background: var(--wood); }
+.b-sand  { background: var(--sand); }
+.b-gold  { background: var(--gold); }
+.b-diamond { background: var(--diamond); }
+.b-redstone { background: var(--redstone); }
+
+/* ============================================
+   XP BAR
+   ============================================ */
+.xp-bar-wrapper { max-width: 600px; margin: 30px auto; }
+.xp-label { font-size: 7px; color: #84c020; text-shadow: 1px 1px #000; margin-bottom: 6px; }
+.xp-bar {
+  height: 16px;
+  background: #1a1a1a;
+  border: 3px solid #000;
+  box-shadow: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #2a2a2a;
+  position: relative;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  background: #84c020;
+  box-shadow: inset -2px 0 0 #5a9010, inset 0 2px 0 #aaf030;
+  transition: width 1.5s ease-out;
+}
+
+/* ============================================
+   UTILITY
+   ============================================ */
+.text-center { text-align: center; }
+.mt-30 { margin-top: 30px; }
+.mb-20 { margin-bottom: 20px; }
+
+/* Pixel hr */
+.pixel-hr {
+  border: none;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--grass-top) 0 6px, var(--grass-side) 6px 8px, transparent 8px 10px);
+  margin: 40px 0;
+}
+
+/* Notification popup */
+#notif {
+  position: fixed;
+  bottom: 30px; right: -400px;
+  background: #1a1a1a;
+  border: 4px solid #000;
+  box-shadow: inset -4px -4px 0 #0a0a0a, inset 4px 4px 0 #2a2a2a, 0 0 20px rgba(132,192,32,0.4);
+  padding: 16px 20px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: right 0.5s ease;
+  max-width: 340px;
+}
+#notif.show { right: 20px; }
+#notif-icon { font-size: 28px; flex-shrink: 0; }
+#notif-text h4 { font-size: 8px; color: var(--gold); text-shadow: 1px 1px #000; margin-bottom: 4px; }
+#notif-text p  { font-size: 6px; color: #aaa; text-shadow: 1px 1px #000; }
+
+/* Loading screen */
+#loader {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s;
+}
+#loader.hide { opacity: 0; pointer-events: none; }
+#loader h1 { font-size: clamp(20px, 5vw, 48px); color: var(--grass-side); text-shadow: 4px 4px #000; margin-bottom: 30px; letter-spacing: 4px; }
+#loader-bar {
+  width: 300px; height: 20px;
+  background: #1a1a1a;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 4px #000;
+  overflow: hidden;
+}
+#loader-fill {
+  height: 100%;
+  background: var(--grass-top);
+  width: 0%;
+  box-shadow: inset 0 4px 0 var(--grass-side);
+  transition: width 0.1s;
+}
+#loader-text { font-size: 9px; color: #888; margin-top: 14px; text-shadow: 1px 1px #000; }
+
+/* Tooltip */
+[data-tip] { position: relative; cursor: help; }
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 6px;
+  padding: 6px 10px;
+  border: 2px solid #000;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  text-shadow: 1px 1px #000;
+  z-index: 100;
+}
+[data-tip]:hover::after { opacity: 1; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .timeline::before { left: 20px; }
+  .tl-item, .tl-item:nth-child(even) {
+    justify-content: flex-start;
+    padding: 0 0 0 60px;
+  }
+  .tl-item::before { left: 20px; transform: none; }
+  #nav-links { display: none; }
+  #nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(0,0,0,0.97); padding: 20px; border-bottom: 3px solid var(--grass-top); }
+  #hamburger { display: flex; }
+  #memory-grid { grid-template-columns: repeat(4, 1fr); }
+  .quiz-options { grid-template-columns: 1fr; }
+}
+#hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+}
+#hamburger span {
+  display: block;
+  width: 24px; height: 4px;
+  background: var(--grass-side);
+  box-shadow: 1px 1px #000;
+}
+
+/* Creeper animation */
+@keyframes creepIn {
+  from { transform: translateY(100px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================
+   COOL GLOBAL ANIMATIONS
+   ============================================ */
+
+/* Glitch text effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  color: var(--grass-side);
+  text-shadow: 3px 3px #000;
+  animation: glitchBase 4s infinite;
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+}
+.glitch-text::before {
+  color: var(--redstone);
+  animation: glitchTop 4s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  transform: translateX(-3px);
+}
+.glitch-text::after {
+  color: var(--diamond);
+  animation: glitchBot 4s infinite;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  transform: translateX(3px);
+}
+@keyframes glitchBase {
+  0%,90%,100% { text-shadow: 3px 3px #000; }
+  91% { text-shadow: -2px 0 var(--redstone), 2px 2px var(--diamond); }
+  92% { text-shadow: 3px 3px #000; }
+  93% { text-shadow: -2px 0 var(--redstone), 2px 2px var(--diamond); }
+  94% { text-shadow: 3px 3px #000; }
+}
+@keyframes glitchTop {
+  0%,89%,95%,100% { transform: translateX(0); opacity: 0; }
+  90% { transform: translateX(-4px); opacity: 1; }
+  91% { transform: translateX(4px); opacity: 1; }
+  92% { transform: translateX(-2px); opacity: 0.8; }
+  93% { transform: translateX(0); opacity: 0; }
+}
+@keyframes glitchBot {
+  0%,89%,95%,100% { transform: translateX(0); opacity: 0; }
+  90% { transform: translateX(4px); opacity: 1; }
+  91% { transform: translateX(-4px); opacity: 1; }
+  92% { transform: translateX(2px); opacity: 0.8; }
+  93% { transform: translateX(0); opacity: 0; }
+}
+
+/* Shake on hover for cards */
+.figure-card:hover .pixel-person,
+.yt-card:hover .yt-icon {
+  animation: wiggle 0.5s ease-in-out;
+}
+@keyframes wiggle {
+  0%,100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+/* Floating animation for hero items - already exists, extended */
+@keyframes floatUpDown {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-12px); }
+}
+
+/* Shine sweep animation */
+@keyframes shine {
+  0%   { left: -100%; }
+  100% { left: 150%; }
+}
+
+/* Pixel rain (for credits BG) */
+@keyframes pixelFall {
+  0%   { transform: translateY(-60px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.1; }
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  30%     { transform: translateY(-16px); }
+  60%     { transform: translateY(-6px); }
+}
+
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 20px rgba(90,228,228,0.3), 0 0 0 3px #000; }
+  50%      { box-shadow: 0 0 50px rgba(90,228,228,0.8), 0 0 0 3px #000; }
+}
+@keyframes pulseGlowGold {
+  0%,100% { box-shadow: 0 0 20px rgba(245,197,24,0.4), 0 0 0 3px #000; }
+  50%      { box-shadow: 0 0 50px rgba(245,197,24,0.9), 0 0 0 3px #000; }
+}
+@keyframes pulseGlowGreen {
+  0%,100% { box-shadow: 0 0 20px rgba(93,151,50,0.4), 0 0 0 3px #000; }
+  50%      { box-shadow: 0 0 60px rgba(93,151,50,1.0), 0 0 0 3px #000; }
+}
+
+/* Rainbow border */
+@keyframes rainbowBorder {
+  0%   { border-color: #f5c518; }
+  16%  { border-color: #5ae4e4; }
+  33%  { border-color: #5d9732; }
+  50%  { border-color: #c91919; }
+  66%  { border-color: #b44cff; }
+  83%  { border-color: #ff8c00; }
+  100% { border-color: #f5c518; }
+}
+
+/* Typewriter cursor */
+@keyframes blink {
+  0%,50%   { opacity: 1; }
+  51%,100% { opacity: 0; }
+}
+
+/* ============================================
+   CREDITS SECTION
+   ============================================ */
+#credits {
+  background: linear-gradient(180deg, #04010f 0%, #080420 40%, #0a0030 70%, #04010f 100%);
+  padding: 0 0 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Falling pixel blocks background */
+#credits-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.cb-block {
+  position: absolute;
+  width: 16px; height: 16px;
+  opacity: 0.35;
+  animation: pixelFall linear infinite;
+  image-rendering: pixelated;
+}
+
+.credits-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 20px 20px;
+}
+
+/* Credits title */
+.credits-title-wrap { text-align: center; margin-bottom: 60px; }
+.credits-pre-label {
+  font-size: 8px;
+  color: var(--diamond);
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px var(--diamond);
+  margin-bottom: 16px;
+  animation: pulseGlow 2s infinite;
+  display: inline-block;
+  padding: 6px 20px;
+  border: 2px solid var(--diamond);
+}
+.credits-main-title {
+  font-size: clamp(20px, 5vw, 48px);
+  line-height: 1.5;
+  text-shadow: 4px 4px #000;
+  margin-bottom: 40px;
+}
+.credits-love {
+  color: #ff69b4;
+  text-shadow: 3px 3px #000, 0 0 20px #ff69b4;
+  animation: pulseGlowGold 2s infinite;
+  display: inline-block;
+}
+.credits-by {
+  color: #888;
+  font-size: 0.5em;
+  letter-spacing: 8px;
+}
+
+/* ── PLAYER CARD ── */
+.player-card-outer {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+}
+.player-card-glow {
+  position: absolute;
+  top: -20px; left: -20px; right: -20px; bottom: -20px;
+  background: radial-gradient(ellipse at center, rgba(90,228,228,0.25) 0%, transparent 70%);
+  animation: pulseGlow 3s infinite;
+  pointer-events: none;
+  border-radius: 4px;
+}
+.player-card {
+  display: flex;
+  gap: 32px;
+  background: linear-gradient(135deg, #0a0820 0%, #120840 50%, #0a1020 100%);
+  border: 4px solid #000;
+  box-shadow:
+    inset -4px -4px 0 #040210,
+    inset 4px 4px 0 #1e1460,
+    0 0 0 2px #000,
+    0 0 40px rgba(90,228,228,0.4);
+  padding: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: rainbowBorder 6s linear infinite;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Skin */
+.player-skin-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.player-skin {
+  width: 100px;
+  height: 150px;
+  image-rendering: pixelated;
+  display: block;
+  animation: floatUpDown 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgba(90,228,228,0.5));
+}
+.player-particle {
+  position: absolute;
+  font-size: 18px;
+  pointer-events: none;
+  animation: particleOrbit 4s ease-in-out infinite;
+}
+.p1 { top: -10px; left: -20px; animation-delay: 0s;    animation-duration: 3.5s; }
+.p2 { top: 20px;  right: -24px; animation-delay: 0.6s; animation-duration: 4.2s; }
+.p3 { bottom: 20px; left: -22px; animation-delay: 1.2s; animation-duration: 3.8s; }
+.p4 { top: 60px; right: -20px; animation-delay: 0.3s;  animation-duration: 4.5s; }
+.p5 { bottom: 0; right: -18px; animation-delay: 0.9s;  animation-duration: 3.2s; }
+@keyframes particleOrbit {
+  0%,100% { transform: translate(0,0) scale(1); opacity: 0.8; }
+  25%      { transform: translate(6px,-10px) scale(1.2); opacity: 1; }
+  50%      { transform: translate(-4px,8px) scale(0.8); opacity: 0.6; }
+  75%      { transform: translate(8px,4px) scale(1.1); opacity: 1; }
+}
+
+/* Player info */
+.player-info { flex: 1; min-width: 240px; text-align: left; }
+.player-name-tag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.player-gt {
+  font-size: clamp(16px, 3.5vw, 26px);
+  color: var(--gold);
+  text-shadow: 3px 3px #000, 0 0 20px var(--gold);
+  animation: pulseGlowGold 2.5s infinite;
+  letter-spacing: 2px;
+}
+.online-dot {
+  width: 10px; height: 10px;
+  background: var(--emerald);
+  border-radius: 0;
+  box-shadow: 0 0 8px var(--emerald);
+  animation: blink 1.4s infinite;
+  flex-shrink: 0;
+}
+.player-level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.level-badge {
+  font-size: 9px;
+  background: var(--gold);
+  color: #000;
+  padding: 4px 10px;
+  text-shadow: none;
+  box-shadow: 0 0 0 2px #000;
+}
+.level-label { font-size: 6px; color: #888; text-shadow: 1px 1px #000; }
+
+.player-stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.ps-item { text-align: center; }
+.ps-val { font-size: 11px; color: var(--diamond); text-shadow: 2px 2px #000; }
+.ps-key { font-size: 5.5px; color: #666; text-shadow: 1px 1px #000; margin-top: 3px; }
+
+.player-xp-bar-wrap {
+  height: 12px;
+  background: #111;
+  border: 2px solid #000;
+  margin-bottom: 14px;
+  box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #222;
+  overflow: hidden;
+}
+.player-xp-fill {
+  height: 100%;
+  background: #84c020;
+  width: 0%;
+  box-shadow: inset 0 3px 0 #aaf030;
+  transition: width 2.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.player-bio {
+  background: rgba(0,0,0,0.4);
+  border: 2px solid #1e1e3a;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: inset -2px -2px 0 #000, inset 2px 2px 0 #1a1a30;
+}
+.player-bio p {
+  font-size: 6.5px;
+  line-height: 2.3;
+  color: #ccc;
+  text-shadow: 1px 1px #000;
+}
+.bio-highlight { color: var(--gold); font-weight: normal; }
+
+/* Friend invite box */
+.friend-invite-box {
+  background: linear-gradient(135deg, #0a180a, #0d220d);
+  border: 3px solid #000;
+  box-shadow: inset -2px -2px 0 #040c04, inset 2px 2px 0 #183018, 0 0 20px rgba(93,151,50,0.4);
+  padding: 16px;
+  animation: pulseGlowGreen 3s infinite;
+}
+.friend-title {
+  font-size: 9px;
+  color: var(--grass-side);
+  text-shadow: 2px 2px #000;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+.friend-gt-display {
+  font-size: clamp(14px, 3vw, 20px);
+  color: var(--diamond);
+  text-shadow: 2px 2px #000, 0 0 15px var(--diamond);
+  margin-bottom: 10px;
+  letter-spacing: 3px;
+  min-height: 30px;
+}
+.cursor-blink { animation: blink 0.8s infinite; color: var(--grass-side); }
+.friend-note {
+  font-size: 6px;
+  color: #aaa;
+  line-height: 2.2;
+  text-shadow: 1px 1px #000;
+  margin-bottom: 12px;
+  border-top: 1px solid #1a2a1a;
+  padding-top: 10px;
+}
+.copy-btn { font-size: 7px; padding: 8px 14px; }
+
+/* ── CREDITS SCROLL ── */
+.credits-scroll-section {
+  margin-top: 60px;
+  text-align: center;
+}
+.credits-scroll-title {
+  font-size: 12px;
+  color: var(--gold);
+  text-shadow: 3px 3px #000;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+.credits-scroll-outer {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  height: 420px;
+  overflow: hidden;
+  background: #000;
+  border: 4px solid #000;
+  box-shadow: inset 0 0 0 3px #222, 0 0 30px rgba(90,228,228,0.2);
+  position: relative;
+}
+.credits-scroll-outer::before,
+.credits-scroll-outer::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 80px;
+  z-index: 3;
+  pointer-events: none;
+}
+.credits-scroll-outer::before {
+  top: 0;
+  background: linear-gradient(to bottom, #000, transparent);
+}
+.credits-scroll-outer::after {
+  bottom: 0;
+  background: linear-gradient(to top, #000, transparent);
+}
+.credits-scroll-inner {
+  padding: 20px 40px;
+  transform: translateY(420px);
+  transition: none;
+}
+.credits-scroll-inner.scrolling {
+  animation: creditRoll 45s linear forwards;
+}
+@keyframes creditRoll {
+  from { transform: translateY(420px); }
+  to   { transform: translateY(-100%); }
+}
+
+.cr-spacer { height: 60px; }
+.cr-studio-logo { text-align: center; margin-bottom: 10px; }
+.cr-logo-blocks { font-size: 28px; margin-bottom: 8px; animation: bounce 2s infinite; display: inline-block; }
+.cr-studio-name {
+  font-size: 16px;
+  color: var(--grass-side);
+  text-shadow: 3px 3px #000, 0 0 15px var(--grass-top);
+  letter-spacing: 4px;
+}
+.cr-studio-sub { font-size: 8px; color: #666; letter-spacing: 6px; margin-top: 6px; }
+.cr-big-title {
+  font-size: clamp(16px, 4vw, 28px);
+  color: var(--diamond);
+  text-shadow: 4px 4px #000, 0 0 20px var(--diamond);
+  text-align: center;
+  line-height: 1.6;
+}
+.cr-role-group {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.cr-role-title {
+  font-size: 7px;
+  color: #666;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+.cr-role-name {
+  font-size: 14px;
+  color: var(--gold);
+  text-shadow: 2px 2px #000, 0 0 10px var(--gold);
+  margin-bottom: 6px;
+}
+.cr-role-sub {
+  font-size: 6.5px;
+  color: #888;
+  line-height: 2;
+  text-shadow: 1px 1px #000;
+}
+.cr-divider {
+  text-align: center;
+  font-size: 14px;
+  color: var(--grass-side);
+  margin: 20px 0;
+  text-shadow: 0 0 10px var(--grass-top);
+  letter-spacing: 10px;
+}
+.cr-version-text {
+  text-align: center;
+  font-size: 6.5px;
+  color: #444;
+  text-shadow: 1px 1px #000;
+  line-height: 2.2;
+}
+.cr-end-message {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #0a1a0a, #050d05);
+  border: 3px solid var(--grass-top);
+  box-shadow: 0 0 30px rgba(93,151,50,0.5);
+}
+.cr-end-icon { font-size: 40px; margin-bottom: 12px; animation: bounce 1.5s infinite; display: block; }
+.cr-end-title {
+  font-size: clamp(12px, 3vw, 20px);
+  color: var(--grass-side);
+  text-shadow: 3px 3px #000, 0 0 20px var(--grass-top);
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+}
+.cr-end-by {
+  font-size: 10px;
+  color: #888;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+.cr-end-gt {
+  font-size: 11px;
+  color: var(--gold);
+  text-shadow: 2px 2px #000, 0 0 10px var(--gold);
+  margin-bottom: 12px;
+}
+.cr-end-tagline {
+  font-size: 6.5px;
+  color: #aaa;
+  font-style: italic;
+  line-height: 2.2;
+  text-shadow: 1px 1px #000;
+}
+
+/* ── FINAL SIGNATURE ── */
+.final-sig {
+  text-align: center;
+  margin-top: 60px;
+  padding: 30px;
+  background: linear-gradient(135deg, #020108, #050220);
+  border: 3px solid #000;
+}
+.sig-blocks {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 20px;
+}
+.sig-block { width: 28px; height: 28px; }
+.sb-g { background: linear-gradient(180deg, var(--grass-top) 40%, var(--dirt) 40%); }
+.sb-d { background: var(--dirt); }
+.sig-text {
+  font-size: clamp(14px, 4vw, 32px);
+  color: var(--gold);
+  text-shadow: 4px 4px #000, 0 0 30px var(--gold);
+  letter-spacing: 4px;
+  min-height: 40px;
+  animation: pulseGlowGold 2s infinite;
+  margin-bottom: 12px;
+}
+.sig-sub {
+  font-size: 7px;
+  color: #888;
+  text-shadow: 1px 1px #000;
+  letter-spacing: 2px;
+  line-height: 2;
+}
+
+/* Section entrance animation */
+.fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ===== LOADER ===== -->
+<div id="loader">
+  <h1>MINECRAFT</h1>
+  <div style="font-size:8px;color:#888;margin-bottom:20px;letter-spacing:2px;text-shadow:1px 1px #000;">WORLD ENCYCLOPEDIA</div>
+  <div id="loader-bar"><div id="loader-fill"></div></div>
+  <div id="loader-text">Loading terrain...</div>
+</div>
+
+<!-- ===== ACHIEVEMENT NOTIFICATION ===== -->
+<div id="notif">
+  <div id="notif-icon">🏆</div>
+  <div id="notif-text">
+    <h4>Achievement Unlocked!</h4>
+    <p id="notif-msg">You visited the Minecraft Encyclopedia!</p>
+  </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <div id="nav-logo">⛏ <span>MINE</span>CRAFT WORLD</div>
+  <div id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+  <ul id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#timeline">History</a></li>
+    <li><a href="#figures">Figures</a></li>
+    <li><a href="#youtubers">Legends</a></li>
+    <li><a href="#gamemodes">Modes</a></li>
+    <li><a href="#worlds">Worlds</a></li>
+    <li><a href="#mobs">Mobs</a></li>
+    <li><a href="#minigames">Play</a></li>
+    <li><a href="#stats">Stats</a></li>
+    <li><a href="#legacy">Legacy</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <!-- Clouds -->
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <!-- Floating blocks -->
+  <div class="float-block fb-grass pixel-border"></div>
+  <div class="float-block fb-stone pixel-border"></div>
+  <div class="float-block fb-wood pixel-border"></div>
+  <div class="float-block fb-gold pixel-border"></div>
+  <div class="float-block fb-diamond pixel-border"></div>
+
+  <div id="hero-content">
+    <div style="font-size:10px;color:#aaa;letter-spacing:4px;text-shadow:2px 2px #000;margin-bottom:14px;">✦ THE ULTIMATE ENCYCLOPEDIA ✦</div>
+    <h1 id="hero-title"><span>MINE</span>CRAFT<br>WORLD</h1>
+    <p id="hero-sub">
+      From a Weekend Indie Project to the<br>
+      Best-Selling Video Game in History<br>
+      <span style="color:var(--gold);">300+ Million Copies Sold · Est. 2009</span>
+    </p>
+    <div id="hero-btns">
+      <a href="#timeline" class="mc-btn">▶ EXPLORE HISTORY</a>
+      <a href="#minigames" class="mc-btn">🎮 PLAY MINI GAMES</a>
+      <a href="#youtubers" class="mc-btn">⭐ LEGENDS</a>
+    </div>
+  </div>
+
+  <!-- Terrain -->
+  <div id="hero-terrain"></div>
+</section>
+
+<!-- BLOCK ROW DIVIDER -->
+<div class="block-row">
+  <div class="b b-grass"></div><div class="b b-dirt"></div><div class="b b-grass"></div>
+  <div class="b b-grass"></div><div class="b b-dirt"></div><div class="b b-grass"></div>
+  <div class="b b-dirt"></div><div class="b b-grass"></div><div class="b b-grass"></div>
+  <div class="b b-dirt"></div><div class="b b-grass"></div><div class="b b-dirt"></div>
+  <div class="b b-grass"></div><div class="b b-grass"></div><div class="b b-dirt"></div>
+  <div class="b b-grass"></div><div class="b b-dirt"></div><div class="b b-grass"></div>
+  <div class="b b-grass"></div><div class="b b-dirt"></div><div class="b b-grass"></div>
+  <div class="b b-dirt"></div><div class="b b-grass"></div><div class="b b-grass"></div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <h2 class="section-title green fade-in">⛏ WHAT IS MINECRAFT?</h2>
+  <div class="about-grid">
+    <div class="about-card fade-in">
+      <span class="icon">🌍</span>
+      <h3>Infinite Open World</h3>
+      <p>Minecraft drops players into a procedurally generated world with virtually infinite terrain made up of three-dimensional blocks. Mountains, forests, caves, oceans, and deserts all await exploration — no two worlds are ever the same.</p>
+      <span class="tag">SANDBOX GENRE</span>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">⚒️</span>
+      <h3>Craft & Survive</h3>
+      <p>Players gather raw materials, craft tools, build shelters, and fend off hostile creatures like Creepers, Zombies, and Skeletons. The game's crafting system lets you combine items on a crafting table to create entirely new ones.</p>
+      <span class="tag">SURVIVAL MODE</span>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">🏗️</span>
+      <h3>Unlimited Creativity</h3>
+      <p>Creative Mode hands players unlimited resources and the ability to fly, letting them construct anything imaginable — from simple houses to massive cities, working computers, and even entire fictional universes recreated in block form.</p>
+      <span class="tag">CREATIVE MODE</span>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">🔴</span>
+      <h3>Redstone Engineering</h3>
+      <p>Redstone is Minecraft's version of electrical circuits. It allows players to build incredibly complex machines, automations, contraptions, and even functional computers within the game — a testament to player creativity.</p>
+      <span class="tag">REDSTONE</span>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">🌐</span>
+      <h3>Multiplayer & Community</h3>
+      <p>Minecraft supports multiplayer servers where thousands of players can coexist. Its massive community has created countless mods, texture packs, custom maps, and servers — extending the game's life indefinitely.</p>
+      <span class="tag">MULTIPLAYER</span>
+    </div>
+    <div class="about-card fade-in">
+      <span class="icon">📱</span>
+      <h3>Cross-Platform</h3>
+      <p>Minecraft is available on virtually every platform — PC (Java & Bedrock), Xbox, PlayStation, Nintendo Switch, iOS, Android, and even VR. The Bedrock Edition allows cross-platform play between all non-Java platforms.</p>
+      <span class="tag">MULTI-PLATFORM</span>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCK DIVIDER -->
+<div class="block-row">
+  <div class="b b-stone"></div><div class="b b-stone"></div><div class="b b-coal" style="background:#222"></div>
+  <div class="b b-stone"></div><div class="b b-stone"></div><div class="b b-stone"></div>
+  <div class="b b-coal" style="background:#222"></div><div class="b b-stone"></div>
+  <div class="b b-stone"></div><div class="b b-coal" style="background:#333"></div>
+  <div class="b b-stone"></div><div class="b b-stone"></div><div class="b b-stone"></div>
+  <div class="b b-coal" style="background:#222"></div><div class="b b-stone"></div>
+  <div class="b b-stone"></div><div class="b b-stone"></div><div class="b b-coal" style="background:#333"></div>
+  <div class="b b-stone"></div><div class="b b-stone"></div><div class="b b-stone"></div>
+  <div class="b b-coal" style="background:#222"></div><div class="b b-stone"></div><div class="b b-stone"></div>
+</div>
+
+<!-- ===== TIMELINE ===== -->
+<section id="timeline">
+  <h2 class="section-title gold fade-in">📜 HISTORY OF MINECRAFT</h2>
+  <div class="timeline">
+    <div class="tl-item fade-in" data-year="2009">
+      <div class="tl-card">
+        <h3>The Birth of Minecraft</h3>
+        <p>Markus "Notch" Persson, a Swedish programmer at jAlbum, creates the first version of Minecraft — originally called "Cave Game" — over a single weekend in early May 2009. Inspired by Infiniminer and Dwarf Fortress, Notch releases the first public alpha (Classic) to TIGSource Forums on May 17, 2009. The game gains an enthusiastic following almost immediately, selling 7 copies a day at first.</p>
+        <span class="tl-badge">📅 MAY 17, 2009 — PUBLIC ALPHA</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2009 Q4">
+      <div class="tl-card">
+        <h3>Survival & Indev Phase</h3>
+        <p>In October 2009, a skeleton of Survival Mode is added to Classic — including enemies like Spiders, as well as TNT blocks. In December 2009, Minecraft enters the "Indev" (In Development) phase, introducing paintings by artist Kristoffer Zetterstrand. Notch quits his day job to focus on Minecraft full-time.</p>
+        <span class="tl-badge">🧪 SURVIVAL TEST BEGINS</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2010">
+      <div class="tl-card">
+        <h3>Alpha & Redstone</h3>
+        <p>On June 30, 2010, Minecraft enters the Alpha phase. Redstone — a revolutionary material that transmits electrical signals — is introduced. Biomes and the Nether dimension are added in Alpha v1.2.0. Notch refuses a job offer at Valve Corporation to continue working on Minecraft. The crafting system is also introduced this year.</p>
+        <span class="tl-badge">⚡ REDSTONE INTRODUCED</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2010 DEC">
+      <div class="tl-card">
+        <h3>Mojang Founded & Beta</h3>
+        <p>Notch officially founds Mojang Studios with co-founders Carl Manneh (CEO) and Jakob Porser. On December 20, 2010, Minecraft moves into its Beta phase. Notch sets up the studio with skilled programmers. Beta 1.0 introduces throwable eggs and leaf decay.</p>
+        <span class="tl-badge">🏢 MOJANG STUDIOS FOUNDED</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2011">
+      <div class="tl-card">
+        <h3>The Adventure Update & Full Release</h3>
+        <p>Minecraft 1.0 is officially released on November 18, 2011 at MineCon — Mojang's own convention. The Adventure Update (Beta 1.8) adds the Ender Dragon boss, new biomes, sprinting, critical hits, and a hunger system. Mojang sells 4 million copies by release date. Jens "Jeb" Bergensten takes over as lead developer.</p>
+        <span class="tl-badge">🎉 MINECRAFT 1.0 RELEASED</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2012">
+      <div class="tl-card">
+        <h3>Console Debut</h3>
+        <p>Minecraft launches on Xbox 360 on May 12, 2012 — developed by 4J Studios. It becomes one of the fastest-selling Xbox Live Arcade titles ever. The "Pretty Scary" update adds a host of new mobs including Witches, Bats, and Wither Skeletons. Mojang acquires CraftBukkit developers to improve server infrastructure.</p>
+        <span class="tl-badge">🎮 XBOX 360 LAUNCH</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2013">
+      <div class="tl-card">
+        <h3>PlayStation & Record Revenue</h3>
+        <p>Minecraft launches on PlayStation 3. Mojang integrates Twitch streaming and releases a new launcher. The company records revenues of $330 million and profits of $129 million in this year alone. "The Update That Changed the World" brings massive improvements to world generation and biomes.</p>
+        <span class="tl-badge">💰 $330M REVENUE</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2014">
+      <div class="tl-card">
+        <h3>Microsoft Acquires Mojang</h3>
+        <p>Microsoft acquires Mojang Studios — including all Minecraft intellectual property — for $2.5 billion. Notch suggested the deal himself on Twitter. The purchase brings Notch's net worth to $1.5 billion. He departs Mojang after the deal. The Minecraft community reacts with concern but Microsoft pledges to keep the game independent.</p>
+        <span class="tl-badge">💼 $2.5B MICROSOFT DEAL</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2016">
+      <div class="tl-card">
+        <h3>Bedrock Edition Unification</h3>
+        <p>Minecraft: Pocket Edition (mobile) is fully released. The Windows 10 Edition — later renamed Bedrock Edition — reaches its full 1.0 release. Bedrock Edition becomes the unified cross-platform version of Minecraft allowing players on Xbox, Nintendo Switch, mobile, and Windows to play together seamlessly.</p>
+        <span class="tl-badge">📱 BEDROCK ERA BEGINS</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2019">
+      <div class="tl-card">
+        <h3>Minecraft Renaissance</h3>
+        <p>Minecraft experiences a massive revival in popularity, largely driven by YouTube and streaming culture. Dream, PewDiePie, and other creators reignite global interest. Minecraft YouTube content surges past billions of views. The game becomes a cultural phenomenon for a new generation of players.</p>
+        <span class="tl-badge">🔥 THE GREAT REVIVAL</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2020–2021">
+      <div class="tl-card">
+        <h3>Dream SMP & Content Golden Age</h3>
+        <p>Dream and GeorgeNotFound create the Dream SMP — a private Minecraft server that becomes a global cultural phenomenon featuring scripted roleplay storylines involving dozens of top creators including Technoblade, TommyInnit, and Wilbur Soot. Minecraft content surpasses one trillion total YouTube views in 2021.</p>
+        <span class="tl-badge">🎭 DREAM SMP ERA</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2022">
+      <div class="tl-card">
+        <h3>Technoblade's Passing</h3>
+        <p>Beloved YouTuber Technoblade (Alexander) passes away from sarcoma cancer on June 30, 2022, at age 23. His final video "So Long Nerds" is uploaded by his father and becomes one of the most-watched tribute videos in YouTube history with over 87 million views. The Minecraft launcher adds a crown to the pig in his honor. "Technoblade Never Dies" becomes a universal rallying cry.</p>
+        <span class="tl-badge">💔 RIP TECHNOBLADE</span>
+      </div>
+    </div>
+
+    <div class="tl-item fade-in" data-year="2023+">
+      <div class="tl-card">
+        <h3>300 Million & A Movie</h3>
+        <p>Minecraft surpasses 300 million total sales, cementing its status as the best-selling video game of all time — surpassing Tetris. The game continues receiving major updates including Caves & Cliffs, The Wild Update, and Trails & Tails. A major Minecraft movie is announced and produced, premiering in 2025.</p>
+        <span class="tl-badge">🏆 300M+ COPIES SOLD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCK DIVIDER -->
+<div class="block-row">
+  <div class="b b-gold"></div><div class="b b-stone"></div><div class="b b-gold"></div>
+  <div class="b b-stone"></div><div class="b b-gold"></div><div class="b b-stone"></div>
+  <div class="b b-gold"></div><div class="b b-stone"></div><div class="b b-gold"></div>
+  <div class="b b-stone"></div><div class="b b-gold"></div><div class="b b-stone"></div>
+  <div class="b b-gold"></div><div class="b b-stone"></div><div class="b b-gold"></div>
+  <div class="b b-stone"></div><div class="b b-gold"></div><div class="b b-stone"></div>
+  <div class="b b-gold"></div><div class="b b-stone"></div><div class="b b-gold"></div>
+  <div class="b b-stone"></div><div class="b b-gold"></div><div class="b b-stone"></div>
+</div>
+
+<!-- ===== PROMINENT FIGURES ===== -->
+<section id="figures">
+  <h2 class="section-title diamond fade-in">👤 PROMINENT FIGURES</h2>
+
+  <div class="figures-grid">
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#f5c518"/>
+        <rect x="10" y="4" width="4" height="4" fill="#000"/>
+        <rect x="18" y="4" width="4" height="4" fill="#000"/>
+        <rect x="10" y="10" width="2" height="2" fill="#000"/>
+        <rect x="14" y="10" width="4" height="2" fill="#000"/>
+        <rect x="20" y="10" width="2" height="2" fill="#000"/>
+        <rect x="6" y="16" width="20" height="12" fill="#3a5a9a"/>
+        <rect x="0" y="16" width="6" height="12" fill="#3a5a9a"/>
+        <rect x="26" y="16" width="6" height="12" fill="#3a5a9a"/>
+        <rect x="6" y="28" width="8" height="4" fill="#5a3a1a"/>
+        <rect x="18" y="28" width="8" height="4" fill="#5a3a1a"/>
+      </svg>
+      <h3>Markus Persson</h3>
+      <div class="alias">aka "Notch"</div>
+      <p>The creator of Minecraft. Born in Stockholm, Sweden, Notch began programming at age seven on his father's Commodore 128. He developed the first version of Minecraft in just days in May 2009 while working at jAlbum. His vision of a limitless sandbox world changed gaming forever. He sold Mojang to Microsoft for $2.5 billion in 2014 and departed the company, citing mental exhaustion and public pressure.</p>
+      <span class="role">CREATOR OF MINECRAFT</span>
+    </div>
+
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#f5a060"/>
+        <rect x="10" y="4" width="4" height="4" fill="#000"/>
+        <rect x="18" y="4" width="4" height="4" fill="#000"/>
+        <rect x="12" y="10" width="8" height="2" fill="#000"/>
+        <rect x="0" y="0" width="6" height="18" fill="#e0802a"/>
+        <rect x="26" y="0" width="6" height="18" fill="#e0802a"/>
+        <rect x="6" y="16" width="20" height="12" fill="#1a6a2a"/>
+        <rect x="0" y="16" width="6" height="12" fill="#1a6a2a"/>
+        <rect x="26" y="16" width="6" height="12" fill="#1a6a2a"/>
+        <rect x="6" y="28" width="8" height="4" fill="#333"/>
+        <rect x="18" y="28" width="8" height="4" fill="#333"/>
+      </svg>
+      <h3>Jens Bergensten</h3>
+      <div class="alias">aka "Jeb_"</div>
+      <p>The current lead developer of Minecraft, Jens took over creative control from Notch in December 2011. Under Jeb's leadership, Minecraft received countless landmark updates — including the Nether Update, Caves & Cliffs, and many new biomes, mobs, and mechanics. Known for his calm, player-focused development philosophy, Jeb has steered Minecraft for over a decade since Notch's departure.</p>
+      <span class="role">LEAD DEVELOPER</span>
+    </div>
+
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#d4a060"/>
+        <rect x="10" y="4" width="4" height="4" fill="#000"/>
+        <rect x="18" y="4" width="4" height="4" fill="#000"/>
+        <rect x="11" y="10" width="10" height="2" fill="#000"/>
+        <rect x="6" y="16" width="20" height="12" fill="#4a2a8a"/>
+        <rect x="0" y="16" width="6" height="12" fill="#4a2a8a"/>
+        <rect x="26" y="16" width="6" height="12" fill="#4a2a8a"/>
+        <rect x="6" y="28" width="8" height="4" fill="#222"/>
+        <rect x="18" y="28" width="8" height="4" fill="#222"/>
+        <rect x="4" y="16" width="4" height="6" fill="#1a1060"/>
+      </svg>
+      <h3>Carl Manneh</h3>
+      <div class="alias">CEO of Mojang (2010–2014)</div>
+      <p>Carl Manneh co-founded Mojang Studios with Notch and Jakob Porser in 2010, having previously worked with Notch at jAlbum. As CEO, Manneh led the business side of Mojang through its meteoric rise, orchestrating the landmark $2.5 billion acquisition by Microsoft in 2014. His business acumen was pivotal in turning a small indie studio into a global gaming empire.</p>
+      <span class="role">CO-FOUNDER / CEO</span>
+    </div>
+
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#e8c090"/>
+        <rect x="10" y="4" width="4" height="4" fill="#000"/>
+        <rect x="18" y="4" width="4" height="4" fill="#000"/>
+        <rect x="12" y="10" width="8" height="2" fill="#000"/>
+        <rect x="6" y="16" width="20" height="12" fill="#8a2a2a"/>
+        <rect x="0" y="16" width="6" height="12" fill="#8a2a2a"/>
+        <rect x="26" y="16" width="6" height="12" fill="#8a2a2a"/>
+        <rect x="6" y="28" width="8" height="4" fill="#111"/>
+        <rect x="18" y="28" width="8" height="4" fill="#111"/>
+      </svg>
+      <h3>Nathan Adams</h3>
+      <div class="alias">aka "Dinnerbone"</div>
+      <p>One of Minecraft's most beloved developers, Dinnerbone joined Mojang in 2011. Known for his quirky contributions — including flipping his own in-game character upside-down as an Easter egg — Dinnerbone is responsible for many key Mojang technical systems, including the new launcher and major backend infrastructure improvements that made Minecraft scalable to millions of players.</p>
+      <span class="role">CORE DEVELOPER</span>
+    </div>
+
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#ffe0a0"/>
+        <rect x="10" y="4" width="4" height="4" fill="#000"/>
+        <rect x="18" y="4" width="4" height="4" fill="#000"/>
+        <rect x="12" y="10" width="8" height="2" fill="#cc0000"/>
+        <rect x="6" y="16" width="20" height="12" fill="#2a6aaa"/>
+        <rect x="0" y="16" width="6" height="12" fill="#2a6aaa"/>
+        <rect x="26" y="16" width="6" height="12" fill="#2a6aaa"/>
+        <rect x="6" y="28" width="8" height="4" fill="#333"/>
+        <rect x="18" y="28" width="8" height="4" fill="#333"/>
+      </svg>
+      <h3>Daniel Rosenfeld</h3>
+      <div class="alias">aka "C418"</div>
+      <p>The composer behind Minecraft's iconic, hauntingly beautiful soundtrack. C418 created the ambient music that defines the Minecraft experience — tracks like "Sweden," "Wet Hands," "Subwoofer Lullaby," and "Living Mice" are arguably the most recognized video game music in history. His ambient, minimalist style perfectly complements the game's open-ended creative atmosphere.</p>
+      <span class="role">ORIGINAL COMPOSER</span>
+    </div>
+
+    <div class="figure-card fade-in">
+      <svg class="pixel-person" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="0" width="16" height="16" fill="#f0c090"/>
+        <rect x="10" y="4" width="4" height="4" fill="#555"/>
+        <rect x="18" y="4" width="4" height="4" fill="#555"/>
+        <rect x="11" y="10" width="10" height="2" fill="#333"/>
+        <rect x="6" y="16" width="20" height="12" fill="#1a4a1a"/>
+        <rect x="0" y="16" width="6" height="12" fill="#1a4a1a"/>
+        <rect x="26" y="16" width="6" height="12" fill="#1a4a1a"/>
+        <rect x="6" y="28" width="8" height="4" fill="#3a2a10"/>
+        <rect x="18" y="28" width="8" height="4" fill="#3a2a10"/>
+      </svg>
+      <h3>Jakob Porsér</h3>
+      <div class="alias">Co-Founder of Mojang</div>
+      <p>Jakob Porsér co-founded Mojang alongside Notch and Carl Manneh. He worked with Notch previously and helped shape the early direction of the studio. Jakob also worked on Scrolls — Mojang's second game — which featured elements from board games and collectible card games. His entrepreneurial partnership with Notch was crucial in establishing Mojang as a real studio.</p>
+      <span class="role">CO-FOUNDER</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="block-row">
+  <div class="b b-diamond"></div><div class="b" style="background:#444"></div><div class="b b-diamond"></div>
+  <div class="b" style="background:#444"></div><div class="b b-diamond"></div><div class="b" style="background:#444"></div>
+  <div class="b b-diamond"></div><div class="b" style="background:#444"></div><div class="b b-diamond"></div>
+  <div class="b" style="background:#444"></div><div class="b b-diamond"></div><div class="b" style="background:#444"></div>
+  <div class="b b-diamond"></div><div class="b" style="background:#444"></div><div class="b b-diamond"></div>
+  <div class="b" style="background:#444"></div><div class="b b-diamond"></div><div class="b" style="background:#444"></div>
+  <div class="b b-diamond"></div><div class="b" style="background:#444"></div><div class="b b-diamond"></div>
+  <div class="b" style="background:#444"></div><div class="b b-diamond"></div><div class="b" style="background:#444"></div>
+</div>
+
+<!-- ===== YOUTUBERS & LEGENDS ===== -->
+<section id="youtubers">
+  <h2 class="section-title red fade-in">🎥 LEGENDARY GAMERS & YOUTUBERS</h2>
+  <div style="text-align:center;font-size:7px;color:#888;margin-bottom:40px;text-shadow:1px 1px #000;max-width:700px;margin-left:auto;margin-right:auto;line-height:2.2;">These are the content creators who shaped the Minecraft community, inspired millions, and built a culture around the greatest game ever made.</div>
+
+  <div class="yt-grid">
+
+    <!-- Technoblade -->
+    <div class="yt-card rip fade-in">
+      <div class="rip-badge">✝ RIP</div>
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#ff69b4"/>
+          <rect x="8" y="2" width="16" height="14" fill="#ffb0d0"/>
+          <rect x="10" y="4" width="4" height="4" fill="#cc0044"/>
+          <rect x="18" y="4" width="4" height="4" fill="#cc0044"/>
+          <rect x="10" y="10" width="12" height="2" fill="#990033"/>
+          <rect x="6" y="0" width="4" height="6" fill="#f5c518"/>
+          <rect x="14" y="0" width="4" height="4" fill="#f5c518"/>
+          <rect x="22" y="0" width="4" height="6" fill="#f5c518"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ff69b4;">Technoblade</div>
+          <div class="yt-subs">~11M Subscribers · 2013–2022</div>
+        </div>
+      </div>
+      <p>Known as "The Blade," Technoblade (real name Alexander) was widely regarded as one of the greatest Minecraft PvP players of all time. He rose to fame through Hypixel tournaments and Minecraft Mondays, winning four times and defeating top creators. His rivalry with Dream culminated in a $100,000 MrBeast duel — which Technoblade won. He joined the Dream SMP in 2020 and created iconic storylines. In August 2021 he announced he had sarcoma cancer. He passed away on June 30, 2022. His final message: "Technoblade out." His last video became the #1 trending video on YouTube in 2022 with 87 million views.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">PvP LEGEND</span>
+        <span class="yt-tag">DREAM SMP</span>
+        <span class="yt-tag">HYPIXEL</span>
+        <span class="yt-tag">TECHNOBLADE NEVER DIES</span>
+      </div>
+    </div>
+
+    <!-- Dream -->
+    <div class="yt-card fade-in">
+      <div class="legend-badge">🌟 ICON</div>
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#fff"/>
+          <rect x="8" y="4" width="16" height="16" fill="#fff"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="10" y="14" width="3" height="3" fill="#000"/>
+          <rect x="19" y="14" width="3" height="3" fill="#000"/>
+          <rect x="13" y="16" width="6" height="2" fill="#000"/>
+          <rect x="6" y="20" width="20" height="12" fill="#5d9732"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#77dd77;">Dream (Clay)</div>
+          <div class="yt-subs">~30M+ Subscribers · 2019–2023 active</div>
+        </div>
+      </div>
+      <p>Dream became the most explosive Minecraft creator in history, gaining millions of subscribers in record time. Known for his Minecraft Manhunt series — where he speedruns Minecraft while being hunted by friends — Dream amassed over 3 billion views across 116 videos. He also cracked PewDiePie's Minecraft world seed using reverse engineering, gaining global attention. In April 2020 he created the Dream SMP with GeorgeNotFound — which became a cultural phenomenon. He held world record speedruns (later disputed) and was dubbed the #1 Breakout Creator on YouTube in 2020.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">MANHUNT</span>
+        <span class="yt-tag">SPEEDRUNNER</span>
+        <span class="yt-tag">DREAM SMP CREATOR</span>
+        <span class="yt-tag">3B+ VIEWS</span>
+      </div>
+    </div>
+
+    <!-- DanTDM -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#0066ff"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffe0a0"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="11" y="13" width="10" height="2" fill="#cc0000"/>
+          <rect x="4" y="2" width="8" height="4" fill="#4400cc"/>
+          <rect x="20" y="2" width="8" height="4" fill="#4400cc"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#4499ff;">DanTDM</div>
+          <div class="yt-subs">28M+ Subscribers · Started 2012</div>
+        </div>
+      </div>
+      <p>Daniel Middleton — DanTDM — was one of the original kings of Minecraft YouTube. Rising to fame with Let's Play videos and mod showcases, Dan became the most-subscribed gaming channel on YouTube in 2016. He won a Kids' Choice Award and has inspired an entire generation of young gamers. His "Diamond Minecart" persona became iconic. DanTDM is known for his family-friendly content and helped make Minecraft a household name in the early 2010s.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">OG CREATOR</span>
+        <span class="yt-tag">MODS</span>
+        <span class="yt-tag">LET'S PLAY</span>
+      </div>
+    </div>
+
+    <!-- Stampylonghead -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#ff6600"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffcc88"/>
+          <rect x="10" y="6" width="4" height="4" fill="#333"/>
+          <rect x="18" y="6" width="4" height="4" fill="#333"/>
+          <rect x="10" y="13" width="12" height="3" fill="#ff3300"/>
+          <rect x="6" y="0" width="20" height="4" fill="#ff6600"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ff8844;">Stampylonghead</div>
+          <div class="yt-subs">10.8M Subscribers · 8B+ Views</div>
+        </div>
+      </div>
+      <p>Joseph Garrett — Stampylonghead — is a British creator whose cheerful, family-friendly Minecraft content made him one of the most beloved YouTubers of all time. His "Lovely World" series — a Let's Play with a warm, narrated storytelling style — racked up billions of views. Stampy was one of the earliest Minecraft YouTubers to gain massive traction, particularly with younger audiences. His 4,122 videos remain a monumental archive of early Minecraft history.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">LOVELY WORLD</span>
+        <span class="yt-tag">OG CREATOR</span>
+        <span class="yt-tag">FAMILY FRIENDLY</span>
+      </div>
+    </div>
+
+    <!-- PewDiePie -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#cc0000"/>
+          <rect x="8" y="4" width="16" height="16" fill="#f0c898"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="10" y="13" width="12" height="2" fill="#553322"/>
+          <rect x="6" y="0" width="20" height="3" fill="#f5c518"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ff4444;">PewDiePie</div>
+          <div class="yt-subs">111M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Felix Kjellberg — PewDiePie — is the most-subscribed individual creator on YouTube. His Minecraft series, launched in 2019 during the great Minecraft revival, broke records and re-introduced the game to tens of millions of viewers. His peaceful "Minecraft" series became one of YouTube's most-watched playlists of 2019. Dream famously reverse-engineered Felix's Minecraft world seed, further igniting the Minecraft resurgence.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">MINECRAFT REVIVAL</span>
+        <span class="yt-tag">111M SUBS</span>
+        <span class="yt-tag">BRO ARMY</span>
+      </div>
+    </div>
+
+    <!-- TommyInnit -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#ff0000"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffd0a0"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="11" y="12" width="10" height="3" fill="#cc2200"/>
+          <rect x="4" y="16" width="24" height="12" fill="#cc0000"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ff4444;">TommyInnit</div>
+          <div class="yt-subs">15M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Thomas Simons — TommyInnit — became one of the fastest-growing creators in YouTube history as a teenager. His chaotic, loud, and entertaining style of Minecraft content brought a new wave of energy to the platform. As a central character in the Dream SMP's L'Manberg storyline, TommyInnit captured the hearts of millions. He was part of the SleepyBoisInc group alongside Technoblade, Wilbur Soot, and Ph1LzA.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">DREAM SMP</span>
+        <span class="yt-tag">L'MANBERG</span>
+        <span class="yt-tag">SLEEPYBOISINC</span>
+      </div>
+    </div>
+
+    <!-- Grian -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#ff9900"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffd0a0"/>
+          <rect x="10" y="6" width="4" height="4" fill="#553300"/>
+          <rect x="18" y="6" width="4" height="4" fill="#553300"/>
+          <rect x="11" y="12" width="10" height="3" fill="#553300"/>
+          <rect x="6" y="20" width="20" height="10" fill="#ff9900"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ffaa44;">Grian</div>
+          <div class="yt-subs">9M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Grian is renowned for his incredible architectural creativity and building skills within Minecraft. His involvement in the Hermitcraft server — a long-running private server featuring some of the best Minecraft content creators — has produced years of beloved content. Grian's building tutorials revolutionized how millions approach Minecraft architecture. His chaotic personality and pranks are legendary within the Hermitcraft community.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">HERMITCRAFT</span>
+        <span class="yt-tag">BUILDING</span>
+        <span class="yt-tag">ARCHITECTURE</span>
+      </div>
+    </div>
+
+    <!-- CaptainSparklez -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#0055cc"/>
+          <rect x="8" y="4" width="16" height="16" fill="#f0c898"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="11" y="13" width="10" height="2" fill="#333"/>
+          <rect x="4" y="16" width="24" height="12" fill="#0044aa"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#4488ff;">CaptainSparklez</div>
+          <div class="yt-subs">12M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Jordan Maron — CaptainSparklez — is one of the OG Minecraft YouTubers, having started Minecraft content as early as 2010. He became famous for his "Revenge" music video parody — a Minecraft rendition of LMFAO's "Party Rock Anthem" — which was one of the first viral Minecraft videos ever. He has participated in Minecraft Monday tournaments and countless collaborative events over the years.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">OG CREATOR</span>
+        <span class="yt-tag">REVENGE MV</span>
+        <span class="yt-tag">MINECRAFT MONDAY</span>
+      </div>
+    </div>
+
+    <!-- Jelly -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#ffdd00"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffe090"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="11" y="12" width="10" height="3" fill="#cc8800"/>
+          <rect x="4" y="20" width="24" height="10" fill="#ddaa00"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ffdd44;">Jelly</div>
+          <div class="yt-subs">23.6M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Jelle Van Vucht — Jelly — is currently the most-subscribed dedicated Minecraft YouTuber. The Dutch creator began his YouTube journey in 2014 at age 17, rapidly gaining 1 million subscribers within his first year. His energetic, child-friendly Minecraft content is uploaded multiple times per week. Jelly's channel is one of the most consistently active Minecraft channels, making him the reigning champion of the current Minecraft YouTube scene.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">23.6M SUBS</span>
+        <span class="yt-tag">FAMILY FRIENDLY</span>
+        <span class="yt-tag">MOST SUBBED</span>
+      </div>
+    </div>
+
+    <!-- SSundee -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#8800cc"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffd0a0"/>
+          <rect x="10" y="6" width="4" height="4" fill="#000"/>
+          <rect x="18" y="6" width="4" height="4" fill="#000"/>
+          <rect x="11" y="13" width="10" height="2" fill="#333"/>
+          <rect x="4" y="20" width="24" height="10" fill="#660099"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#bb44ff;">SSundee</div>
+          <div class="yt-subs">24M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Ian Stapleton — SSundee — is one of the most consistently popular Minecraft creators on YouTube. Known for his high-energy gameplay and creative challenge videos, SSundee has built a massive and loyal fanbase over many years. He is particularly known for his "Among Us but Minecraft" style mashup content and his knack for keeping every video fresh and exciting. He rose to his greatest heights during 2020-2021.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">24M SUBS</span>
+        <span class="yt-tag">CHALLENGES</span>
+        <span class="yt-tag">MODS</span>
+      </div>
+    </div>
+
+    <!-- Mumbo Jumbo -->
+    <div class="yt-card fade-in">
+      <div class="yt-header">
+        <svg class="yt-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" fill="#cc3300"/>
+          <rect x="8" y="4" width="16" height="16" fill="#ffd0a0"/>
+          <rect x="10" y="6" width="4" height="4" fill="#553322"/>
+          <rect x="18" y="6" width="4" height="4" fill="#553322"/>
+          <rect x="8" y="12" width="16" height="4" fill="#885522"/>
+          <rect x="4" y="20" width="24" height="10" fill="#aa2200"/>
+        </svg>
+        <div>
+          <div class="yt-name" style="color:#ff6633;">Mumbo Jumbo</div>
+          <div class="yt-subs">9M+ Subscribers</div>
+        </div>
+      </div>
+      <p>Oliver Brotherhood — Mumbo Jumbo — is the undisputed king of Redstone engineering on YouTube. His tutorials on Minecraft Redstone contraptions, automated farms, and complex mechanisms have educated millions of players. A longtime member of the Hermitcraft server, Mumbo is beloved for his "Is it simple?" catchphrase and his ability to explain extremely complex Redstone systems in an accessible and entertaining way.</p>
+      <div class="yt-tags">
+        <span class="yt-tag">REDSTONE KING</span>
+        <span class="yt-tag">HERMITCRAFT</span>
+        <span class="yt-tag">TUTORIALS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="block-row">
+  <div class="b b-redstone"></div><div class="b" style="background:#333"></div><div class="b b-redstone"></div>
+  <div class="b" style="background:#333"></div><div class="b b-redstone"></div><div class="b" style="background:#333"></div>
+  <div class="b b-redstone"></div><div class="b" style="background:#333"></div><div class="b b-redstone"></div>
+  <div class="b" style="background:#333"></div><div class="b b-redstone"></div><div class="b" style="background:#333"></div>
+  <div class="b b-redstone"></div><div class="b" style="background:#333"></div><div class="b b-redstone"></div>
+  <div class="b" style="background:#333"></div><div class="b b-redstone"></div><div class="b" style="background:#333"></div>
+  <div class="b b-redstone"></div><div class="b" style="background:#333"></div><div class="b b-redstone"></div>
+  <div class="b" style="background:#333"></div><div class="b b-redstone"></div><div class="b" style="background:#333"></div>
+</div>
+
+<!-- ===== GAME MODES ===== -->
+<section id="gamemodes">
+  <h2 class="section-title green fade-in">🎮 GAME MODES</h2>
+  <div class="modes-grid">
+    <div class="mode-card fade-in">
+      <div class="mode-icon">⚔️</div>
+      <h3>Survival Mode</h3>
+      <p>The classic Minecraft experience. Gather resources, build shelter, craft tools, grow food, and fight off hostile mobs. Manage your health, hunger, and oxygen as you explore and build in a world full of danger and wonder.</p>
+    </div>
+    <div class="mode-card fade-in">
+      <div class="mode-icon">🏗️</div>
+      <h3>Creative Mode</h3>
+      <p>Unlimited resources, infinite health, and the ability to fly. Build anything your imagination can conceive — from modest homes to entire continents. The perfect mode for builders and architects.</p>
+    </div>
+    <div class="mode-card fade-in">
+      <div class="mode-icon">🗺️</div>
+      <h3>Adventure Mode</h3>
+      <p>Designed for custom maps and player-created adventures. Block placement and destruction is restricted, encouraging players to engage with environments exactly as map creators intended. Perfect for story-driven experiences.</p>
+    </div>
+    <div class="mode-card fade-in">
+      <div class="mode-icon">👁️</div>
+      <h3>Spectator Mode</h3>
+      <p>Fly invisibly through any block and observe the world without interacting. Perfect for builders scouting locations, reviewers assessing builds, or players wanting to experience other worlds without participation.</p>
+    </div>
+    <div class="mode-card fade-in">
+      <div class="mode-icon">💀</div>
+      <h3>Hardcore Mode</h3>
+      <p>Survival Mode with one life only — permadeath. Once you die, the world is deleted. It's Minecraft at its most ruthless and tension-filled. Widely regarded as the ultimate Minecraft challenge by the community.</p>
+    </div>
+    <div class="mode-card fade-in">
+      <div class="mode-icon">🌐</div>
+      <h3>Multiplayer SMP</h3>
+      <p>Survival Multiplayer — thousands of servers host communities of players coexisting, trading, building, and competing. From vanilla SMPs to highly modded servers, multiplayer extends Minecraft's lifespan infinitely.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORLDS / DIMENSIONS ===== -->
+<section id="worlds">
+  <div class="star-field" id="stars"></div>
+  <h2 class="section-title diamond fade-in">🌌 THE THREE DIMENSIONS</h2>
+  <div class="worlds-grid">
+    <div class="world-card world-overworld fade-in">
+      <div class="world-icon">🌍</div>
+      <h3>The Overworld</h3>
+      <p>The primary dimension and home dimension of Minecraft. A procedurally generated world featuring dozens of unique biomes — from lush forests and snowy mountains to scorching deserts and dark swamps. Nearly infinite in size, the Overworld is where players begin every adventure.</p>
+      <ul>
+        <li>60+ unique biomes</li>
+        <li>Deep Dark & Ancient Cities</li>
+        <li>Strongholds with End Portals</li>
+        <li>Villages, Temples, Monuments</li>
+        <li>Mineshafts & Dungeons</li>
+        <li>Caves & Cliffs system</li>
+        <li>Trial Chambers (1.21)</li>
+      </ul>
+    </div>
+
+    <div class="world-card world-nether fade-in">
+      <div class="world-icon">🔥</div>
+      <h3>The Nether</h3>
+      <p>A hellish, dangerous dimension accessed through obsidian Nether Portals. The Nether is filled with lava oceans, dangerous mobs, and ancient structures. Travelling in the Nether covers 8x the horizontal distance of the Overworld, making it essential for long-distance travel. It is home to some of Minecraft's rarest and most powerful materials.</p>
+      <ul>
+        <li>Lava Oceans & Fire</li>
+        <li>Nether Fortresses</li>
+        <li>Bastions of the Piglins</li>
+        <li>Crimson & Warped Forests</li>
+        <li>Ghasts, Blazes, Wither Skeletons</li>
+        <li>Ancient Debris → Netherite</li>
+        <li>Soul Sand Valley</li>
+      </ul>
+    </div>
+
+    <div class="world-card world-end fade-in">
+      <div class="world-icon">🌌</div>
+      <h3>The End</h3>
+      <p>A mysterious, void-filled dimension accessed through End Portals in Strongholds. The End is home to the Ender Dragon — Minecraft's final boss. After defeating the Dragon, players unlock the outer End islands, filled with End Cities, Chorus Fruit, and Shulkers. It is the official "ending" of Minecraft — though the game truly never ends.</p>
+      <ul>
+        <li>Ender Dragon boss</li>
+        <li>Endermen everywhere</li>
+        <li>End Cities with Elytra</li>
+        <li>Chorus Fruit & Plants</li>
+        <li>Shulker Boxes origin</li>
+        <li>End Stone biome</li>
+        <li>Exit portal with poem</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MOBS ===== -->
+<section id="mobs">
+  <h2 class="section-title green fade-in">🐾 MINECRAFT MOBS</h2>
+  <div class="mobs-container">
+    <div class="mob-tabs">
+      <button class="mob-tab active" onclick="showMobPanel('passive')">🐄 Passive</button>
+      <button class="mob-tab" onclick="showMobPanel('neutral')">🐝 Neutral</button>
+      <button class="mob-tab" onclick="showMobPanel('hostile')">💀 Hostile</button>
+      <button class="mob-tab" onclick="showMobPanel('boss')">👑 Bosses</button>
+    </div>
+
+    <div class="mob-panel active" id="panel-passive">
+      <div class="mob-card passive"><span class="mob-sprite">🐄</span><h4>Cow</h4><p>Provides leather & raw beef. Breeds with Wheat. Can be milked with a Bucket.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🐖</span><h4>Pig</h4><p>Drops porkchops. Can be ridden with a saddle. Breeds with Carrots, Potatoes, or Beetroot.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🐑</span><h4>Sheep</h4><p>Provides Wool when sheared. Comes in various natural and dyed colors. Drops mutton.</p><div class="mob-hp">❤️ 8 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🐔</span><h4>Chicken</h4><p>Lays Eggs randomly. Drops raw chicken & feathers. Floats gently when falling.</p><div class="mob-hp">❤️ 4 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🐇</span><h4>Rabbit</h4><p>Shy and fast. Drops Rabbit Hide and Raw Rabbit. Rarely drops the prized Rabbit's Foot.</p><div class="mob-hp">❤️ 3 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🐊</span><h4>Turtle</h4><p>Found on beaches. Breeds with Seagrass. Baby turtles drop Scutes to craft Turtle Helmets.</p><div class="mob-hp">❤️ 30 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🦑</span><h4>Squid</h4><p>Aquatic mob found in water. Drops Ink Sacs used for dark dye and text styling.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card passive"><span class="mob-sprite">🦙</span><h4>Llama</h4><p>Found in mountains. Can be tamed and used as pack animals. Spits at threats.</p><div class="mob-hp">❤️ 15–30 HP</div></div>
+    </div>
+
+    <div class="mob-panel" id="panel-neutral">
+      <div class="mob-card neutral"><span class="mob-sprite">🐺</span><h4>Wolf</h4><p>Wild wolves are neutral. Tame with bones to create loyal companion dogs. Attacks hostile mobs!</p><div class="mob-hp">❤️ 8 HP (wild)</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🐻</span><h4>Polar Bear</h4><p>Neutral unless a cub is nearby — then fiercely protective. Found in cold biomes.</p><div class="mob-hp">❤️ 30 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🐝</span><h4>Bee</h4><p>Pollinates flowers and produces Honey. Attacks if provoked or nest is disturbed. Dies after stinging.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🕷️</span><h4>Spider</h4><p>Hostile at night, neutral in daylight. Can climb walls. May spawn with a Skeleton jockey rider.</p><div class="mob-hp">❤️ 16 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🐸</span><h4>Enderman</h4><p>Teleports when attacked or looked at. Picks up blocks. Neutral unless you look directly at them.</p><div class="mob-hp">❤️ 40 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🦊</span><h4>Fox</h4><p>Fast and clever. Picks up dropped items. Can be bred with Berries to create a tame version.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🐬</span><h4>Dolphin</h4><p>Swims with players and grants Speed boost. Leads players to underwater treasure. Attacks with a bite.</p><div class="mob-hp">❤️ 10 HP</div></div>
+      <div class="mob-card neutral"><span class="mob-sprite">🐙</span><h4>Panda</h4><p>Found in bamboo jungles. Each panda has a unique personality gene. Rare brown pandas exist.</p><div class="mob-hp">❤️ 20 HP</div></div>
+    </div>
+
+    <div class="mob-panel" id="panel-hostile">
+      <div class="mob-card hostile"><span class="mob-sprite">💚</span><h4>Creeper</h4><p>The most iconic Minecraft mob. Approaches silently and detonates. Drops Gunpowder. Born from a coding bug — it became Minecraft's mascot.</p><div class="mob-hp">❤️ 20 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">🧟</span><h4>Zombie</h4><p>Classic undead enemy. Burns in sunlight. Can break down wooden doors. Drops Rotten Flesh and occasionally rare items.</p><div class="mob-hp">❤️ 20 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">💀</span><h4>Skeleton</h4><p>Fires arrows with deadly accuracy. Burns in sunlight. Drops Bones & Arrows. Can wear armor to resist sunlight damage.</p><div class="mob-hp">❤️ 20 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">🕸️</span><h4>Cave Spider</h4><p>Smaller, faster, and venomous cousin of the Spider. Found in mineshafts. Their poison can be lethal if unprepared.</p><div class="mob-hp">❤️ 12 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">🧙</span><h4>Witch</h4><p>Throws splash potions of Poison, Slowness, and Weakness. Drinks potions to heal herself. Drops potion ingredients.</p><div class="mob-hp">❤️ 26 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">🔱</span><h4>Drowned</h4><p>Underwater zombie variant. Some wield Tridents — the rarest and most powerful throwing weapon in the game.</p><div class="mob-hp">❤️ 20 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">🗿</span><h4>Endermite</h4><p>Tiny hostile mob occasionally spawned by Enderman teleportation or Ender Pearls. Endermen will attack Endermites on sight.</p><div class="mob-hp">❤️ 8 HP</div></div>
+      <div class="mob-card hostile"><span class="mob-sprite">👻</span><h4>Phantom</h4><p>Flies overhead and swoops to attack players who haven't slept in 3+ in-game days. Drops Phantom Membrane for repairing Elytra.</p><div class="mob-hp">❤️ 20 HP</div></div>
+    </div>
+
+    <div class="mob-panel" id="panel-boss">
+      <div class="mob-card boss"><span class="mob-sprite">🐉</span><h4>Ender Dragon</h4><p>The final boss of Minecraft. Flies over the End dimension, attacks with dragon breath and knock-back. Healed by End Crystals atop obsidian pillars. Defeating it triggers the end poem and credits.</p><div class="mob-hp">❤️ 200 HP</div></div>
+      <div class="mob-card boss"><span class="mob-sprite">💨</span><h4>The Wither</h4><p>A constructed boss created by placing Wither Skeleton skulls on Soul Sand. Fires explosive Wither Skulls and inflicts the deadly Wither effect. Drops the Nether Star used to craft the Beacon.</p><div class="mob-hp">❤️ 300 HP</div></div>
+      <div class="mob-card boss"><span class="mob-sprite">🪼</span><h4>Elder Guardian</h4><p>A massive aquatic boss found inside Ocean Monuments. Inflicts Mining Fatigue III, preventing players from mining. Drops Sponge and wet Sponge when defeated.</p><div class="mob-hp">❤️ 80 HP</div></div>
+      <div class="mob-card boss"><span class="mob-sprite">🕸</span><h4>Ravager</h4><p>A powerful raid boss that appears during Village raids. Charges at players and villagers, destroying plants. Must be defeated to end Village raids and unlock the Hero of the Village effect.</p><div class="mob-hp">❤️ 100 HP</div></div>
+      <div class="mob-card boss"><span class="mob-sprite">🌿</span><h4>The Breeze</h4><p>A new wind-based mob introduced in the 1.21 Trial Chambers update. Fires wind charges that deflect arrows and damage players through indirect bouncing physics.</p><div class="mob-hp">❤️ 30 HP</div></div>
+      <div class="mob-card boss"><span class="mob-sprite">🦑</span><h4>The Warden</h4><p>The most feared mob in Minecraft — blind but can smell and hear. Found deep in the Ancient City. Its Sonic Shriek attack ignores armor entirely. Drops the Sculk Catalyst. More powerful than the Ender Dragon.</p><div class="mob-hp">❤️ 500 HP</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MINI GAMES ===== -->
+<section id="minigames">
+  <h2 class="section-title diamond fade-in">🎮 MINI GAMES</h2>
+  <p style="text-align:center;font-size:7px;color:#888;margin-bottom:30px;text-shadow:1px 1px #000;">Test your Minecraft knowledge with these three mini games!</p>
+
+  <div class="minigames-tabs">
+    <button class="mg-tab active" onclick="switchMG('quiz')">📝 TRIVIA QUIZ</button>
+    <button class="mg-tab" onclick="switchMG('memory')">🃏 MEMORY MATCH</button>
+    <button class="mg-tab" onclick="switchMG('scramble')">🔡 WORD SCRAMBLE</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="mg-panel active" id="mg-quiz">
+    <div id="quiz-container">
+      <div class="quiz-score-bar">
+        <span>SCORE: <span id="quiz-score">0</span></span>
+        <span class="quiz-hearts" id="quiz-hearts">❤️❤️❤️</span>
+        <span>Q <span id="quiz-num">1</span>/15</span>
+      </div>
+      <div id="quiz-question">Loading question...</div>
+      <div class="quiz-options" id="quiz-opts"></div>
+      <div id="quiz-result"></div>
+      <button class="mc-btn" id="quiz-next" onclick="nextQuestion()" style="display:none;">NEXT QUESTION ▶</button>
+    </div>
+  </div>
+
+  <!-- MEMORY -->
+  <div class="mg-panel" id="mg-memory">
+    <div id="memory-container">
+      <div class="memory-stats">
+        <span>MOVES: <span id="mem-moves">0</span></span>
+        <span>MATCHES: <span id="mem-matches">0</span>/8</span>
+        <span>TIME: <span id="mem-time">0s</span></span>
+      </div>
+      <div id="memory-grid"></div>
+      <button class="mc-btn" onclick="initMemory()">🔄 NEW GAME</button>
+    </div>
+  </div>
+
+  <!-- SCRAMBLE -->
+  <div class="mg-panel" id="mg-scramble">
+    <div id="scramble-container">
+      <div id="scramble-score">SCORE: <span id="scr-score">0</span> | STREAK: <span id="scr-streak">0</span>🔥</div>
+      <div class="scramble-hint" id="scr-hint">HINT: Loading...</div>
+      <div class="scramble-word-display" id="scr-display">?????</div>
+      <br>
+      <input type="text" id="scramble-input" placeholder="TYPE ANSWER..." maxlength="20" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')checkScramble()"/>
+      <div id="scramble-feedback"></div>
+      <div class="scramble-btns">
+        <button class="mc-btn" onclick="checkScramble()">✅ SUBMIT</button>
+        <button class="mc-btn" onclick="skipScramble()">⏭ SKIP</button>
+        <button class="mc-btn" onclick="initScramble()">🔄 NEW GAME</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section id="stats">
+  <h2 class="section-title gold fade-in">📊 MINECRAFT BY THE NUMBERS</h2>
+  <div class="stats-grid">
+    <div class="stat-card fade-in" data-tip="Best-selling game of all time">
+      <div class="stat-icon">📦</div>
+      <div class="stat-num" data-target="300">0</div>
+      <div class="stat-label">MILLION COPIES SOLD<br>(All Platforms)</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="As of 2023">
+      <div class="stat-icon">👥</div>
+      <div class="stat-num" data-target="180">0</div>
+      <div class="stat-label">MILLION MONTHLY<br>ACTIVE PLAYERS</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="Year Minecraft was fully released">
+      <div class="stat-icon">📅</div>
+      <div class="stat-num" data-target="2011">0</div>
+      <div class="stat-label">YEAR OF<br>FULL RELEASE</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="Microsoft acquisition price">
+      <div class="stat-icon">💰</div>
+      <div class="stat-num" data-target="2.5">0</div>
+      <div class="stat-label">BILLION DOLLARS<br>ACQUISITION PRICE</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="On YouTube as of 2021">
+      <div class="stat-icon">📹</div>
+      <div class="stat-num" data-target="1">0</div>
+      <div class="stat-label">TRILLION YOUTUBE<br>VIEWS</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="Available platform count">
+      <div class="stat-icon">🎮</div>
+      <div class="stat-num" data-target="20">0</div>
+      <div class="stat-label">PLATFORMS<br>AVAILABLE ON</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="Unique biomes in the Overworld">
+      <div class="stat-icon">🌿</div>
+      <div class="stat-num" data-target="60">0</div>
+      <div class="stat-label">UNIQUE BIOMES<br>IN THE GAME</div>
+    </div>
+    <div class="stat-card fade-in" data-tip="Technoblade's final video views">
+      <div class="stat-icon">❤️</div>
+      <div class="stat-num" data-target="87">0</div>
+      <div class="stat-label">MILLION VIEWS<br>TECHNOBLADE'S LAST VIDEO</div>
+    </div>
+  </div>
+
+  <h3 class="section-title gold fade-in" style="margin-top:60px;font-size:16px;">🏆 LEGENDARY ACHIEVEMENTS</h3>
+  <div class="achievements-grid">
+    <div class="achievement fade-in"><div class="ach-icon">🥇</div><div class="ach-text"><h4>Best-Selling Game Ever</h4><p>Minecraft surpassed Tetris to become the best-selling video game of all time with 300M+ copies sold.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🎓</div><div class="ach-text"><h4>Educational Tool</h4><p>Minecraft: Education Edition is used in schools worldwide to teach subjects from math to history to coding.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🌍</div><div class="ach-text"><h4>Real-World Scale Replica</h4><p>Players built a 1:1 scale replica of the entire Earth inside Minecraft — covering millions of blocks.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🖥️</div><div class="ach-text"><h4>Working Computer Inside</h4><p>Players have built functioning computers, calculators, and even simple game engines entirely using Redstone.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🎬</div><div class="ach-text"><h4>Hollywood Movie</h4><p>A major Minecraft movie premiered in 2025 — one of the most anticipated gaming movies ever produced.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🏆</div><div class="ach-text"><h4>BAFTA Special Award</h4><p>Notch received a BAFTA Special Award in 2012 for his contributions to game culture through Minecraft.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">📚</div><div class="ach-text"><h4>Official Novel & Guides</h4><p>Dozens of official Minecraft books, guides, and novels have been published, becoming bestsellers worldwide.</p></div></div>
+    <div class="achievement fade-in"><div class="ach-icon">🧱</div><div class="ach-text"><h4>LEGO Partnership</h4><p>Minecraft and LEGO launched a long-running partnership, producing hundreds of sets that bridge digital and physical play.</p></div></div>
+  </div>
+</section>
+
+<!-- ===== CRAFTING LORE ===== -->
+<section id="crafting">
+  <h2 class="section-title gold fade-in">⚒️ THE ART OF CRAFTING</h2>
+  <div class="craft-container">
+    <p class="craft-desc">At the heart of Minecraft is the crafting system — introduced in the Alpha phase of 2010. Combining resources on a 3×3 crafting grid unlocks hundreds of unique items and tools, each with its own recipe. Crafting is how players progress from wooden sticks to diamond swords to Netherite armor.</p>
+
+    <div class="crafting-table">
+      <div>
+        <div class="craft-grid" id="active-craft-grid">
+          <div class="craft-slot filled">🪵</div>
+          <div class="craft-slot filled">🪵</div>
+          <div class="craft-slot"></div>
+          <div class="craft-slot filled">🪵</div>
+          <div class="craft-slot filled">🪵</div>
+          <div class="craft-slot"></div>
+          <div class="craft-slot"></div>
+          <div class="craft-slot"></div>
+          <div class="craft-slot"></div>
+        </div>
+        <div class="craft-label" id="craft-name">PLANKS × 4</div>
+      </div>
+      <div class="craft-arrow">▶▶</div>
+      <div>
+        <div class="craft-output" id="craft-output">🪵</div>
+      </div>
+    </div>
+
+    <div class="recipes-list">
+      <div class="recipe-mini" onclick="setCraft(['🪵','🪵','','🪵','🪵','','','',''],'🪵','PLANKS × 4')">
+        <div class="r-icon">🪵</div>
+        <h4>Wooden Planks</h4>
+        <p>1 Log → 4 Planks. The foundation of all early crafting.</p>
+      </div>
+      <div class="recipe-mini" onclick="setCraft(['','🪵','','','🪵','','','',''],'🏹','STICK × 4')">
+        <div class="r-icon">🏹</div>
+        <h4>Sticks</h4>
+        <p>2 Planks vertically → 4 Sticks. Used in nearly every tool.</p>
+      </div>
+      <div class="recipe-mini" onclick="setCraft(['🪵','🪵','🪵','','🏹','','','🏹',''],'⛏️','WOODEN PICKAXE')">
+        <div class="r-icon">⛏️</div>
+        <h4>Pickaxe</h4>
+        <p>3 Materials across top + 2 sticks = the core mining tool.</p>
+      </div>
+      <div class="recipe-mini" onclick="setCraft(['🧱','🧱','🧱','🧱','','🧱','🧱','🧱','🧱'],'🔥','FURNACE')">
+        <div class="r-icon">🔥</div>
+        <h4>Furnace</h4>
+        <p>8 Cobblestone in a ring → Furnace for smelting ores and cooking food.</p>
+      </div>
+      <div class="recipe-mini" onclick="setCraft(['💎','💎','💎','','🏹','','','🏹',''],'💎','DIAMOND PICKAXE')">
+        <div class="r-icon">💎</div>
+        <h4>Diamond Pickaxe</h4>
+        <p>The pinnacle of pre-Netherite mining. Required to mine Obsidian.</p>
+      </div>
+      <div class="recipe-mini" onclick="setCraft(['💎','💎','💎','💎','','💎','💎','💎','💎'],'⛩️','DIAMOND CHESTPLATE')">
+        <div class="r-icon">⛩️</div>
+        <h4>Diamond Chestplate</h4>
+        <p>8 Diamonds in a U-shape = the best pre-Netherite body armor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEGACY ===== -->
+<section id="legacy">
+  <h2 class="section-title green fade-in">🌟 THE LEGACY OF MINECRAFT</h2>
+  <div class="legacy-content">
+
+    <div class="legacy-para fade-in">
+      <strong>A Game That Changed Everything</strong><br><br>
+      When Markus Persson released a janky, glitch-filled block game on a forum for indie developers in May 2009, nobody could have predicted what it would become. Minecraft didn't have a marketing budget, a publisher, a polished trailer, or even a proper name for the first few days. What it had was an idea so simple and so powerful that it couldn't help but spread — the idea that players should be free to do anything they wanted in a world they could shape entirely with their own hands.
+    </div>
+
+    <div class="legacy-para fade-in">
+      <strong>Cultural Phenomenon</strong><br><br>
+      By 2021, <span class="highlight">Minecraft YouTube content had surpassed one trillion views</span> — a number almost incomprehensible in scale. The game has been played by over 180 million people monthly. It has inspired novels, toys, television shows, clothing lines, theme park rides, and a Hollywood blockbuster. It is taught in schools worldwide through the Education Edition, helping children learn mathematics, history, environmental science, and computer programming. Minecraft has transcended the category of "video game" and become a medium unto itself.
+    </div>
+
+    <div class="legacy-quote fade-in">
+      "Minecraft is arguably the most important video game ever created.<br>
+      Not the most technically impressive, not the most cinematic — the most important.<br>
+      It gave a generation of children unlimited creative power and said:<br>
+      <span style="color:var(--grass-side)">'Go build something.'</span>"
+    </div>
+
+    <div class="legacy-para fade-in">
+      <strong>The Community That Built a World</strong><br><br>
+      The Minecraft community is one of the largest and most creative in gaming history. Players have constructed 1:1 scale replicas of Earth, fully functional computers using Redstone, pixel art canvases of historic paintings, and entire civilizations with working economies and governments. The Dream SMP — a scripted roleplay Minecraft server — attracted a global audience in 2020 and became what Wired magazine described as <span class="highlight">"a form of live theatre."</span>
+    </div>
+
+    <div class="legacy-para fade-in">
+      <strong>Technoblade Never Dies</strong><br><br>
+      The passing of Technoblade in June 2022 united the Minecraft community in grief and celebration of a life well lived. His final video garnered <span class="highlight">87 million views</span>, becoming one of the most-watched tribute videos in the history of YouTube. The Minecraft Java Edition launcher was updated to show a crowned pig in his honor. His battle against cancer — fought with humor, grace, and characteristic wit — inspired millions. The phrase "Technoblade Never Dies" became a permanent part of gaming culture.
+    </div>
+
+    <div class="legacy-para fade-in">
+      <strong>Still Growing</strong><br><br>
+      In 2026, Minecraft continues to receive major updates. The game that Notch built in a weekend has outlasted entire game studios, platform generations, and cultural eras. <span class="highlight">300 million copies sold</span>. More than any game in history. A universe of biomes, mobs, mechanics, and stories — still expanding. Still surprising. Still endlessly creative. The final words of Minecraft's official in-game poem say it best: <span class="highlight" style="color:var(--diamond);">"And the game was over and the player woke up from the dream. And the player began a new dream. And the player dreamed again, endlessly."</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- XP BAR -->
+<div style="padding:40px 20px;background:#0d0d0d;text-align:center;">
+  <div class="xp-bar-wrapper">
+    <div class="xp-label">YOUR MINECRAFT KNOWLEDGE XP</div>
+    <div class="xp-bar"><div class="xp-fill" id="xpfill" style="width:0%"></div></div>
+  </div>
+  <button class="mc-btn" onclick="maxXP()" style="margin-top:20px;">⚡ CLAIM YOUR XP</button>
+</div>
+
+<!-- ===== CREDITS SECTION ===== -->
+<section id="credits">
+
+  <!-- Animated falling blocks background -->
+  <div id="credits-bg"></div>
+
+  <!-- Top ore divider -->
+  <div class="block-row" style="position:relative;z-index:2;">
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div><div class="b b-diamond"></div>
+    <div class="b" style="background:#1a0a40"></div>
+  </div>
+
+  <div class="credits-inner">
+
+    <!-- ── TITLE ── -->
+    <div class="credits-title-wrap fade-in">
+      <div class="credits-pre-label">✦ &nbsp; CREDITS &nbsp; ✦</div>
+      <h2 class="credits-main-title">
+        <span class="glitch-text" data-text="MADE WITH">MADE WITH</span>
+        <br>
+        <span class="credits-love">LOVE ❤️ AND BLOCKS 🧱</span>
+        <br>
+        <span class="credits-by">BY</span>
+      </h2>
+
+      <!-- ── PLAYER CARD ── -->
+      <div class="player-card-outer fade-in">
+        <div class="player-card-glow"></div>
+        <div class="player-card">
+          <!-- Pixel skin -->
+          <div class="player-skin-wrap">
+            <svg class="player-skin" viewBox="0 0 64 96" xmlns="http://www.w3.org/2000/svg">
+              <!-- Head -->
+              <rect x="16" y="0"  width="32" height="32" fill="#c8a87a"/>
+              <!-- Hair -->
+              <rect x="16" y="0"  width="32" height="8"  fill="#2c1a08"/>
+              <rect x="16" y="8"  width="6"  height="6"  fill="#2c1a08"/>
+              <rect x="42" y="8"  width="6"  height="6"  fill="#2c1a08"/>
+              <!-- Eyes -->
+              <rect x="22" y="12" width="6"  height="6"  fill="#fff"/>
+              <rect x="36" y="12" width="6"  height="6"  fill="#fff"/>
+              <rect x="24" y="13" width="4"  height="4"  fill="#1a6aff"/>
+              <rect x="38" y="13" width="4"  height="4"  fill="#1a6aff"/>
+              <rect x="25" y="14" width="2"  height="2"  fill="#000"/>
+              <rect x="39" y="14" width="2"  height="2"  fill="#000"/>
+              <!-- Nose -->
+              <rect x="30" y="20" width="4"  height="2"  fill="#b08060"/>
+              <!-- Smile -->
+              <rect x="23" y="24" width="18" height="2"  fill="#6a3a18"/>
+              <rect x="22" y="22" width="4"  height="4"  fill="#b08060"/>
+              <rect x="38" y="22" width="4"  height="4"  fill="#b08060"/>
+              <!-- Body -->
+              <rect x="16" y="32" width="32" height="32" fill="#2a5aa8"/>
+              <!-- Logo on shirt -->
+              <rect x="24" y="38" width="16" height="12" fill="#1a3a7a"/>
+              <rect x="27" y="40" width="4"  height="2"  fill="#5ae4e4"/>
+              <rect x="33" y="40" width="4"  height="2"  fill="#5ae4e4"/>
+              <rect x="26" y="44" width="12" height="2"  fill="#5ae4e4"/>
+              <!-- Arms -->
+              <rect x="0"  y="32" width="16" height="30" fill="#2a5aa8"/>
+              <rect x="48" y="32" width="16" height="30" fill="#2a5aa8"/>
+              <!-- Hands -->
+              <rect x="0"  y="62" width="16" height="6"  fill="#c8a87a"/>
+              <rect x="48" y="62" width="16" height="6"  fill="#c8a87a"/>
+              <!-- Legs -->
+              <rect x="16" y="64" width="14" height="32" fill="#1a2a5a"/>
+              <rect x="34" y="64" width="14" height="32" fill="#1a2a5a"/>
+              <!-- Shoes -->
+              <rect x="14" y="90" width="18" height="6"  fill="#1a1a1a"/>
+              <rect x="32" y="90" width="18" height="6"  fill="#1a1a1a"/>
+              <!-- Crown / accessory -->
+              <rect x="14" y="0"  width="4"  height="6"  fill="#f5c518"/>
+              <rect x="22" y="0"  width="4"  height="4"  fill="#f5c518"/>
+              <rect x="30" y="0"  width="4"  height="6"  fill="#f5c518"/>
+              <rect x="38" y="0"  width="4"  height="4"  fill="#f5c518"/>
+              <rect x="46" y="0"  width="4"  height="6"  fill="#f5c518"/>
+            </svg>
+            <!-- Floating particles around player -->
+            <div class="player-particle p1">⭐</div>
+            <div class="player-particle p2">💎</div>
+            <div class="player-particle p3">⛏️</div>
+            <div class="player-particle p4">🌿</div>
+            <div class="player-particle p5">🔥</div>
+          </div>
+
+          <div class="player-info">
+            <div class="player-name-tag">
+              <span class="player-gt">SswayamPlayz</span>
+              <span class="online-dot"></span>
+            </div>
+            <div class="player-level">
+              <span class="level-badge">⭐ LVL 5</span>
+              <span class="level-label">YEARS IN MINECRAFT</span>
+            </div>
+            <div class="player-stats-row">
+              <div class="ps-item"><div class="ps-val">2020</div><div class="ps-key">SINCE</div></div>
+              <div class="ps-item"><div class="ps-val">∞</div><div class="ps-key">BLOCKS PLACED</div></div>
+              <div class="ps-item"><div class="ps-val">💎</div><div class="ps-key">RANK</div></div>
+            </div>
+            <div class="player-xp-bar-wrap">
+              <div class="player-xp-fill" id="playerXpFill"></div>
+            </div>
+            <div class="player-bio">
+              <p>Hey! I'm <span class="bio-highlight">SswayamPlayz</span> and I've been swinging my pickaxe in Minecraft since <span class="bio-highlight">2020</span>. I might only be a 5-year player, but I've dug deep into the history, lore, and culture of this legendary game — and that passion is what built this entire website from the ground up, block by block.</p>
+            </div>
+            <div class="friend-invite-box">
+              <div class="friend-title">🤝 ADD ME AS A FRIEND!</div>
+              <div class="friend-gt-display">
+                <span class="friend-gt-text" id="friendGtTyped"></span><span class="cursor-blink">▌</span>
+              </div>
+              <div class="friend-note">✅ I'm always happy to explore, build, and survive together! Send me a friend request anytime — whether you're a veteran from 2009 or just joined the world of Minecraft yesterday. Everyone is welcome!</div>
+              <button class="mc-btn copy-btn" onclick="copyGamertag()">📋 COPY GAMERTAG</button>
+              <span id="copy-confirm" style="font-size:6px;color:#84c020;margin-left:10px;display:none;text-shadow:1px 1px #000;">✅ COPIED!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CINEMATIC CREDITS SCROLL ── -->
+    <div class="credits-scroll-section fade-in">
+      <div class="credits-scroll-title">📜 THE CREDITS ROLL</div>
+      <div class="credits-scroll-outer">
+        <div class="credits-scroll-inner" id="creditsScroll">
+
+          <div class="cr-spacer"></div>
+
+          <div class="cr-studio-logo">
+            <div class="cr-logo-blocks">
+              <span>🧱</span><span>⛏️</span><span>🧱</span>
+            </div>
+            <div class="cr-studio-name">SSWAYAM STUDIOS</div>
+            <div class="cr-studio-sub">presents</div>
+          </div>
+
+          <div class="cr-spacer"></div>
+          <div class="cr-big-title">MINECRAFT WORLD<br><span style="color:var(--gold);font-size:0.6em;">THE ULTIMATE ENCYCLOPEDIA</span></div>
+          <div class="cr-spacer"></div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— CREATOR & LEAD DEVELOPER —</div>
+            <div class="cr-role-name">SswayamPlayz</div>
+            <div class="cr-role-sub">"Mined every block of knowledge so you don't have to"</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— RESEARCH & LORE —</div>
+            <div class="cr-role-name">SswayamPlayz</div>
+            <div class="cr-role-sub">5 years of playing · countless hours of wiki reading<br>Compiled from Wikipedia, Minecraft Wiki & Mojang</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— DESIGN & PIXEL ART —</div>
+            <div class="cr-role-name">SswayamPlayz</div>
+            <div class="cr-role-sub">Every block, every border, every pixel — handcrafted</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— MINI GAMES —</div>
+            <div class="cr-role-name">SswayamPlayz</div>
+            <div class="cr-role-sub">Trivia Quiz · Memory Match · Word Scramble<br>All crafted from scratch in pure JavaScript</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— SPECIAL THANKS —</div>
+            <div class="cr-role-name" style="font-size:11px;">Markus "Notch" Persson</div>
+            <div class="cr-role-sub">For creating the game that inspired millions</div>
+          </div>
+
+          <div class="cr-role-group" style="margin-top:20px;">
+            <div class="cr-role-name" style="font-size:10px;color:#ff69b4;">Technoblade (Alex · 1999–2022)</div>
+            <div class="cr-role-sub" style="color:#ff69b4;">Technoblade Never Dies 🐷👑</div>
+          </div>
+
+          <div class="cr-role-group" style="margin-top:20px;">
+            <div class="cr-role-name" style="font-size:10px;">The Entire Minecraft Community</div>
+            <div class="cr-role-sub">For keeping the world alive since 2009</div>
+          </div>
+
+          <div class="cr-role-group" style="margin-top:20px;">
+            <div class="cr-role-name" style="font-size:10px;">Jens "Jeb_" Bergensten</div>
+            <div class="cr-role-sub">For continuing to grow the world Notch built</div>
+          </div>
+
+          <div class="cr-role-group" style="margin-top:20px;">
+            <div class="cr-role-name" style="font-size:10px;">C418 · Daniel Rosenfeld</div>
+            <div class="cr-role-sub">For "Sweden" — the most nostalgic 3 minutes in gaming</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— DEDICATED TO —</div>
+            <div class="cr-role-name" style="font-size:11px;">Every player who ever said<br>"just five more minutes"</div>
+            <div class="cr-role-sub">...and stayed up all night anyway 🌙</div>
+          </div>
+
+          <div class="cr-divider">⛏️ 🧱 ⛏️</div>
+
+          <div class="cr-role-group">
+            <div class="cr-role-title">— BUILT WITH —</div>
+            <div class="cr-role-name" style="font-size:9px;">Pure HTML · CSS · JavaScript</div>
+            <div class="cr-role-sub">No frameworks · No libraries · Just blocks & code</div>
+          </div>
+
+          <div class="cr-divider">✦ ✦ ✦</div>
+
+          <div class="cr-end-message">
+            <div class="cr-end-icon">🧱</div>
+            <div class="cr-end-title">MADE WITH LOVE AND BLOCKS</div>
+            <div class="cr-end-by">BY SSWAYAM</div>
+            <div class="cr-end-gt">SswayamPlayz · Since 2020</div>
+            <div class="cr-end-tagline">"I didn't just play Minecraft.<br>I studied it. I breathed it. I built this."</div>
+          </div>
+
+          <div class="cr-spacer"></div>
+          <div class="cr-version-text">Minecraft World Encyclopedia v1.0<br>© 2025 SswayamPlayz · All blocks reserved</div>
+          <div class="cr-spacer"></div>
+          <div class="cr-spacer"></div>
+        </div>
+      </div>
+      <button class="mc-btn" onclick="toggleCreditsScroll()" id="creditsScrollBtn" style="margin-top:16px;">▶ PLAY CREDITS</button>
+    </div>
+
+    <!-- ── FINAL SIGNATURE ── -->
+    <div class="final-sig fade-in">
+      <div class="sig-blocks">
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+        <div class="sig-block sb-g"></div><div class="sig-block sb-d"></div>
+      </div>
+      <div class="sig-text" id="sigText"></div>
+      <div class="sig-sub">SswayamPlayz · Minecraft Player Since 2020 · Add Me! 🎮</div>
+      <div class="sig-blocks" style="margin-top:8px;">
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+        <div class="sig-block sb-d"></div><div class="sig-block sb-g"></div>
+      </div>
+    </div>
+
+  </div><!-- /credits-inner -->
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">⛏ MINECRAFT WORLD ENCYCLOPEDIA</div>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#timeline">History</a></li>
+    <li><a href="#figures">Figures</a></li>
+    <li><a href="#youtubers">Legends</a></li>
+    <li><a href="#gamemodes">Game Modes</a></li>
+    <li><a href="#worlds">Worlds</a></li>
+    <li><a href="#mobs">Mobs</a></li>
+    <li><a href="#minigames">Mini Games</a></li>
+    <li><a href="#stats">Stats</a></li>
+    <li><a href="#legacy">Legacy</a></li>
+  </ul>
+  <div class="footer-credits">
+    Minecraft® is a trademark of Mojang Studios / Microsoft. This is an unofficial fan encyclopedia.<br>
+    Built with ❤️ using pure HTML, CSS & JavaScript · Minecraft Style Design<br>
+    Research compiled from Wikipedia, Minecraft Wiki, and official Mojang sources.<br>
+    "Technoblade Never Dies" 🐷👑
+  </div>
+  <div class="footer-grass">
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+    <div class="fg-block"></div><div class="fg-block"></div><div class="fg-block"></div>
+  </div>
+</footer>
+
+<script>
+// =============================================
+//  LOADER
+// =============================================
+const loadMsgs = ['Loading terrain...','Generating chunks...','Spawning mobs...','Building structures...','Almost ready!'];
+let loadProgress = 0;
+const fill = document.getElementById('loader-fill');
+const loadText = document.getElementById('loader-text');
+let msgIdx = 0;
+const loadInterval = setInterval(() => {
+  loadProgress += (Math.random() * 15 + 5);
+  if (loadProgress >= 100) { loadProgress = 100; clearInterval(loadInterval); }
+  fill.style.width = loadProgress + '%';
+  loadText.textContent = loadMsgs[Math.min(msgIdx++, loadMsgs.length - 1)];
+  if (loadProgress >= 100) {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+      setTimeout(() => document.getElementById('loader').remove(), 1000);
+      showNotif('🎮', 'Welcome, Player!', 'You have discovered the Minecraft Encyclopedia!');
+    }, 400);
+  }
+}, 200);
+
+// =============================================
+//  NAV
+// =============================================
+function toggleNav() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+
+// =============================================
+//  NOTIFICATION
+// =============================================
+function showNotif(icon, title, msg) {
+  const n = document.getElementById('notif');
+  document.getElementById('notif-icon').textContent = icon;
+  document.getElementById('notif-text').querySelector('h4').textContent = title;
+  document.getElementById('notif-msg').textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 4000);
+}
+
+// =============================================
+//  SCROLL ANIMATIONS
+// =============================================
+const fadeEls = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+fadeEls.forEach(el => observer.observe(el));
+
+// =============================================
+//  STAR FIELD
+// =============================================
+const starField = document.getElementById('stars');
+if (starField) {
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top  = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    starField.appendChild(s);
+  }
+}
+
+// =============================================
+//  STAT COUNTER
+// =============================================
+const statNums = document.querySelectorAll('.stat-num[data-target]');
+const statObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = 1;
+      const target = parseFloat(e.target.dataset.target);
+      const isFloat = target !== Math.floor(target);
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        e.target.textContent = isFloat ? current.toFixed(1) : Math.floor(current).toLocaleString();
+      }, 25);
+    }
+  });
+}, { threshold: 0.5 });
+statNums.forEach(n => statObs.observe(n));
+
+// =============================================
+//  MOB TABS
+// =============================================
+function showMobPanel(type) {
+  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mob-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + type).classList.add('active');
+}
+
+// =============================================
+//  MINI GAME TABS
+// =============================================
+function switchMG(name) {
+  document.querySelectorAll('.mg-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mg-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('mg-' + name).classList.add('active');
+}
+
+// =============================================
+//  CRAFTING RECIPES
+// =============================================
+function setCraft(slots, output, name) {
+  const grid = document.getElementById('active-craft-grid');
+  const children = grid.children;
+  for (let i = 0; i < 9; i++) {
+    children[i].textContent = slots[i] || '';
+    children[i].className = 'craft-slot' + (slots[i] ? ' filled' : '');
+  }
+  document.getElementById('craft-output').textContent = output;
+  document.getElementById('craft-name').textContent = name;
+  showNotif('⚒️','Recipe Loaded!','Viewing: ' + name);
+}
+
+// =============================================
+//  QUIZ GAME
+// =============================================
+const questions = [
+  { q: "When was the first public alpha of Minecraft released?", opts: ["May 17, 2009","June 30, 2010","November 18, 2011","December 20, 2010"], a: 0 },
+  { q: "What was Minecraft originally called during development?", opts: ["Block Game","Cave Game","Cube World","Build Sim"], a: 1 },
+  { q: "Which game inspired Notch to create Minecraft?", opts: ["Dwarf Fortress","Infiniminer","Roblox","Lego Worlds"], a: 1 },
+  { q: "How much did Microsoft pay to acquire Mojang in 2014?", opts: ["$1 billion","$5 billion","$2.5 billion","$10 billion"], a: 2 },
+  { q: "What is the strongest naturally occurring ore in Minecraft?", opts: ["Diamond","Gold","Netherite","Emerald"], a: 2 },
+  { q: "Which mob was born from a coding bug and became Minecraft's mascot?", opts: ["Zombie","Skeleton","Creeper","Enderman"], a: 2 },
+  { q: "What does defeating the Ender Dragon unlock?", opts: ["The Nether","Credits & End poem","New biomes","Wither boss"], a: 1 },
+  { q: "What is Technoblade's famous catchphrase?", opts: ["Technoblade Always Wins","Technoblade Never Dies","Pigs Rule","Blood for the Blood God"], a: 1 },
+  { q: "Who created the Dream SMP with GeorgeNotFound?", opts: ["Technoblade","TommyInnit","Dream","Wilbur Soot"], a: 2 },
+  { q: "What year did Minecraft surpass 300 million copies sold?", opts: ["2021","2022","2023","2024"], a: 2 },
+  { q: "What material do you need to craft a Nether Portal?", opts: ["Black Stone","Obsidian","Bedrock","End Stone"], a: 1 },
+  { q: "Which Minecraft YouTuber is known as the 'Redstone King'?", opts: ["Grian","Mumbo Jumbo","Technoblade","Dream"], a: 1 },
+  { q: "What was Minecraft's original Java Edition first sold as?", opts: ["Classic","Indev","Alpha","Pocket Edition"], a: 2 },
+  { q: "Which country is Mojang Studios based in?", opts: ["USA","UK","Sweden","Norway"], a: 2 },
+  { q: "What is the most powerful hostile mob in Minecraft by HP?", opts: ["Ender Dragon","The Wither","The Warden","Elder Guardian"], a: 2 },
+];
+
+let quizIdx = 0, quizScore = 0, quizLives = 3, quizAnswered = false;
+const shuffled = [...questions].sort(() => Math.random() - 0.5);
+
+function renderQuestion() {
+  const q = shuffled[quizIdx];
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-num').textContent = quizIdx + 1;
+  document.getElementById('quiz-score').textContent = quizScore;
+  document.getElementById('quiz-result').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  quizAnswered = false;
+
+  const container = document.getElementById('quiz-opts');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = ['A','B','C','D'][i] + ') ' + opt;
+    btn.onclick = () => answerQuiz(i);
+    container.appendChild(btn);
+  });
+}
+
+function answerQuiz(chosen) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = shuffled[quizIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts[q.a].classList.add('correct');
+  const result = document.getElementById('quiz-result');
+  if (chosen === q.a) {
+    quizScore += 10;
+    result.textContent = '✅ CORRECT! +10 XP';
+    result.style.color = '#84c020';
+    showNotif('✅','Correct!','You answered correctly!');
+  } else {
+    opts[chosen].classList.add('wrong');
+    quizLives--;
+    result.textContent = '❌ WRONG! Correct: ' + ['A','B','C','D'][q.a] + ') ' + q.opts[q.a];
+    result.style.color = '#c91919';
+    updateHearts();
+    if (quizLives <= 0) {
+      setTimeout(() => {
+        result.textContent = '💀 GAME OVER! Score: ' + quizScore;
+        showNotif('💀','Game Over','Final Score: ' + quizScore);
+        document.getElementById('quiz-next').textContent = '🔄 PLAY AGAIN';
+        document.getElementById('quiz-next').onclick = restartQuiz;
+        document.getElementById('quiz-next').style.display = 'inline-block';
+      }, 500);
+      return;
+    }
+  }
+  document.getElementById('quiz-score').textContent = quizScore;
+  document.getElementById('quiz-next').style.display = 'inline-block';
+  document.getElementById('quiz-next').textContent = quizIdx + 1 >= shuffled.length ? '🏆 FINISH' : 'NEXT QUESTION ▶';
+  document.getElementById('quiz-next').onclick = nextQuestion;
+}
+
+function updateHearts() {
+  const h = ['❤️❤️❤️','❤️❤️🖤','❤️🖤🖤','🖤🖤🖤'];
+  document.getElementById('quiz-hearts').textContent = h[3 - quizLives] || '🖤🖤🖤';
+}
+
+function nextQuestion() {
+  quizIdx++;
+  if (quizIdx >= shuffled.length || quizLives <= 0) {
+    document.getElementById('quiz-question').textContent = '🏆 QUIZ COMPLETE! Final Score: ' + quizScore + ' / ' + (shuffled.length * 10);
+    document.getElementById('quiz-opts').innerHTML = '';
+    document.getElementById('quiz-result').textContent = quizScore >= 100 ? '⭐ DIAMOND RANK!' : quizScore >= 70 ? '🥇 GOLD RANK!' : '🪨 STONE RANK';
+    document.getElementById('quiz-next').textContent = '🔄 PLAY AGAIN';
+    document.getElementById('quiz-next').onclick = restartQuiz;
+    showNotif('🏆','Quiz Complete!','You scored ' + quizScore + ' points!');
+    return;
+  }
+  renderQuestion();
+}
+
+function restartQuiz() {
+  quizIdx = 0; quizScore = 0; quizLives = 3;
+  shuffled.sort(() => Math.random() - 0.5);
+  updateHearts();
+  renderQuestion();
+}
+
+renderQuestion();
+
+// =============================================
+//  MEMORY GAME
+// =============================================
+const memEmojis = ['🐄','💎','⛏️','🐉','🌿','🧱','🔥','🏹'];
+let memFlipped = [], memMatched = 0, memMoves = 0, memTimer = null, memSeconds = 0, memLock = false;
+
+function initMemory() {
+  memFlipped = []; memMatched = 0; memMoves = 0; memSeconds = 0; memLock = false;
+  clearInterval(memTimer);
+  memTimer = setInterval(() => {
+    memSeconds++;
+    document.getElementById('mem-time').textContent = memSeconds + 's';
+  }, 1000);
+  document.getElementById('mem-moves').textContent = 0;
+  document.getElementById('mem-matches').textContent = 0;
+
+  const cards = [...memEmojis, ...memEmojis].sort(() => Math.random() - 0.5);
+  const grid = document.getElementById('memory-grid');
+  grid.innerHTML = '';
+  cards.forEach((emoji, idx) => {
+    const card = document.createElement('div');
+    card.className = 'mem-card';
+    card.dataset.emoji = emoji;
+    card.dataset.idx = idx;
+    card.innerHTML = `<div class="mem-back">⛏️</div><div class="mem-front">${emoji}</div>`;
+    card.onclick = () => flipCard(card);
+    grid.appendChild(card);
+  });
+}
+
+function flipCard(card) {
+  if (memLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  memFlipped.push(card);
+
+  if (memFlipped.length === 2) {
+    memLock = true;
+    memMoves++;
+    document.getElementById('mem-moves').textContent = memMoves;
+
+    const [a, b] = memFlipped;
+    if (a.dataset.emoji === b.dataset.emoji) {
+      a.classList.add('matched'); b.classList.add('matched');
+      memMatched++;
+      document.getElementById('mem-matches').textContent = memMatched;
+      memFlipped = [];
+      memLock = false;
+      if (memMatched === 8) {
+        clearInterval(memTimer);
+        showNotif('🏆','Memory Master!','All matched in ' + memMoves + ' moves & ' + memSeconds + 's!');
+      }
+    } else {
+      setTimeout(() => {
+        a.classList.remove('flipped'); b.classList.remove('flipped');
+        memFlipped = []; memLock = false;
+      }, 900);
+    }
+  }
+}
+
+initMemory();
+
+// =============================================
+//  WORD SCRAMBLE GAME
+// =============================================
+const scrambleWords = [
+  { word:'CREEPER', hint:'🐢 A green mob that explodes when close to the player' },
+  { word:'DIAMOND', hint:'💎 The rarest blue ore in the Overworld (until Netherite)' },
+  { word:'NOTCH', hint:'👤 The creator of Minecraft' },
+  { word:'MOJANG', hint:'🏢 The studio behind Minecraft' },
+  { word:'ENDERMAN', hint:'🖤 A tall mob that teleports when looked at' },
+  { word:'REDSTONE', hint:'⚡ Minecraft\'s electrical engineering material' },
+  { word:'NETHER', hint:'🔥 The hellish second dimension in Minecraft' },
+  { word:'SKELETON', hint:'💀 A bone archer hostile mob' },
+  { word:'CRAFTING', hint:'⚒️ The system for making new items from materials' },
+  { word:'TECHNOBLADE', hint:'🐷 "Never dies" — legendary PvP YouTuber' },
+  { word:'ELYTRA', hint:'🦋 Wings found in End Cities for gliding' },
+  { word:'OBSIDIAN', hint:'🪨 The black block formed when water meets lava' },
+  { word:'HEROBRINE', hint:'👻 A famous Minecraft urban legend and creepypasta' },
+  { word:'ENCHANTING', hint:'✨ The process of adding magical properties to gear' },
+  { word:'NETHERITE', hint:'🔱 The strongest armor and tool material in the game' },
+  { word:'VILLAGER', hint:'🏘️ NPC that can trade items for emeralds' },
+  { word:'TOTEM', hint:'🏺 An item that can save you from death once' },
+  { word:'BEACON', hint:'📡 A structure built from Nether Stars for buffs' },
+  { word:'BLAZE', hint:'🔥 A fiery Nether mob that drops Blaze Rods' },
+  { word:'PHANTOM', hint:'👻 Attacks players who don\'t sleep for 3 nights' },
+];
+
+let scrIdx = 0, scrScore = 0, scrStreak = 0, scrCurrent = null;
+
+function scrambleString(word) {
+  let arr = word.split('');
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  const result = arr.join('');
+  return result === word ? scrambleString(word) : result;
+}
+
+function initScramble() {
+  scrScore = 0; scrStreak = 0;
+  document.getElementById('scr-score').textContent = 0;
+  document.getElementById('scr-streak').textContent = 0;
+  const shuffledWords = [...scrambleWords].sort(() => Math.random() - 0.5);
+  scrIdx = 0;
+  window._scrWords = shuffledWords;
+  loadScrambleWord();
+}
+
+function loadScrambleWord() {
+  if (!window._scrWords || scrIdx >= window._scrWords.length) {
+    document.getElementById('scr-display').textContent = '🏆 ALL DONE!';
+    document.getElementById('scr-hint').textContent = 'Score: ' + scrScore;
+    document.getElementById('scramble-feedback').textContent = 'Amazing! You got through all the words!';
+    document.getElementById('scramble-feedback').style.color = '#84c020';
+    return;
+  }
+  scrCurrent = window._scrWords[scrIdx];
+  document.getElementById('scr-display').textContent = scrambleString(scrCurrent.word);
+  document.getElementById('scr-hint').textContent = 'HINT: ' + scrCurrent.hint;
+  document.getElementById('scramble-input').value = '';
+  document.getElementById('scramble-feedback').textContent = '';
+  document.getElementById('scr-score').textContent = scrScore;
+  document.getElementById('scr-streak').textContent = scrStreak;
+}
+
+function checkScramble() {
+  const val = document.getElementById('scramble-input').value.trim().toUpperCase();
+  const fb = document.getElementById('scramble-feedback');
+  if (!val) return;
+  if (val === scrCurrent.word) {
+    scrScore += 10 + (scrStreak * 2);
+    scrStreak++;
+    fb.textContent = '✅ CORRECT! +' + (10 + (scrStreak - 1) * 2) + ' XP 🔥 STREAK: ' + scrStreak;
+    fb.style.color = '#84c020';
+    showNotif('✅','Correct!',scrCurrent.word + ' — well done!');
+    document.getElementById('scr-score').textContent = scrScore;
+    document.getElementById('scr-streak').textContent = scrStreak;
+    setTimeout(() => { scrIdx++; loadScrambleWord(); }, 900);
+  } else {
+    scrStreak = 0;
+    fb.textContent = '❌ Wrong! Try again or skip.';
+    fb.style.color = '#c91919';
+    document.getElementById('scr-streak').textContent = scrStreak;
+    document.getElementById('scramble-input').value = '';
+  }
+}
+
+function skipScramble() {
+  const fb = document.getElementById('scramble-feedback');
+  fb.textContent = '⏭ Skipped! The answer was: ' + scrCurrent.word;
+  fb.style.color = '#f5c518';
+  scrStreak = 0;
+  document.getElementById('scr-streak').textContent = 0;
+  setTimeout(() => { scrIdx++; loadScrambleWord(); }, 1000);
+}
+
+initScramble();
+
+// =============================================
+//  XP BAR
+// =============================================
+function maxXP() {
+  document.getElementById('xpfill').style.width = '100%';
+  showNotif('⭐','Level Up!','You reached maximum Minecraft knowledge!');
+}
+
+// Animate XP on scroll
+const xpObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        document.getElementById('xpfill').style.width = '78%';
+      }, 300);
+    }
+  });
+}, { threshold: 0.5 });
+const xpEl = document.getElementById('xpfill');
+if (xpEl) xpObs.observe(xpEl.parentElement);
+
+// =============================================
+//  DYNAMIC BLOCK TYPING EFFECT
+// =============================================
+// Typing cursor on hero subtitle (add underscore blink)
+const heroSub = document.getElementById('hero-sub');
+
+// Random creeper sound on body click (using window.createOscillator for retro feel)
+let audioCtx = null;
+function playClickSound() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.12);
+  } catch(e) {}
+}
+document.querySelectorAll('.mc-btn, .mob-tab, .mg-tab, .quiz-opt').forEach(el => {
+  el.addEventListener('click', playClickSound);
+});
+
+// =============================================
+//  FLOATING PARTICLES ON HERO CLICK
+// =============================================
+document.getElementById('hero').addEventListener('click', function(e) {
+  const particles = ['💎','⛏️','🪙','⭐','🌿','🔥','💚'];
+  const p = document.createElement('div');
+  p.textContent = particles[Math.floor(Math.random() * particles.length)];
+  p.style.cssText = `
+    position:fixed;left:${e.clientX}px;top:${e.clientY}px;
+    font-size:24px;pointer-events:none;z-index:99999;
+    animation:particleFly 1s ease-out forwards;
+    transform:translate(-50%,-50%);
+  `;
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 1000);
+});
+
+const particleStyle = document.createElement('style');
+particleStyle.textContent = `
+  @keyframes particleFly {
+    from { opacity:1; transform:translate(-50%,-50%) scale(1); }
+    to   { opacity:0; transform:translate(calc(-50% + ${(Math.random()-0.5)*100}px), calc(-50% - 80px)) scale(0.3); }
+  }
+`;
+document.head.appendChild(particleStyle);
+
+// =============================================
+//  CREDITS SECTION
+// =============================================
+
+// --- Falling pixel blocks background ---
+(function() {
+  const bg = document.getElementById('credits-bg');
+  if (!bg) return;
+  const colors = ['#5d9732','#5ae4e4','#f5c518','#c91919','#888','#866043','#b44cff','#ff8c00'];
+  const emojis = ['🧱','💎','⛏️','🌿','🔥','💚','⭐','🪙'];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement('div');
+    el.className = 'cb-block';
+    el.style.left = Math.random() * 100 + '%';
+    el.style.top = (Math.random() * -200) + 'px';
+    el.style.animationDuration = (Math.random() * 12 + 6) + 's';
+    el.style.animationDelay = (Math.random() * 8) + 's';
+    const useEmoji = Math.random() > 0.5;
+    if (useEmoji) {
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.fontSize = '16px';
+      el.style.width = 'auto';
+      el.style.height = 'auto';
+    } else {
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    }
+    bg.appendChild(el);
+  }
+})();
+
+// --- Player XP bar fill on scroll ---
+const playerXp = document.getElementById('playerXpFill');
+if (playerXp) {
+  const xpObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !e.target.dataset.done) {
+        e.target.dataset.done = 1;
+        setTimeout(() => { e.target.style.width = '72%'; }, 400);
+      }
+    });
+  }, { threshold: 0.4 });
+  xpObserver.observe(playerXp);
+}
+
+// --- Typewriter for gamertag ---
+(function() {
+  const el = document.getElementById('friendGtTyped');
+  if (!el) return;
+  const text = 'SswayamPlayz';
+  let i = 0;
+  function type() {
+    if (i <= text.length) {
+      el.textContent = text.slice(0, i++);
+      setTimeout(type, 120);
+    } else {
+      setTimeout(() => { i = 0; el.textContent = ''; type(); }, 3000);
+    }
+  }
+  // Start when in viewport
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { type(); obs.disconnect(); } });
+  }, { threshold: 0.5 });
+  obs.observe(el);
+})();
+
+// --- Copy gamertag ---
+function copyGamertag() {
+  navigator.clipboard.writeText('SswayamPlayz').then(() => {
+    const c = document.getElementById('copy-confirm');
+    c.style.display = 'inline';
+    showNotif('📋','Gamertag Copied!','SswayamPlayz — now go add me!');
+    setTimeout(() => { c.style.display = 'none'; }, 2000);
+  }).catch(() => {
+    showNotif('📋','Gamertag','SswayamPlayz — add me on Minecraft!');
+  });
+}
+
+// --- Typewriter for final signature ---
+(function() {
+  const el = document.getElementById('sigText');
+  if (!el) return;
+  const text = 'MADE WITH LOVE AND BLOCKS BY SSWAYAM';
+  let i = 0, forward = true;
+  function cycle() {
+    el.textContent = text.slice(0, i);
+    if (forward) {
+      i++;
+      if (i > text.length) { forward = false; setTimeout(cycle, 2200); return; }
+    } else {
+      i--;
+      if (i < 0) { forward = true; i = 0; }
+    }
+    setTimeout(cycle, forward ? 70 : 35);
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { cycle(); obs.disconnect(); } });
+  }, { threshold: 0.3 });
+  obs.observe(el);
+})();
+
+// --- Credits scroll button ---
+let creditsScrolling = false;
+function toggleCreditsScroll() {
+  const inner = document.getElementById('creditsScroll');
+  const btn = document.getElementById('creditsScrollBtn');
+  if (!creditsScrolling) {
+    inner.classList.add('scrolling');
+    btn.textContent = '⏹ STOP CREDITS';
+    creditsScrolling = true;
+    showNotif('🎬','Credits Rolling!','Sit back and enjoy the show!');
+    setTimeout(() => {
+      inner.classList.remove('scrolling');
+      inner.style.transform = 'translateY(420px)';
+      btn.textContent = '▶ PLAY CREDITS';
+      creditsScrolling = false;
+    }, 45500);
+  } else {
+    inner.classList.remove('scrolling');
+    inner.style.transform = 'translateY(420px)';
+    btn.textContent = '▶ PLAY CREDITS';
+    creditsScrolling = false;
+  }
+}
+
+// --- Enhanced hover ripple on buttons ---
+document.querySelectorAll('.mc-btn').forEach(btn => {
+  btn.addEventListener('mouseenter', function() {
+    this.style.letterSpacing = '2px';
+  });
+  btn.addEventListener('mouseleave', function() {
+    this.style.letterSpacing = '1px';
+  });
+});
+
+// --- Section entrance SUPER animation (enhanced) ---
+const superFadeEls = document.querySelectorAll('#credits .fade-in');
+const superObs = new IntersectionObserver(entries => {
+  entries.forEach((e, idx) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), idx * 120);
+    }
+  });
+}, { threshold: 0.05 });
+superFadeEls.forEach(el => superObs.observe(el));
+
+// --- Hover sparkle on player skin ---
+const skin = document.querySelector('.player-skin');
+if (skin) {
+  skin.addEventListener('click', function() {
+    showNotif('👾','That\'s me!','SswayamPlayz — click "Add me" below! 😄');
+    this.style.filter = 'drop-shadow(0 0 30px rgba(245,197,24,0.9))';
+    setTimeout(() => { this.style.filter = 'drop-shadow(0 0 14px rgba(90,228,228,0.5))'; }, 600);
+  });
+}
+
+// --- Add nav link for credits ---
+(function() {
+  const navLinks = document.getElementById('nav-links');
+  if (navLinks) {
+    const li = document.createElement('li');
+    li.innerHTML = '<a href="#credits" style="color:var(--gold);">★ Credits</a>';
+    navLinks.appendChild(li);
+  }
+})();
+
+// =============================================
+//  SECTION HIGHLIGHT ON SCROLL
+// =============================================
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const nav = document.getElementById('navbar');
+  if (scrolled > 100) {
+    nav.style.borderBottomColor = '#84c020';
+  } else {
+    nav.style.borderBottomColor = '#5d9732';
+  }
+});
+</script>
+</body>
+</html>
